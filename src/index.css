@@ -1,0 +1,88 @@
+@import "tailwindcss";
+
+@layer utilities {
+  .font-montserrat {
+    font-family: 'Montserrat', sans-serif;
+  }
+  .font-pixel {
+    font-family: 'Montserrat', 'Pixelify Sans', sans-serif;
+  }
+  .font-press-start {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+  }
+  .font-silkscreen {
+    font-family: 'Montserrat', sans-serif;
+  }
+  .font-vt323 {
+    font-family: 'Montserrat', sans-serif;
+  }
+}
+
+/* Custom Pixel Art Bevel & Border styles */
+.pixel-border-dark {
+  border: 2px solid #141414;
+}
+
+.pixel-[#418a28] {
+  background-color: #418a28;
+}
+
+.pixel-shadow-hero {
+  box-shadow: inset 0 2px 0 #6cc34b, inset 0 -3px 0 #1e4511;
+}
+
+.pixel-shadow-hero-hover {
+  box-shadow: inset 0 2px 0 #89dc69, inset 0 -3px 0 #285718;
+}
+
+.pixel-shadow-hero-pressed {
+  box-shadow: inset 0 3px 0 #18370d, inset 0 -1px 0 #418a28;
+}
+
+.pixel-shadow-hero-disabled {
+  box-shadow: inset 0 2px 0 #e2e5e8, inset 0 -3px 0 #9ca0a4;
+}
+
+/* Button Press Down Motion - Instant snappy response without animation */
+.btn-press-effect {
+  transition: background-color 0.05s ease, color 0.05s ease !important;
+}
+.btn-press-effect:active, .btn-pressed {
+  transform: translateY(2px) !important;
+  transition: none !important;
+}
+
+/* Custom Scanline FX for TV screen */
+.crt-scanlines {
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.25) 50%
+  ), linear-gradient(
+    90deg,
+    rgba(255, 0, 0, 0.03),
+    rgba(0, 255, 0, 0.01),
+    rgba(0, 0, 255, 0.03)
+  );
+  background-size: 100% 3px, 6px 100%;
+}
+
+/* Minecraft Panorama Scrolling Keyframes */
+@keyframes minecraft-panorama-scroll {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-panorama {
+  animation: minecraft-panorama-scroll 75s linear infinite;
+  will-change: transform;
+}
+
+.bg-radial-vignette {
+  background: radial-gradient(circle at center, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.65) 100%);
+}
+
