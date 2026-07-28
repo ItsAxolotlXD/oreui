@@ -83,7 +83,9 @@ export const VplaySecondaryButton: React.FC<VplaySecondaryButtonProps> = ({
       `}
       {...props}
     >
-      <span>{children}</span>
+      <div className="flex items-center justify-center gap-2 w-full h-full">
+        {children}
+      </div>
     </button>
   );
 };

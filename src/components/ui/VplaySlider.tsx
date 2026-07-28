@@ -11,11 +11,12 @@ interface VplaySliderProps {
   onChange?: (val: number) => void;
   forcedState?: ComponentState;
   disabled?: boolean;
+  noBackground?: boolean;
   className?: string;
 }
 
 export const VplaySlider: React.FC<VplaySliderProps> = ({
-  label = 'States demonstration',
+  label,
   min = 0,
   max = 10,
   step = 1,
@@ -23,8 +24,10 @@ export const VplaySlider: React.FC<VplaySliderProps> = ({
   onChange,
   forcedState,
   disabled,
+  noBackground = false,
   className = '',
 }) => {
+  const displayLabel = label !== undefined ? label : 'States demonstration';
   const [val, setVal] = useState(value);
   const [isHovered, setIsHovered] = useState(false);
   const [isPressed, setIsPressed] = useState(false);
@@ -70,15 +73,21 @@ export const VplaySlider: React.FC<VplaySliderProps> = ({
   }
 
   return (
-    <div className={`w-full max-w-lg bg-[#36383b] p-3.5 border border-[#232527] rounded-none ${className}`}>
-      <div className="flex items-center justify-between font-montserrat text-xs font-semibold mb-2 select-none">
-        <span className={state === 'disabled' ? 'text-[#8c9196]' : 'text-white'}>
-          {label}
-        </span>
-        <span className={state === 'disabled' ? 'text-[#8c9196]' : 'text-[#89dc69]'}>
-          {currentValue}
-        </span>
-      </div>
+    <div
+      className={`w-full rounded-none ${
+        noBackground ? '' : 'bg-[#36383b] p-2.5 sm:p-3 border border-[#232527]'
+      } ${className}`}
+    >
+      {displayLabel !== '' && (
+        <div className="flex items-center justify-between font-montserrat text-xs font-semibold mb-2 select-none">
+          <span className={state === 'disabled' ? 'text-[#8c9196]' : 'text-white'}>
+            {displayLabel}
+          </span>
+          <span className={state === 'disabled' ? 'text-[#8c9196]' : 'text-[#89dc69]'}>
+            {currentValue}
+          </span>
+        </div>
+      )}
 
       <div
         onMouseEnter={() => setIsHovered(true)}

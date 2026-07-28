@@ -38,6 +38,20 @@ export const TvPlayer: React.FC<TvPlayerProps> = ({
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const hlsRef = useRef<Hls | null>(null);
 
+  // Sync fullscreen state from document/video element
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      const isVideoFS = document.fullscreenElement === videoRef.current || !!(document as any).webkitFullscreenElement;
+      setIsFullscreen(isVideoFS);
+    };
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+      document.removeEventListener('webkitfullscreenchange', handleFullscreenChange);
+    };
+  }, []);
+
   // Initialize HLS stream when channel changes
   useEffect(() => {
     setStreamError(false);
@@ -105,158 +119,228 @@ export const TvPlayer: React.FC<TvPlayerProps> = ({
     }
   };
 
+  // Fullscreen specifically for video element (luồng m3u8 đang xem)
   const toggleFullscreen = () => {
-    setIsFullscreen(!isFullscreen);
+    const video = videoRef.current;
+    if (!video) return;
+
+    if (document.fullscreenElement || (document as any).webkitFullscreenElement) {
+      if (document.exitFullscreen) {
+        document.exitFullscreen().catch(() => {});
+      } else if ((document as any).webkitExitFullscreen) {
+        (document as any).webkitExitFullscreen();
+      }
+    } else {
+      if (video.requestFullscreen) {
+        video.requestFullscreen().catch(() => {});
+      } else if ((video as any).webkitRequestFullscreen) {
+        (video as any).webkitRequestFullscreen();
+      } else if ((video as any).msRequestFullscreen) {
+        (video as any).msRequestFullscreen();
+      }
+    }
   };
 
   return (
-    <div className="w-full space-y-6">
-      {/* TV SCREEN / VIDEO PLAYER FRAME */}
-      <div className={`relative group bg-[#0d0e0f] border-4 border-[#141414] shadow-2xl transition-all duration-300 overflow-hidden ${isFullscreen ? 'fixed inset-0 z-50 p-4 bg-black flex flex-col justify-center' : 'w-full aspect-video max-h-[560px]'}`}>
+    <div className="w-full space-y-4">
+      {/* GRID CONTAINER: PLAYER & CONTROLS ON LEFT, CHANNEL INFO ON RIGHT */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6 items-start">
         
-        {/* Background Stream Player */}
-        <div className="absolute inset-0 overflow-hidden bg-black flex items-center justify-center">
-          
-          {/* HTML5 Video element with HLS */}
-          <video
-            ref={videoRef}
-            playsInline
-            className={`w-full h-full object-cover transition-opacity duration-300 ${
-              !streamError ? 'opacity-100' : 'opacity-0 hidden'
-            }`}
-          />
+        {/* LEFT COLUMN: SHRUNK CHANNEL PLAYER & CONTROLS (lg:col-span-7) */}
+        <div className="lg:col-span-7 space-y-3">
+          {/* TV SCREEN / VIDEO PLAYER FRAME */}
+          <div className="relative bg-[#0d0e0f] border-4 border-[#141414] shadow-2xl overflow-hidden w-full aspect-video max-h-[380px] sm:max-h-[420px]">
+            {/* Background Stream Player */}
+            <div className="w-full h-full relative overflow-hidden bg-black flex items-center justify-center">
+              {/* HTML5 Video element with HLS */}
+              <video
+                ref={videoRef}
+                playsInline
+                className={`w-full h-full object-cover transition-opacity duration-300 ${
+                  !streamError ? 'opacity-100' : 'opacity-0 hidden'
+                }`}
+              />
 
-          {/* Fallback image when stream errors out or url is missing */}
-          {(streamError || !channel.streamUrl) && (
-            <img
-              src={channel.videoBg}
-              alt={channel.name}
-              className="w-full h-full object-cover opacity-100"
-            />
-          )}
-        </div>
+              {/* Fallback image when stream errors out or url is missing */}
+              {(streamError || !channel.streamUrl) && (
+                <img
+                  src={channel.videoBg}
+                  alt={channel.name}
+                  className="w-full h-full object-cover opacity-100"
+                />
+              )}
+            </div>
+          </div>
 
-        {/* PIXEL CONTROL BAR - ON HOVER ONLY */}
-        <div className="absolute bottom-0 left-0 right-0 bg-[#1e2022]/95 border-t-2 border-[#141414] p-3 flex flex-wrap items-center justify-between gap-3 z-30 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity duration-300 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto">
-          
-          {/* Left Controls */}
-          <div className="flex items-center gap-3">
-            <div className="w-32">
-              <VplayHeroButton onClick={togglePlay}>
+          {/* CONTROL BAR BELOW PLAYER (3 SEPARATE ROWS) */}
+          <div className="bg-[#1e2022] border-4 border-[#141414] p-3 flex flex-col gap-3 z-30 font-montserrat shadow-xl">
+            {/* ROW 1: PLAY / PAUSE BUTTON */}
+            <div className="w-full">
+              <VplayHeroButton onClick={togglePlay} className="w-full text-center justify-center py-2.5">
                 {isPlaying ? '⏸ TẠM DỪNG' : '▶ PHÁT'}
               </VplayHeroButton>
             </div>
 
-            <button
-              onClick={() => setIsMuted(!isMuted)}
-              className="p-2 bg-[#3a3c3f] border border-[#141414] hover:bg-[#4d5055] text-white active:translate-y-[2px] cursor-pointer"
-              title="Tắt/Mở tiếng"
-            >
-              {isMuted ? <VolumeX className="w-5 h-5 text-red-400" /> : <Volume2 className="w-5 h-5 text-[#89dc69]" />}
-            </button>
+            {/* ROW 2: VOLUME SLIDER (WITHOUT "Âm lượng" TEXT) & FAVORITE CHECKBOX */}
+            <div className="w-full flex items-center justify-between gap-3 bg-[#282a2c] p-2 sm:p-2.5 border border-[#141414]">
+              {/* Mute Button & Volume Slider */}
+              <div className="flex items-center gap-2 flex-1 min-w-0">
+                <button
+                  onClick={() => setIsMuted(!isMuted)}
+                  className="p-2 bg-[#3a3c3f] border border-[#141414] hover:bg-[#4d5055] text-white active:translate-y-[1px] cursor-pointer flex-shrink-0"
+                  title="Tắt/Mở tiếng"
+                >
+                  {isMuted ? <VolumeX className="w-5 h-5 text-red-400" /> : <Volume2 className="w-5 h-5 text-[#89dc69]" />}
+                </button>
 
-            {/* Vplay Volume Slider */}
-            <div className="hidden lg:block w-48">
-              <VplaySlider
-                label="Âm lượng"
-                value={isMuted ? 0 : volume}
-                min={0}
-                max={10}
-                onChange={(v) => {
-                  setVolume(v);
-                  if (v > 0) setIsMuted(false);
-                }}
-              />
-            </div>
-          </div>
-
-          {/* Right Controls */}
-          <div className="flex items-center gap-3">
-            <div className="bg-[#292a2c] px-3 py-1.5 border border-[#141414] flex items-center">
-              <VplayCheckbox
-                checked={isFavorite}
-                onChange={setIsFavorite}
-                label="Yêu thích"
-              />
-            </div>
-
-            <VplaySecondaryButton onClick={toggleFullscreen} fullWidth={false} className="!px-3">
-              <Maximize2 className="w-4 h-4" />
-            </VplaySecondaryButton>
-          </div>
-        </div>
-      </div>
-
-      {/* CHANNEL DETAILS TABS */}
-      <div className="bg-[#292a2c] border-2 border-[#141414] p-4 sm:p-6 space-y-6">
-        
-        {/* Navigation Tabs */}
-        <div className="flex gap-2 flex-wrap border-b border-[#3e4145] pb-4">
-          {['Thông tin kênh', 'Tùy chỉnh luồng phát', 'Đề xuất kênh khác'].map((tabTitle, idx) => (
-            <VplayTab
-              key={tabTitle}
-              active={activeTab === idx}
-              onClick={() => setActiveTab(idx)}
-            >
-              {tabTitle}
-            </VplayTab>
-          ))}
-        </div>
-
-        {/* Tab 0: Thông tin kênh */}
-        {activeTab === 0 && (
-          <div className="space-y-4 text-xs font-montserrat text-gray-300">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="bg-[#1f2123] p-4 border border-[#383a3d] space-y-2">
-                <p><strong className="text-[#89dc69]">Tên kênh:</strong> {channel.name}</p>
-                <p><strong className="text-[#89dc69]">Nhóm kênh:</strong> {channel.groupTitle}</p>
-                <p><strong className="text-[#89dc69]">Ngôn ngữ:</strong> {channel.language}</p>
-                <p><strong className="text-[#89dc69]">Chất lượng:</strong> {channel.resolution}</p>
-              </div>
-              <div className="bg-[#1f2123] p-4 border border-[#383a3d] space-y-2">
-                <p><strong className="text-[#89dc69]">Mô tả:</strong> {channel.summary}</p>
-                {channel.streamUrl && (
-                  <p className="truncate"><strong className="text-[#89dc69]">Luồng HLS:</strong> <span className="text-gray-400 font-mono text-[10px]">{channel.streamUrl}</span></p>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Tab 1: Tùy chỉnh luồng phát */}
-        {activeTab === 1 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <VplayToggleSwitch
-              checked={settings.subtitles}
-              onChange={(b) => onUpdateSettings({ ...settings, subtitles: b })}
-              label="Hiển thị phụ đề tiếng Việt"
-            />
-            <VplayToggleSwitch
-              checked={settings.autoPlay}
-              onChange={(b) => onUpdateSettings({ ...settings, autoPlay: b })}
-              label="Tự động phát khi chuyển kênh"
-            />
-          </div>
-        )}
-
-        {/* Tab 2: Đề xuất kênh khác */}
-        {activeTab === 2 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {channels.slice(0, 9).filter(c => c.id !== channel.id).map((other) => (
-              <div
-                key={other.id}
-                onClick={() => onSelectChannel(other)}
-                className="bg-[#1f2123] border-2 border-[#141414] p-3 hover:border-[#418a28] cursor-pointer transition-colors space-y-2 active:translate-y-[2px]"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="font-montserrat font-bold text-xs text-[#89dc69] truncate max-w-[150px]">{other.name}</span>
-                  <span className="text-[10px] bg-[#333] px-2 py-0.5 text-gray-300 font-montserrat">{other.groupTitle}</span>
+                <div className="flex-1 min-w-0">
+                  <VplaySlider
+                    label=""
+                    value={isMuted ? 0 : volume}
+                    min={0}
+                    max={10}
+                    onChange={(v) => {
+                      setVolume(v);
+                      if (v > 0) setIsMuted(false);
+                    }}
+                    noBackground
+                    className="!p-0"
+                  />
                 </div>
-                <div className="text-xs font-bold font-montserrat text-white truncate">{other.currentProgram}</div>
               </div>
-            ))}
+
+              {/* Favorite Checkbox */}
+              <div className="bg-[#1f2123] px-3 py-2 border border-[#141414] flex items-center flex-shrink-0">
+                <VplayCheckbox
+                  checked={isFavorite}
+                  onChange={setIsFavorite}
+                  label="Yêu thích"
+                />
+              </div>
+            </div>
+
+            {/* ROW 3: FULL SCREEN BUTTON (USES DESIGN SYSTEM SECONDARY BUTTON) */}
+            <div className="w-full">
+              <VplaySecondaryButton
+                onClick={toggleFullscreen}
+                fullWidth
+                className="w-full"
+              >
+                <Maximize2 className="w-4 h-4 sm:w-5 sm:h-5 text-[#1c1d1f] flex-shrink-0" />
+                <span className="font-bold text-xs uppercase tracking-wider text-[#1c1d1f]">
+                  {isFullscreen ? 'THOÁT TOÀN MÀN HÌNH (EXIT FULLSCREEN)' : 'PHÓNG TO MÀN HÌNH (FULL SCREEN)'}
+                </span>
+              </VplaySecondaryButton>
+            </div>
           </div>
-        )}
+        </div>
+
+        {/* RIGHT COLUMN: CHANNEL INFORMATION & DETAILS (lg:col-span-5) */}
+        <div className="lg:col-span-5 space-y-4">
+          {/* Header Card for Channel */}
+          <div className="bg-[#292a2c] border-4 border-[#141414] p-4 sm:p-5 shadow-xl space-y-4">
+            <div className="flex items-center gap-3 border-b border-[#3e4145] pb-3">
+              {channel.logo ? (
+                <img
+                  src={channel.logo}
+                  alt={channel.name}
+                  referrerPolicy="no-referrer"
+                  className="w-12 h-12 object-contain bg-[#1a1c1e] p-1 border border-[#141414]"
+                />
+              ) : (
+                <div className="w-12 h-12 bg-[#1a1c1e] border border-[#141414] flex items-center justify-center font-bold text-xs text-[#89dc69]">
+                  TV
+                </div>
+              )}
+              <div className="min-w-0 flex-1">
+                <h2 className="text-lg font-black text-white truncate font-montserrat">{channel.name}</h2>
+                <div className="flex items-center gap-2 mt-1">
+                  <span className="bg-[#1c1d1f] text-[#89dc69] px-2 py-0.5 text-[10px] font-bold font-mono border border-[#141414]">
+                    {channel.groupTitle}
+                  </span>
+                  <span className="bg-[#ffe866] text-[#141414] px-2 py-0.5 text-[10px] font-bold font-mono border border-[#141414]">
+                    {channel.resolution}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Currently Playing Program */}
+            <div className="bg-[#1f2123] p-3 border border-[#383a3d] space-y-1">
+              <div className="text-[10px] text-[#89dc69] font-bold uppercase tracking-wider">Chương trình đang phát:</div>
+              <div className="text-sm font-bold text-white leading-snug">
+                {channel.currentProgram || 'Đang phát sóng trực tiếp'}
+              </div>
+            </div>
+
+            {/* Channel Details Tabs */}
+            <div className="space-y-4 pt-2">
+              <div className="flex gap-1.5 flex-wrap border-b border-[#3e4145] pb-3">
+                {['Thông tin kênh', 'Tùy chỉnh', 'Đề xuất'].map((tabTitle, idx) => (
+                  <VplayTab
+                    key={tabTitle}
+                    active={activeTab === idx}
+                    onClick={() => setActiveTab(idx)}
+                  >
+                    {tabTitle}
+                  </VplayTab>
+                ))}
+              </div>
+
+              {/* Tab 0: Thông tin kênh */}
+              {activeTab === 0 && (
+                <div className="space-y-2.5 text-xs font-montserrat text-gray-300">
+                  <div className="bg-[#1f2123] p-3 border border-[#383a3d] space-y-1.5">
+                    <p><strong className="text-[#89dc69]">Tên kênh:</strong> {channel.name}</p>
+                    <p><strong className="text-[#89dc69]">Nhóm kênh:</strong> {channel.groupTitle}</p>
+                    <p><strong className="text-[#89dc69]">Ngôn ngữ:</strong> {channel.language}</p>
+                    <p><strong className="text-[#89dc69]">Chất lượng:</strong> {channel.resolution}</p>
+                    <p><strong className="text-[#89dc69]">Mô tả:</strong> {channel.summary}</p>
+                    {channel.streamUrl && (
+                      <p className="truncate"><strong className="text-[#89dc69]">Luồng HLS:</strong> <span className="text-gray-400 font-mono text-[10px]">{channel.streamUrl}</span></p>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Tab 1: Tùy chỉnh luồng phát */}
+              {activeTab === 1 && (
+                <div className="space-y-3 bg-[#1f2123] p-3 border border-[#383a3d]">
+                  <VplayToggleSwitch
+                    checked={settings.subtitles}
+                    onChange={(b) => onUpdateSettings({ ...settings, subtitles: b })}
+                    label="Hiển thị phụ đề tiếng Việt"
+                  />
+                  <VplayToggleSwitch
+                    checked={settings.autoPlay}
+                    onChange={(b) => onUpdateSettings({ ...settings, autoPlay: b })}
+                    label="Tự động phát khi chuyển kênh"
+                  />
+                </div>
+              )}
+
+              {/* Tab 2: Đề xuất kênh khác */}
+              {activeTab === 2 && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-[300px] overflow-y-auto pr-1">
+                  {channels.slice(0, 8).filter(c => c.id !== channel.id).map((other) => (
+                    <div
+                      key={other.id}
+                      onClick={() => onSelectChannel(other)}
+                      className="bg-[#1f2123] border-2 border-[#141414] p-2.5 hover:border-[#418a28] cursor-pointer transition-colors space-y-1 active:translate-y-[1px]"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="font-montserrat font-bold text-xs text-[#89dc69] truncate max-w-[120px]">{other.name}</span>
+                        <span className="text-[9px] bg-[#333] px-1.5 py-0.5 text-gray-300 font-montserrat">{other.groupTitle}</span>
+                      </div>
+                      <div className="text-[11px] font-bold font-montserrat text-white truncate">{other.currentProgram}</div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   );

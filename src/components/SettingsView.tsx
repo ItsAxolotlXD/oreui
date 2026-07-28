@@ -7,9 +7,13 @@ import { VplayToggleSwitch } from './ui/VplayToggleSwitch';
 interface SettingsViewProps {
   settings: UserSettings;
   onSave: (newSettings: UserSettings) => void;
-  onCancel: () => void;
+  onCancel: (newSettings: UserSettings) => void; // allow pass or fallback
   onOpenFeedback?: () => void;
 }
+
+const SettingsDivider = () => (
+  <div className="w-full h-[2px] border-t border-[#1c1d1f] border-b border-[#56595d]" />
+);
 
 export const SettingsView: React.FC<SettingsViewProps> = ({
   settings,
@@ -62,7 +66,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
     <div className="w-full max-w-3xl mx-auto my-2 sm:my-4 bg-[#4c4f52] border-2 border-[#141414] text-white font-montserrat shadow-2xl rounded-none overflow-hidden select-none">
       
       {/* Welcome & Feedback Banner Box */}
-      <div className="p-3 sm:p-4 bg-[#424548] border-b border-[#34373a] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+      <div className="p-3 sm:p-4 bg-[#424548] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div>
           <h2 className="text-[11px] text-gray-300 font-normal leading-normal mb-0.5">
             Welcome to design preview!
@@ -84,9 +88,11 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         </button>
       </div>
 
+      <SettingsDivider />
+
       {/* SECTION 1: KEYBOARD & MOUSE / AUDIO */}
       <div>
-        <div className="px-3 sm:px-4 py-2 bg-[#3d4043] border-b border-[#34373a]">
+        <div className="px-3 sm:px-4 py-2 bg-[#3d4043]">
           <h3 className="font-bold text-xs tracking-wider uppercase text-gray-200">
             ÂM THANH & CẤU HÌNH THIẾT BỊ
           </h3>
@@ -95,8 +101,10 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           </p>
         </div>
 
+        <SettingsDivider />
+
         {/* Row: Volume Slider */}
-        <div className="px-3 sm:px-4 py-3 border-b border-[#34373a] hover:bg-[#525559] transition-colors space-y-1.5">
+        <div className="px-3 sm:px-4 py-3 hover:bg-[#525559] transition-colors space-y-1.5">
           <div className="flex items-center justify-between">
             <div>
               <div className="font-bold text-xs text-white">
@@ -141,16 +149,20 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         </div>
       </div>
 
+      <SettingsDivider />
+
       {/* SECTION 2: CHẤT LƯỢNG & PHỤ ĐỀ */}
       <div>
-        <div className="px-3 sm:px-4 py-2 bg-[#3d4043] border-b border-[#34373a]">
+        <div className="px-3 sm:px-4 py-2 bg-[#3d4043]">
           <h3 className="font-bold text-xs tracking-wider uppercase text-gray-200">
             CHẤT LƯỢNG & PHỤ ĐỀ TRUYỀN HÌNH
           </h3>
         </div>
 
+        <SettingsDivider />
+
         {/* Quality Options */}
-        <div className="px-3 sm:px-4 py-2.5 border-b border-[#34373a] hover:bg-[#525559] transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div className="px-3 sm:px-4 py-2.5 hover:bg-[#525559] transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
             <div className="font-bold text-xs text-white">
               Độ phân giải ưu tiên
@@ -181,8 +193,10 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           </div>
         </div>
 
+        <SettingsDivider />
+
         {/* Toggle: Subtitles */}
-        <div className="px-3 sm:px-4 py-2.5 border-b border-[#34373a] hover:bg-[#525559] transition-colors flex items-center justify-between gap-3">
+        <div className="px-3 sm:px-4 py-2.5 hover:bg-[#525559] transition-colors flex items-center justify-between gap-3">
           <div>
             <div className="font-bold text-xs text-white">
               Tự động bật phụ đề tiếng Việt
@@ -197,8 +211,10 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           />
         </div>
 
+        <SettingsDivider />
+
         {/* Toggle: Auto play / Auto jump */}
-        <div className="px-3 sm:px-4 py-2.5 border-b border-[#34373a] hover:bg-[#525559] transition-colors flex items-center justify-between gap-3">
+        <div className="px-3 sm:px-4 py-2.5 hover:bg-[#525559] transition-colors flex items-center justify-between gap-3">
           <div>
             <div className="font-bold text-xs text-white">
               Tự động phát khi chuyển kênh (Auto jump)
@@ -214,16 +230,20 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         </div>
       </div>
 
+      <SettingsDivider />
+
       {/* SECTION 3: TÀI KHOẢN & THÔNG BÁO */}
       <div>
-        <div className="px-3 sm:px-4 py-2 bg-[#3d4043] border-b border-[#34373a]">
+        <div className="px-3 sm:px-4 py-2 bg-[#3d4043]">
           <h3 className="font-bold text-xs tracking-wider uppercase text-gray-200">
             TÀI KHOẢN & THÔNG BÁO
           </h3>
         </div>
 
+        <SettingsDivider />
+
         {/* Gamertag / User Name */}
-        <div className="px-3 sm:px-4 py-2.5 border-b border-[#34373a] hover:bg-[#525559] transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div className="px-3 sm:px-4 py-2.5 hover:bg-[#525559] transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
             <div className="font-bold text-xs text-white">
               Tên người dùng (Gamertag / User)
@@ -242,8 +262,10 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           </div>
         </div>
 
+        <SettingsDivider />
+
         {/* Notifications Toggle */}
-        <div className="px-3 sm:px-4 py-2.5 border-b border-[#34373a] hover:bg-[#525559] transition-colors flex items-center justify-between gap-3">
+        <div className="px-3 sm:px-4 py-2.5 hover:bg-[#525559] transition-colors flex items-center justify-between gap-3">
           <div>
             <div className="font-bold text-xs text-white">
               Thông báo sự kiện thể thao trực tiếp
@@ -258,8 +280,10 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           />
         </div>
 
+        <SettingsDivider />
+
         {/* Reset Row */}
-        <div className="px-3 sm:px-4 py-2.5 border-b border-[#34373a] hover:bg-[#525559] transition-colors flex items-center justify-between gap-3">
+        <div className="px-3 sm:px-4 py-2.5 hover:bg-[#525559] transition-colors flex items-center justify-between gap-3">
           <div>
             <div className="font-bold text-xs text-white">
               Reset settings to default
@@ -277,8 +301,10 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         </div>
       </div>
 
+      <SettingsDivider />
+
       {/* Save Action Bar */}
-      <div className="p-3 bg-[#3d4043] border-b border-[#34373a] flex items-center justify-end gap-2.5">
+      <div className="p-3 bg-[#3d4043] flex items-center justify-end gap-2.5">
         <button
           onClick={handleCancelClick}
           className="bg-[#323437] hover:bg-[#3d4043] text-gray-200 font-bold text-xs px-4 py-1.5 border-2 border-[#141414] cursor-pointer active:translate-y-[1px] btn-press-effect"

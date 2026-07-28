@@ -18,7 +18,7 @@ import { VplaySecondaryButton } from './components/ui/VplaySecondaryButton';
 import { VplayInputBox } from './components/ui/VplayInputBox';
 import { VplayTab } from './components/ui/VplayTab';
 
-import { Settings, Trophy, Flame, Menu, X, Radio } from 'lucide-react';
+import { Settings, Trophy, Flame, Menu, X, Radio, Pencil } from 'lucide-react';
 
 export default function App() {
   const [sidebarItem, setSidebarItem] = useState<SidebarMenuItem>('home');
@@ -155,7 +155,7 @@ export default function App() {
                 key="loading"
                 initial={{ x: '100%', opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
-                exit={{ opacity: 0 }}
+                exit={{ opacity: 1, transition: { duration: 0 } }}
                 transition={{ duration: 0.22, ease: 'easeInOut' }}
               >
                 <div className="w-full min-h-[380px] bg-black/50 border-2 border-[#141414] shadow-2xl flex items-center justify-center p-8 text-center select-none my-2 rounded-none">
@@ -171,10 +171,13 @@ export default function App() {
             ) : (
               <motion.div
                 key={isSettingsOpen ? 'settings' : sidebarItem}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.5, ease: 'easeInOut' }}
+                initial={{ opacity: 0, x: 0 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ x: '-100%', opacity: 1 }}
+                transition={{
+                  opacity: { duration: 0.5, ease: 'easeInOut' },
+                  x: { duration: 0.22, ease: 'easeInOut' },
+                }}
               >
                 {sidebarItem === 'settings' || isSettingsOpen ? (
                   <SettingsView
@@ -307,8 +310,8 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* Channels Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                {/* Channels Grid: 3 columns on mobile, 5 columns on desktop */}
+                <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-3 lg:gap-4">
                   {filteredChannels.map((channel) => {
                     const isSelected = selectedChannel.id === channel.id;
                     return (
@@ -319,53 +322,105 @@ export default function App() {
                           handleSelectChannel(channel);
                         }}
                         className={`
-                          group relative bg-[#292a2c] border-2 p-4 cursor-pointer transition-colors duration-150 flex flex-col justify-between gap-3 active:translate-y-[2px] btn-press-effect
-                          ${isSelected ? 'border-[#418a28] shadow-[0_0_15px_rgba(65,138,40,0.3)] bg-[#212c1d]' : 'border-[#141414] hover:border-[#418a28] hover:bg-[#323437]'}
+                          group relative bg-[#4c4f52] border-2 cursor-pointer transition-all duration-150 flex flex-col justify-between overflow-hidden shadow-xl select-none active:translate-y-[2px] btn-press-effect rounded-none
+                          ${isSelected ? 'border-[#418a28] shadow-[0_0_15px_rgba(65,138,40,0.4)]' : 'border-[#141414] hover:border-[#89dc69]'}
                         `}
                       >
-                        {/* Top Header */}
-                        <div className="flex items-center justify-between gap-2">
-                          <span className="font-bold text-xs text-[#89dc69] truncate">
-                            {channel.name}
-                          </span>
-                          <span className="text-[10px] text-gray-400 font-mono flex-shrink-0">
-                            {channel.groupTitle}
-                          </span>
-                        </div>
+                        {/* TOP IMAGE AREA: Channel Logo with Wavy Background */}
+                        <div className="relative aspect-[16/10] bg-[#1a1c1e] border-b-2 border-[#141414] flex items-center justify-center p-1.5 sm:p-3 overflow-hidden">
+                          {/* Background Wavy Lines Pattern */}
+                          <svg
+                            className="absolute inset-0 w-full h-full opacity-35 pointer-events-none text-[#45494e]"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="100%"
+                            height="100%"
+                          >
+                            <defs>
+                              <pattern
+                                id={`wavy-pattern-${channel.id}`}
+                                x="0"
+                                y="0"
+                                width="32"
+                                height="12"
+                                patternUnits="userSpaceOnUse"
+                              >
+                                <path
+                                  d="M 0 6 Q 8 0, 16 6 T 32 6"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="1.5"
+                                />
+                              </pattern>
+                            </defs>
+                            <rect width="100%" height="100%" fill={`url(#wavy-pattern-${channel.id})`} />
+                          </svg>
 
-                        {/* Logo Preview from M3U8 */}
-                        <div className="relative aspect-video bg-[#1a1b1d] overflow-hidden border border-[#141414] flex items-center justify-center p-3">
                           {channel.logo ? (
                             <img
                               src={channel.logo}
                               alt={channel.name}
                               referrerPolicy="no-referrer"
-                              className="max-h-full max-w-full object-contain filter drop-shadow group-hover:scale-105 transition-transform duration-200"
+                              className="max-h-full max-w-[85%] object-contain filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] group-hover:scale-105 transition-transform duration-200 z-10"
                               onError={(e) => {
                                 (e.target as HTMLImageElement).src = `https://via.placeholder.com/150/1c1d1f/89dc69?text=${encodeURIComponent(channel.name)}`;
                               }}
                             />
                           ) : (
-                            <span className="font-extrabold text-xs text-[#89dc69]">{channel.name}</span>
+                            <span className="font-extrabold text-xs sm:text-sm text-[#89dc69] tracking-wider font-mono uppercase z-10">{channel.name}</span>
+                          )}
+
+                          {/* Live Indicator Badge on top right */}
+                          {isSelected && (
+                            <div className="absolute top-1 right-1 sm:top-2 sm:right-2 bg-[#418a28] text-white px-1 sm:px-2 py-0.5 text-[8px] sm:text-[10px] font-bold border border-[#141414] font-mono shadow z-10">
+                              ● LIVE
+                            </div>
                           )}
                         </div>
 
-                        {/* Program Title */}
-                        <div className="space-y-1">
-                          <div className="text-xs text-gray-200 font-semibold line-clamp-2 min-h-[32px]">
-                            {channel.currentProgram}
+                        {/* MIDDLE CONTENT: Title & Tags */}
+                        <div className="p-2 sm:p-3 bg-[#4c4f52] flex flex-col justify-between gap-1.5 sm:gap-2 flex-1">
+                          <div>
+                            <h3 className="font-bold text-xs sm:text-sm text-white truncate tracking-tight font-montserrat">
+                              {channel.name}
+                            </h3>
+                            <p className="text-[9px] sm:text-[11px] text-gray-300 line-clamp-1 mt-0.5">
+                              {channel.currentProgram || 'Đang phát sóng'}
+                            </p>
+                          </div>
+
+                          {/* Tag Badges Row (Survival, Creative, Experimental style) */}
+                          <div className="flex flex-wrap items-center gap-1 sm:gap-1.5 mt-0.5">
+                            {/* Black Badge (Group/Category) */}
+                            <span className="bg-[#1c1d1f] text-white px-1 sm:px-2 py-0.5 text-[8px] sm:text-[11px] font-bold font-mono border border-[#141414] shadow-sm truncate max-w-[70px] sm:max-w-none">
+                              {channel.groupTitle}
+                            </span>
+
+                            {/* Yellow Badge (Badge / Status / Experimental style) */}
+                            {channel.badge ? (
+                              <span className="bg-[#ffe866] text-[#141414] px-1 sm:px-2 py-0.5 text-[8px] sm:text-[11px] font-bold font-mono border border-[#141414] shadow-sm">
+                                {channel.badge}
+                              </span>
+                            ) : isSelected ? (
+                              <span className="bg-[#ffe866] text-[#141414] px-1 sm:px-2 py-0.5 text-[8px] sm:text-[11px] font-bold font-mono border border-[#141414] shadow-sm">
+                                Đang xem
+                              </span>
+                            ) : (
+                              <span className="bg-[#ffe866] text-[#141414] px-1 sm:px-2 py-0.5 text-[8px] sm:text-[11px] font-bold font-mono border border-[#141414] shadow-sm">
+                                HD
+                              </span>
+                            )}
                           </div>
                         </div>
 
-                        {/* Play Button */}
-                        <VplayPrimaryButton
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setSelectedChannel(channel);
-                          }}
-                        >
-                          {isSelected ? '● ĐANG XEM' : '▶ XEM KÊNH'}
-                        </VplayPrimaryButton>
+                        {/* BOTTOM DIVIDER & EDIT BUTTON BAR */}
+                        <div className="border-t-2 border-[#1c1d1f]">
+                          <div className="bg-[#3e4144] group-hover:bg-[#484b4e] transition-colors py-1.5 sm:py-2 px-1.5 sm:px-3 flex items-center justify-center gap-1 sm:gap-2 text-center text-white cursor-pointer select-none">
+                            <Pencil className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
+                            <span className="font-bold text-[9px] sm:text-xs uppercase tracking-wider text-white font-montserrat">
+                              {isSelected ? 'Đang xem' : 'Xem ngay'}
+                            </span>
+                          </div>
+                        </div>
 
                       </div>
                     );
