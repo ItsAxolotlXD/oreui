@@ -20,7 +20,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const menuItems: { id: SidebarMenuItem; label: string; badge?: string }[] = [
     { id: 'home', label: 'Home' },
     { id: 'live_tv', label: 'Live TV', badge: `(${channelCount})` },
-    { id: 'settings', label: 'Settings' },
     { id: 'design_system', label: 'Design System' },
   ];
 

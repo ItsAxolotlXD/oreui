@@ -75,7 +75,7 @@ export const VplaySecondaryButton: React.FC<VplaySecondaryButtonProps> = ({
       onClick={handleClick}
       className={`
         relative select-none font-montserrat text-sm sm:text-base font-semibold
-        py-2.5 px-6 h-11 flex items-center justify-center active:translate-y-[2px] btn-press-effect
+        py-3 px-6 h-12 flex items-center justify-center active:translate-y-[2px] btn-press-effect
         border-2 border-[#181818] rounded-none cursor-pointer transition-colors duration-75
         ${bgClass} ${shadowClass} ${transformClass}
         ${fullWidth ? 'w-full' : ''}

@@ -7,6 +7,7 @@ interface HeaderBarProps {
   onBack?: () => void;
   onToggleMenu?: () => void;
   onSearchClick?: () => void;
+  onSettingsClick?: () => void;
   searchValue?: string;
   onSearchChange?: (val: string) => void;
 }
@@ -16,6 +17,7 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
   onBack,
   onToggleMenu,
   onSearchClick,
+  onSettingsClick,
   searchValue = '',
   onSearchChange,
 }) => {
@@ -35,6 +37,11 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
     playPopSound();
     setIsSearching(!isSearching);
     onSearchClick?.();
+  };
+
+  const handleSettingsClick = () => {
+    playPopSound();
+    onSettingsClick?.();
   };
 
   return (
@@ -95,13 +102,27 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
           </div>
         </div>
       ) : (
-        <div className="text-center font-black text-xs sm:text-sm tracking-widest text-[#141414] uppercase">
+        <div className="text-center font-black font-montserrat font-[900] text-xs sm:text-sm tracking-widest text-[#141414] uppercase">
           {title}
         </div>
       )}
 
-      {/* Right control: Custom Search Magnifying Glass Icon */}
-      <div className="flex items-center">
+      {/* Right controls: Settings & Custom Search Magnifying Glass Icon */}
+      <div className="flex items-center gap-1">
+        <button
+          onClick={handleSettingsClick}
+          aria-label="Settings"
+          className="p-1 hover:bg-[#cecece] active:bg-[#bebebe] active:translate-y-[1px] btn-press-effect text-[#141414] cursor-pointer rounded-none flex items-center justify-center"
+          title="Cài đặt"
+        >
+          <img
+            src="https://static.wikia.nocookie.net/ep-deo/images/c/ce/Settings%400.5x.icon-768deb134ddeae9ce37ab53735e95ac7.png/revision/latest?cb=20260728073540"
+            alt="Settings"
+            referrerPolicy="no-referrer"
+            className="w-3.5 h-3.5 sm:w-4 sm:h-4 object-contain filter brightness-0"
+          />
+        </button>
+
         <button
           onClick={handleSearchToggle}
           aria-label="Search"

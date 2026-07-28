@@ -9,6 +9,7 @@ import { SearchChannelsView } from './components/SearchChannelsView';
 import { Sidebar, SidebarMenuItem } from './components/Sidebar';
 import { HeaderBar } from './components/HeaderBar';
 import { MinecraftPanorama } from './components/MinecraftPanorama';
+import { HomeBannerSlider } from './components/HomeBannerSlider';
 import { playPopSound } from './utils/sound';
 
 import { VplayHeroButton } from './components/ui/VplayHeroButton';
@@ -27,6 +28,14 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+  const [isTabLoading, setIsTabLoading] = useState(false);
+
+  const triggerTabLoading = () => {
+    setIsTabLoading(true);
+    setTimeout(() => {
+      setIsTabLoading(false);
+    }, 2000);
+  };
 
   const [settings, setSettings] = useState<UserSettings>({
     autoPlay: true,
@@ -59,6 +68,9 @@ export default function App() {
 
   const handleSidebarSelect = (item: SidebarMenuItem) => {
     playPopSound();
+    if (item !== sidebarItem || isSettingsOpen) {
+      triggerTabLoading();
+    }
     if (item === 'settings') {
       setIsSettingsOpen(true);
       setSidebarItem('settings');
@@ -82,6 +94,9 @@ export default function App() {
   };
 
   const handleHeaderBack = () => {
+    if (isSettingsOpen || sidebarItem !== 'home') {
+      triggerTabLoading();
+    }
     if (isSettingsOpen) {
       setIsSettingsOpen(false);
       setSidebarItem('home');
@@ -101,7 +116,13 @@ export default function App() {
           title={getHeaderTitle()}
           onBack={handleHeaderBack}
           onToggleMenu={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
+          onSettingsClick={() => {
+            if (!isSettingsOpen) triggerTabLoading();
+            setIsSettingsOpen(true);
+            setSidebarItem('settings');
+          }}
           onSearchClick={() => {
+            if (sidebarItem !== 'search' || isSettingsOpen) triggerTabLoading();
             setIsSettingsOpen(false);
             setSidebarItem('search');
           }}
@@ -110,6 +131,7 @@ export default function App() {
             setSearchQuery(q);
             setIsSettingsOpen(false);
             if (sidebarItem !== 'search') {
+              triggerTabLoading();
               setSidebarItem('search');
             }
           }}
@@ -125,102 +147,94 @@ export default function App() {
       </div>
 
       {/* MAIN CONTAINER CONTENT AREA */}
-      <div className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 pt-2 pb-6 lg:pb-8">
+      <div className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 pt-2 pb-6 lg:pb-8 relative">
         <main className="w-full min-w-0 overflow-hidden">
           <AnimatePresence mode="wait">
-            <motion.div
-              key={isSettingsOpen ? 'settings' : sidebarItem}
-              initial={{ x: '100%', opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: '-100%', opacity: 0 }}
-              transition={{ duration: 0.22, ease: 'easeInOut' }}
-            >
-              {sidebarItem === 'settings' || isSettingsOpen ? (
-                <SettingsView
+            {isTabLoading ? (
+              <motion.div
+                key="loading"
+                initial={{ x: '100%', opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.22, ease: 'easeInOut' }}
+              >
+                <div className="w-full min-h-[380px] bg-black/50 border-2 border-[#141414] shadow-2xl flex items-center justify-center p-8 text-center select-none my-2 rounded-none">
+                  <img
+                    src="https://i.ibb.co/YF4Q2tmz/animation-074ed0ba8c16bb30e36c.gif"
+                    alt="Loading..."
+                    referrerPolicy="no-referrer"
+                    className="w-7 h-7 object-contain [image-rendering:pixelated]"
+                    style={{ imageRendering: 'pixelated' }}
+                  />
+                </div>
+              </motion.div>
+            ) : (
+              <motion.div
+                key={isSettingsOpen ? 'settings' : sidebarItem}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.5, ease: 'easeInOut' }}
+              >
+                {sidebarItem === 'settings' || isSettingsOpen ? (
+                  <SettingsView
                   settings={settings}
                   onSave={(newSet) => {
                     setSettings(newSet);
                     setIsSettingsOpen(false);
+                    triggerTabLoading();
                     setSidebarItem('live_tv');
                   }}
                   onCancel={() => {
                     setIsSettingsOpen(false);
+                    triggerTabLoading();
                     setSidebarItem('live_tv');
                   }}
                 />
               ) : sidebarItem === 'design_system' ? (
-                <DesignSystemViewer />
-              ) : sidebarItem === 'search' ? (
-                <SearchChannelsView
-                  channels={TV_CHANNELS}
-                  searchQuery={searchQuery}
-                  onSearchChange={setSearchQuery}
-                  onSelectChannel={(ch) => {
-                    handleSelectChannel(ch);
-                    setSidebarItem('live_tv');
-                  }}
-                  recentlyWatched={recentlyWatched}
-                />
-              ) : sidebarItem === 'home' ? (
-                /* HOME DASHBOARD VIEW */
-                <div className="space-y-3">
-                  {/* YELLOW TIP PANEL BANNER */}
-                  <div className="relative w-full bg-[#ffe866] overflow-hidden select-none">
-                    <div className="relative z-10 py-1 px-3 text-center text-[#141414] font-jura font-bold text-[11px] sm:text-xs">
-                      You are previewing a test version of Vplay.{' '}
-                      <a
-                        href="https://vplay-refresh.vercel.app"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="underline font-black hover:text-black/80"
-                      >
-                        Click here
-                      </a>{' '}
-                      to go to official version.
-                    </div>
-                  </div>
-
-                  {/* WELCOME TO A DESIGN PREVIEW BANNER */}
-                  <div className="bg-[#292a2c] border-2 border-[#141414] p-6 shadow-xl flex flex-col gap-6 relative overflow-hidden">
-                    <div className="space-y-3 z-10 w-full">
-                      <h1 className="text-2xl sm:text-3xl font-black text-white uppercase tracking-wide font-jura">
-                        WELCOME TO A DESIGN PREVIEW
-                      </h1>
-                      <p className="text-xs sm:text-sm text-gray-300 leading-relaxed">
-                        We would love to hear your thoughts of this new design. Keep in mind that it's still work in progress and some functionality might be missing. Only available on some devices and scenarios.
-                      </p>
-                      
-                      {/* Enlarge and center the image */}
-                      <div className="w-full flex justify-center py-3">
-                        <img
-                          src="https://static.wikia.nocookie.net/ep-deo/images/3/37/Load_not_done.png/revision/latest?cb=20260724133427"
-                          alt="Work in progress"
-                          referrerPolicy="no-referrer"
-                          className="w-full max-w-xl sm:max-w-2xl md:max-w-3xl h-auto object-contain [image-rendering:pixelated]"
-                          style={{ imageRendering: 'pixelated' }}
-                        />
-                      </div>
-                    </div>
-
-                    {/* Buttons placed BELOW content */}
-                    <div className="flex flex-wrap items-center gap-3 z-10 pt-1">
-                      <div className="w-auto min-w-[200px]">
-                        <VplayHeroButton onClick={() => setSidebarItem('design_system')}>
-                          EXPLORE DESIGN SYSTEM
-                        </VplayHeroButton>
-                      </div>
-                      <div className="w-auto min-w-[160px]">
-                        <VplaySecondaryButton
-                          fullWidth={false}
-                          onClick={() => {
-                            alert("Thank you for your feedback!");
-                          }}
+                  <DesignSystemViewer />
+                ) : sidebarItem === 'search' ? (
+                  <SearchChannelsView
+                    channels={TV_CHANNELS}
+                    searchQuery={searchQuery}
+                    onSearchChange={setSearchQuery}
+                    onSelectChannel={(ch) => {
+                      handleSelectChannel(ch);
+                      triggerTabLoading();
+                      setSidebarItem('live_tv');
+                    }}
+                    recentlyWatched={recentlyWatched}
+                  />
+                ) : sidebarItem === 'home' ? (
+                  /* HOME DASHBOARD VIEW */
+                  <div className="space-y-3">
+                    {/* YELLOW TIP PANEL BANNER */}
+                    <div className="relative w-full bg-[#ffe866] overflow-hidden select-none">
+                      <div className="relative z-10 py-1 px-3 text-center text-[#141414] font-jura font-bold text-[11px] sm:text-xs">
+                        You are previewing a test version of Vplay.{' '}
+                        <a
+                          href="https://vplay-refresh.vercel.app"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="underline font-black hover:text-black/80"
                         >
-                          Give Feedback
-                        </VplaySecondaryButton>
+                          Click here
+                        </a>{' '}
+                        to go to official version.
                       </div>
                     </div>
-                  </div>
+
+                    {/* SLIDING BANNER */}
+                    <HomeBannerSlider
+                      onExploreDesignSystem={() => {
+                        triggerTabLoading();
+                        setSidebarItem('design_system');
+                      }}
+                      onWatchNow={() => {
+                        triggerTabLoading();
+                        setSidebarItem('live_tv');
+                      }}
+                    />
 
                   {/* VIP ANNOUNCEMENT HERO BANNER */}
                   <div className="bg-gradient-to-r from-[#212f1e] via-[#292a2c] to-[#1e2022] border-2 border-[#418a28] p-6 shadow-xl flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 relative overflow-hidden">
@@ -374,7 +388,8 @@ export default function App() {
 
             </div>
           )}
-            </motion.div>
+              </motion.div>
+            )}
           </AnimatePresence>
 
         </main>
