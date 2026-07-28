@@ -40,7 +40,7 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
   return (
     <div className="sticky top-0 z-50 w-full bg-[#dedede] text-[#141414] border-b-4 border-[#2b2d30] px-3 py-1 flex items-center justify-between font-montserrat select-none shadow-sm">
       {/* Left controls: Chevron Left (<) & Hamburger Menu (☰) */}
-      <div className="flex items-center gap-3 sm:gap-4">
+      <div className="flex items-center gap-0.5 sm:gap-1">
         <button
           onClick={handleBack}
           aria-label="Back"
@@ -75,8 +75,8 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
               autoFocus
               value={searchValue}
               onChange={(e) => onSearchChange?.(e.target.value)}
-              placeholder="Tìm kiếm kênh truyền hình..."
-              className="w-full h-7 bg-[#222426] text-white pl-8 pr-7 text-xs sm:text-sm font-bold font-montserrat border-2 border-[#141414] focus:outline-none placeholder:text-gray-400 shadow-[inset_0_2px_0_rgba(0,0,0,0.4)]"
+              placeholder="Search Vplay"
+              className="w-full h-7 bg-[#222426] text-white pl-8 pr-7 text-[11px] sm:text-xs font-normal font-montserrat border-2 border-[#141414] focus:outline-none placeholder:text-gray-400 shadow-[inset_0_2px_0_rgba(0,0,0,0.4)]"
             />
             {searchValue && (
               <button

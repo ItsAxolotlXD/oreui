@@ -5,6 +5,7 @@ import { TV_CHANNELS } from './data/mockTvData';
 import { DesignSystemViewer } from './components/DesignSystemViewer';
 import { TvPlayer } from './components/TvPlayer';
 import { SettingsView } from './components/SettingsView';
+import { SearchChannelsView } from './components/SearchChannelsView';
 import { Sidebar, SidebarMenuItem } from './components/Sidebar';
 import { HeaderBar } from './components/HeaderBar';
 import { MinecraftPanorama } from './components/MinecraftPanorama';
@@ -21,6 +22,7 @@ import { Settings, Trophy, Flame, Menu, X, Radio } from 'lucide-react';
 export default function App() {
   const [sidebarItem, setSidebarItem] = useState<SidebarMenuItem>('home');
   const [selectedChannel, setSelectedChannel] = useState<TvChannel>(TV_CHANNELS[0]);
+  const [recentlyWatched, setRecentlyWatched] = useState<TvChannel[]>([TV_CHANNELS[0], TV_CHANNELS[1], TV_CHANNELS[2]]);
   const [selectedGroup, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -37,6 +39,11 @@ export default function App() {
     notifications: true,
     searchQuery: '',
   });
+
+  const handleSelectChannel = (channel: TvChannel) => {
+    setSelectedChannel(channel);
+    setRecentlyWatched((prev) => [channel, ...prev.filter((c) => c.id !== channel.id)].slice(0, 10));
+  };
 
   // Extract unique group titles from parsed channels
   const groupsList = ['all', ...Array.from(new Set(TV_CHANNELS.map(c => c.groupTitle)))];
@@ -67,6 +74,7 @@ export default function App() {
     switch (sidebarItem) {
       case 'home': return 'TRANG CHỦ';
       case 'live_tv': return 'TRUYỀN HÌNH';
+      case 'search': return 'SEARCH FOR CHANNELS';
       case 'settings': return 'CÀI ĐẶT';
       case 'design_system': return 'DESIGN SYSTEM';
       default: return 'CÀI ĐẶT';
@@ -92,8 +100,16 @@ export default function App() {
         title={getHeaderTitle()}
         onBack={handleHeaderBack}
         onToggleMenu={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
+        onSearchClick={() => {
+          setSidebarItem('search');
+        }}
         searchValue={searchQuery}
-        onSearchChange={setSearchQuery}
+        onSearchChange={(q) => {
+          setSearchQuery(q);
+          if (sidebarItem !== 'search') {
+            setSidebarItem('search');
+          }
+        }}
       />
 
       {/* MAIN CONTAINER: SIDEBAR + CONTENT */}
@@ -150,6 +166,17 @@ export default function App() {
                 />
               ) : sidebarItem === 'design_system' ? (
                 <DesignSystemViewer />
+              ) : sidebarItem === 'search' ? (
+                <SearchChannelsView
+                  channels={TV_CHANNELS}
+                  searchQuery={searchQuery}
+                  onSearchChange={setSearchQuery}
+                  onSelectChannel={(ch) => {
+                    handleSelectChannel(ch);
+                    setSidebarItem('live_tv');
+                  }}
+                  recentlyWatched={recentlyWatched}
+                />
               ) : sidebarItem === 'home' ? (
                 /* HOME DASHBOARD VIEW */
                 <div className="space-y-8">
@@ -184,21 +211,9 @@ export default function App() {
                   
                   {/* LIVE TV PLAYER */}
                   <section className="space-y-3">
-                    <div className="flex items-center justify-between border-b-2 border-[#383a3d] pb-2">
-                      <div className="flex items-center gap-2">
-                        <div className="w-3 h-3 bg-red-600 animate-ping rounded-full" />
-                        <h2 className="text-sm font-bold text-[#89dc69] uppercase">
-                          ĐANG PHÁT TRỰC TIẾP ({selectedChannel.name})
-                        </h2>
-                      </div>
-                      <span className="text-xs text-gray-400 font-mono hidden sm:inline">
-                        HLS Live Stream | 1080p
-                      </span>
-                    </div>
-
                     <TvPlayer
                       channel={selectedChannel}
-                      onSelectChannel={setSelectedChannel}
+                      onSelectChannel={handleSelectChannel}
                       channels={TV_CHANNELS}
                       settings={settings}
                       onUpdateSettings={setSettings}
@@ -245,7 +260,7 @@ export default function App() {
                         key={channel.id}
                         onClick={() => {
                           playPopSound();
-                          setSelectedChannel(channel);
+                          handleSelectChannel(channel);
                         }}
                         className={`
                           group relative bg-[#292a2c] border-2 p-4 cursor-pointer transition-colors duration-150 flex flex-col justify-between gap-3 active:translate-y-[2px] btn-press-effect
@@ -257,8 +272,8 @@ export default function App() {
                           <span className="font-bold text-xs text-[#89dc69] truncate">
                             {channel.name}
                           </span>
-                          <span className={`text-[10px] font-bold px-1.5 py-0.5 border flex-shrink-0 ${isSelected ? 'bg-[#418a28] text-white border-white' : 'bg-[#1a1b1d] text-gray-300 border-[#383a3d]'}`}>
-                            {channel.badge || 'LIVE'}
+                          <span className="text-[10px] text-gray-400 font-mono flex-shrink-0">
+                            {channel.groupTitle}
                           </span>
                         </div>
 
@@ -277,19 +292,12 @@ export default function App() {
                           ) : (
                             <span className="font-extrabold text-xs text-[#89dc69]">{channel.name}</span>
                           )}
-                          <div className="absolute bottom-1 right-1 text-[9px] font-bold text-gray-300 bg-black/80 px-1.5 py-0.5 border border-[#333]">
-                            {channel.groupTitle}
-                          </div>
                         </div>
 
-                        {/* Program Title & Viewers */}
+                        {/* Program Title */}
                         <div className="space-y-1">
                           <div className="text-xs text-gray-200 font-semibold line-clamp-2 min-h-[32px]">
                             {channel.currentProgram}
-                          </div>
-                          <div className="flex items-center justify-between text-[11px] text-gray-400 pt-2 border-t border-[#3e4145]">
-                            <span>👁 {channel.viewers}</span>
-                            <span className="text-[#89dc69] font-bold">⭐ {channel.rating}</span>
                           </div>
                         </div>
 

@@ -1,8 +1,8 @@
 import React from 'react';
-import { Home, Tv, Settings, ExternalLink, Sparkles } from 'lucide-react';
+import { Home, Tv, Settings, ExternalLink, Sparkles, Search } from 'lucide-react';
 import { playPopSound } from '../utils/sound';
 
-export type SidebarMenuItem = 'home' | 'live_tv' | 'settings' | 'design_system';
+export type SidebarMenuItem = 'home' | 'live_tv' | 'settings' | 'design_system' | 'search';
 
 interface SidebarProps {
   activeItem: SidebarMenuItem;
@@ -22,12 +22,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const menuItems: { id: SidebarMenuItem; label: string; icon: React.ReactNode; badge?: string }[] = [
     { id: 'home', label: 'Home', icon: <Home className="w-4 h-4" /> },
     { id: 'live_tv', label: 'Live TV', icon: <Tv className="w-4 h-4" />, badge: `(${channelCount})` },
+    { id: 'search', label: 'Search Channels', icon: <Search className="w-4 h-4" /> },
     { id: 'settings', label: 'Settings', icon: <Settings className="w-4 h-4" /> },
     { id: 'design_system', label: 'Design System', icon: <Sparkles className="w-4 h-4" />, badge: 'V2' },
   ];
 
   return (
-    <aside className={`w-full md:w-64 flex-shrink-0 bg-[#222427]/70 border-2 border-[#141414] p-3 flex flex-col justify-between select-none ${className}`}>
+    <aside className={`w-full md:w-64 flex-shrink-0 sticky top-12 self-start max-h-[calc(100vh-4rem)] overflow-y-auto bg-[#222427]/70 border-2 border-[#141414] p-3 flex flex-col justify-between select-none ${className}`}>
       
       {/* Top Menu Section */}
       <div className="space-y-1">
