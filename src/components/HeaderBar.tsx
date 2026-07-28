@@ -44,10 +44,16 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
         <button
           onClick={handleBack}
           aria-label="Back"
-          className="p-1 hover:bg-[#cecece] active:bg-[#bebebe] active:translate-y-[1px] btn-press-effect text-[#141414] cursor-pointer rounded-none"
+          className="p-1 hover:bg-[#cecece] active:bg-[#bebebe] active:translate-y-[1px] btn-press-effect text-[#141414] cursor-pointer rounded-none flex items-center justify-center"
           title="Quay lại"
         >
-          <ChevronLeft className="w-5 h-5 stroke-[2.5]" />
+          <img
+            src="https://static.wikia.nocookie.net/ep-deo/images/a/ab/ArrowLeft.png/revision/latest?cb=20260728033445"
+            alt="Back"
+            referrerPolicy="no-referrer"
+            className="w-[13px] h-[13px] sm:w-[14px] sm:h-[14px] object-contain [image-rendering:pixelated]"
+            style={{ imageRendering: 'pixelated' }}
+          />
         </button>
 
         <button
@@ -111,7 +117,7 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
               src="https://static.wikia.nocookie.net/ep-deo/images/c/c8/MagnifyingGlass-52f96e5f47f42e682a00.png/revision/latest?cb=20260723030208"
               alt="Search"
               referrerPolicy="no-referrer"
-              className="w-4 h-4 sm:w-5 sm:h-5 object-contain filter brightness-0"
+              className="w-3.5 h-3.5 sm:w-4 sm:h-4 object-contain filter brightness-0"
             />
           )}
         </button>

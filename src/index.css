@@ -1,21 +1,24 @@
 @import "tailwindcss";
 
 @layer utilities {
+  .font-jura {
+    font-family: 'Jura', sans-serif;
+  }
   .font-montserrat {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Jura', sans-serif;
   }
   .font-pixel {
-    font-family: 'Montserrat', 'Pixelify Sans', sans-serif;
+    font-family: 'Jura', 'Pixelify Sans', sans-serif;
   }
   .font-press-start {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Jura', sans-serif;
     font-weight: 700;
   }
   .font-silkscreen {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Jura', sans-serif;
   }
   .font-vt323 {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Jura', sans-serif;
   }
 }
 

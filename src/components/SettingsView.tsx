@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { UserSettings } from '../types';
 import { ExternalLink } from 'lucide-react';
 import { playPopSound } from '../utils/sound';
+import { VplayToggleSwitch } from './ui/VplayToggleSwitch';
 
 interface SettingsViewProps {
   settings: UserSettings;
@@ -190,17 +191,10 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
               Hiển thị phụ đề dịch thuật trên các kênh tin tức & phim truyện
             </div>
           </div>
-          <button
-            onClick={handleToggleSubtitles}
-            className={`
-              w-10 h-6 border-2 border-[#141414] flex items-center p-0.5 cursor-pointer active:translate-y-[1px] btn-press-effect
-              ${temp.subtitles ? 'bg-[#55b331] justify-end' : 'bg-[#2a2c2e] justify-start'}
-            `}
-          >
-            <span className="w-4 h-4 bg-[#dcdfe2] border border-[#141414] flex items-center justify-center text-[9px] font-mono font-bold text-[#141414]">
-              {temp.subtitles ? 'I' : 'O'}
-            </span>
-          </button>
+          <VplayToggleSwitch
+            checked={temp.subtitles}
+            onChange={handleToggleSubtitles}
+          />
         </div>
 
         {/* Toggle: Auto play / Auto jump */}
@@ -213,17 +207,10 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
               Tự động tải luồng truyền hình trực tiếp ngay khi bấm chọn kênh
             </div>
           </div>
-          <button
-            onClick={handleToggleAutoPlay}
-            className={`
-              w-10 h-6 border-2 border-[#141414] flex items-center p-0.5 cursor-pointer active:translate-y-[1px] btn-press-effect
-              ${temp.autoPlay ? 'bg-[#55b331] justify-end' : 'bg-[#2a2c2e] justify-start'}
-            `}
-          >
-            <span className="w-4 h-4 bg-[#dcdfe2] border border-[#141414] flex items-center justify-center text-[9px] font-mono font-bold text-[#141414]">
-              {temp.autoPlay ? 'I' : 'O'}
-            </span>
-          </button>
+          <VplayToggleSwitch
+            checked={temp.autoPlay}
+            onChange={handleToggleAutoPlay}
+          />
         </div>
       </div>
 
@@ -265,17 +252,10 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
               Nhận nhắc nhở lịch thi đấu Ngoại hạng Anh & sự kiện trực tiếp
             </div>
           </div>
-          <button
-            onClick={handleToggleNotifications}
-            className={`
-              w-10 h-6 border-2 border-[#141414] flex items-center p-0.5 cursor-pointer active:translate-y-[1px] btn-press-effect
-              ${temp.notifications ? 'bg-[#55b331] justify-end' : 'bg-[#2a2c2e] justify-start'}
-            `}
-          >
-            <span className="w-4 h-4 bg-[#dcdfe2] border border-[#141414] flex items-center justify-center text-[9px] font-mono font-bold text-[#141414]">
-              {temp.notifications ? 'I' : 'O'}
-            </span>
-          </button>
+          <VplayToggleSwitch
+            checked={temp.notifications}
+            onChange={handleToggleNotifications}
+          />
         </div>
 
         {/* Reset Row */}

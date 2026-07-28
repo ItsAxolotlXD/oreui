@@ -91,58 +91,42 @@ export default function App() {
   };
 
   return (
-    <div className="relative min-h-screen text-white font-montserrat antialiased selection:bg-[#418a28] selection:text-white flex flex-col">
+    <div className="relative min-h-screen text-white font-jura antialiased selection:bg-[#418a28] selection:text-white flex flex-col">
       {/* Minecraft Panorama Animated Background */}
       <MinecraftPanorama />
       
-      {/* SILVER TOP HEADER BAR - Clean single header bar matching reference design style */}
-      <HeaderBar
-        title={getHeaderTitle()}
-        onBack={handleHeaderBack}
-        onToggleMenu={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
-        onSearchClick={() => {
-          setSidebarItem('search');
-        }}
-        searchValue={searchQuery}
-        onSearchChange={(q) => {
-          setSearchQuery(q);
-          if (sidebarItem !== 'search') {
+      {/* STICKY TOP CONTAINER FOR HEADER BAR + HORIZONTAL TAB BAR */}
+      <div className="sticky top-0 z-50 w-full bg-[#242424]/95 backdrop-blur-md border-b-2 border-[#141414] shadow-lg">
+        <HeaderBar
+          title={getHeaderTitle()}
+          onBack={handleHeaderBack}
+          onToggleMenu={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
+          onSearchClick={() => {
+            setIsSettingsOpen(false);
             setSidebarItem('search');
-          }
-        }}
-      />
-
-      {/* MAIN CONTAINER: SIDEBAR + CONTENT */}
-      <div className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 flex flex-col md:flex-row gap-6">
-        
-        {/* DESKTOP SIDEBAR (Style matching reference image) */}
-        <Sidebar
-          activeItem={sidebarItem}
-          onSelectItem={handleSidebarSelect}
-          channelCount={TV_CHANNELS.length}
-          className="hidden md:flex"
+          }}
+          searchValue={searchQuery}
+          onSearchChange={(q) => {
+            setSearchQuery(q);
+            setIsSettingsOpen(false);
+            if (sidebarItem !== 'search') {
+              setSidebarItem('search');
+            }
+          }}
         />
 
-        {/* MOBILE SIDEBAR OVERLAY */}
-        {isMobileSidebarOpen && (
-          <div className="fixed inset-0 z-50 bg-black/80 flex md:hidden">
-            <div className="w-72 bg-[#222427]/70 h-full p-4 border-r-2 border-[#141414]">
-              <div className="flex justify-between items-center mb-4 pb-2 border-b border-[#282a2d]">
-                <span className="font-bold text-[#89dc69]">MENU</span>
-                <button onClick={() => setIsMobileSidebarOpen(false)} className="text-gray-400 p-1">✕</button>
-              </div>
-              <Sidebar
-                activeItem={sidebarItem}
-                onSelectItem={handleSidebarSelect}
-                channelCount={TV_CHANNELS.length}
-                className="w-full h-full border-none p-0"
-              />
-            </div>
-          </div>
-        )}
+        <div className="w-full max-w-7xl mx-auto px-3 sm:px-6 py-1">
+          <Sidebar
+            activeItem={sidebarItem}
+            onSelectItem={handleSidebarSelect}
+            channelCount={TV_CHANNELS.length}
+          />
+        </div>
+      </div>
 
-        {/* CONTENT AREA BASED ON SIDEBAR SELECTION */}
-        <main className="flex-1 min-w-0 overflow-hidden">
+      {/* MAIN CONTAINER CONTENT AREA */}
+      <div className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 pt-2 pb-6 lg:pb-8">
+        <main className="w-full min-w-0 overflow-hidden">
           <AnimatePresence mode="wait">
             <motion.div
               key={isSettingsOpen ? 'settings' : sidebarItem}
@@ -179,7 +163,65 @@ export default function App() {
                 />
               ) : sidebarItem === 'home' ? (
                 /* HOME DASHBOARD VIEW */
-                <div className="space-y-8">
+                <div className="space-y-3">
+                  {/* YELLOW TIP PANEL BANNER */}
+                  <div className="relative w-full bg-[#ffe866] overflow-hidden select-none">
+                    <div className="relative z-10 py-1 px-3 text-center text-[#141414] font-jura font-bold text-[11px] sm:text-xs">
+                      You are previewing a test version of Vplay.{' '}
+                      <a
+                        href="https://vplay-refresh.vercel.app"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline font-black hover:text-black/80"
+                      >
+                        Click here
+                      </a>{' '}
+                      to go to official version.
+                    </div>
+                  </div>
+
+                  {/* WELCOME TO A DESIGN PREVIEW BANNER */}
+                  <div className="bg-[#292a2c] border-2 border-[#141414] p-6 shadow-xl flex flex-col gap-6 relative overflow-hidden">
+                    <div className="space-y-3 z-10 w-full">
+                      <h1 className="text-2xl sm:text-3xl font-black text-white uppercase tracking-wide font-jura">
+                        WELCOME TO A DESIGN PREVIEW
+                      </h1>
+                      <p className="text-xs sm:text-sm text-gray-300 leading-relaxed">
+                        We would love to hear your thoughts of this new design. Keep in mind that it's still work in progress and some functionality might be missing. Only available on some devices and scenarios.
+                      </p>
+                      
+                      {/* Enlarge and center the image */}
+                      <div className="w-full flex justify-center py-3">
+                        <img
+                          src="https://static.wikia.nocookie.net/ep-deo/images/3/37/Load_not_done.png/revision/latest?cb=20260724133427"
+                          alt="Work in progress"
+                          referrerPolicy="no-referrer"
+                          className="w-full max-w-xl sm:max-w-2xl md:max-w-3xl h-auto object-contain [image-rendering:pixelated]"
+                          style={{ imageRendering: 'pixelated' }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Buttons placed BELOW content */}
+                    <div className="flex flex-wrap items-center gap-3 z-10 pt-1">
+                      <div className="w-auto min-w-[200px]">
+                        <VplayHeroButton onClick={() => setSidebarItem('design_system')}>
+                          EXPLORE DESIGN SYSTEM
+                        </VplayHeroButton>
+                      </div>
+                      <div className="w-auto min-w-[160px]">
+                        <VplaySecondaryButton
+                          fullWidth={false}
+                          onClick={() => {
+                            alert("Thank you for your feedback!");
+                          }}
+                        >
+                          Give Feedback
+                        </VplaySecondaryButton>
+                      </div>
+                    </div>
+                  </div>
+
                   {/* VIP ANNOUNCEMENT HERO BANNER */}
                   <div className="bg-gradient-to-r from-[#212f1e] via-[#292a2c] to-[#1e2022] border-2 border-[#418a28] p-6 shadow-xl flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 relative overflow-hidden">
                     <div className="absolute right-0 top-0 bottom-0 opacity-10 pointer-events-none flex items-center pr-8">
@@ -194,7 +236,7 @@ export default function App() {
                         HỆ THỐNG TRUYỀN HÌNH TRỰC TUYẾN CHẤT LƯỢNG CAO
                       </h2>
                       <p className="text-xs text-gray-300 leading-relaxed">
-                        Trải nghiệm {TV_CHANNELS.length} Kênh TV Bản Quyền (VTV, HTV, SCTV, VTVcab, Kênh Địa Phương & Quốc Tế) với font Montserrat hiện đại và nút nhấn hiệu ứng lún độc đáo.
+                        Trải nghiệm {TV_CHANNELS.length} Kênh TV Bản Quyền (VTV, HTV, SCTV, VTVcab, Kênh Địa Phương & Quốc Tế) với font Jura hiện đại và nút nhấn hiệu ứng lún độc đáo.
                       </p>
                     </div>
 

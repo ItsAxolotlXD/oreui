@@ -12,6 +12,13 @@ interface VplayToggleSwitchProps {
   className?: string;
 }
 
+const TOGGLE_IMAGES = {
+  off: 'https://static.wikia.nocookie.net/ep-deo/images/6/6e/Toggle_off.png/revision/latest?cb=20260728024809',
+  offHover: 'https://static.wikia.nocookie.net/ep-deo/images/4/4f/Toggle_off_disabled.png/revision/latest?cb=20260728024809',
+  on: 'https://static.wikia.nocookie.net/ep-deo/images/4/4d/Toggle_on.png/revision/latest?cb=20260728024809',
+  onHover: 'https://static.wikia.nocookie.net/ep-deo/images/9/9e/Toggle_on_hover.png/revision/latest?cb=20260728024809',
+};
+
 export const VplayToggleSwitch: React.FC<VplayToggleSwitchProps> = ({
   checked = false,
   onChange,
@@ -44,51 +51,19 @@ export const VplayToggleSwitch: React.FC<VplayToggleSwitchProps> = ({
     onChange?.(next);
   };
 
-  let leftBox = '';
-  let rightBox = '';
-  let transformClass = '';
-
+  // Determine which pixel image asset to show based on state & checked
+  let imgSrc = TOGGLE_IMAGES.off;
   if (isChecked) {
-    switch (state) {
-      case 'hovered':
-        leftBox = 'bg-[#51a233] text-white shadow-[inset_0_1px_0_#89dc69]';
-        rightBox = 'bg-[#ffffff] text-[#141414] shadow-[inset_0_1px_0_#ffffff]';
-        break;
-      case 'pressed':
-        leftBox = 'bg-[#2b611a] text-white shadow-[inset_0_2px_0_#18370d]';
-        rightBox = 'bg-[#abafb3] text-[#141414] shadow-[inset_0_2px_0_#898d91]';
-        transformClass = 'translate-y-[1px]';
-        break;
-      case 'disabled':
-        leftBox = 'bg-[#8c9196] text-[#5e6266] shadow-none cursor-not-allowed';
-        rightBox = 'bg-[#c8cbce] text-[#5e6266] shadow-none cursor-not-allowed';
-        break;
-      case 'normal':
-      default:
-        leftBox = 'bg-[#418a28] text-white shadow-[inset_0_1px_0_#6bc34b]';
-        rightBox = 'bg-[#cdd1d4] text-[#141414] shadow-[inset_0_1px_0_#ffffff]';
-        break;
+    if (state === 'hovered') {
+      imgSrc = TOGGLE_IMAGES.onHover;
+    } else {
+      imgSrc = TOGGLE_IMAGES.on;
     }
   } else {
-    switch (state) {
-      case 'hovered':
-        leftBox = 'bg-[#ffffff] text-[#141414] shadow-[inset_0_1px_0_#ffffff]';
-        rightBox = 'bg-[#5a5e62] text-white shadow-[inset_0_1px_0_#787d82]';
-        break;
-      case 'pressed':
-        leftBox = 'bg-[#abafb3] text-[#141414] shadow-[inset_0_2px_0_#898d91]';
-        rightBox = 'bg-[#3e4144] text-white shadow-[inset_0_2px_0_#282a2b]';
-        transformClass = 'translate-y-[1px]';
-        break;
-      case 'disabled':
-        leftBox = 'bg-[#c8cbce] text-[#5e6266] shadow-none cursor-not-allowed';
-        rightBox = 'bg-[#8c9196] text-[#5e6266] shadow-none cursor-not-allowed';
-        break;
-      case 'normal':
-      default:
-        leftBox = 'bg-[#cdd1d4] text-[#141414] shadow-[inset_0_1px_0_#ffffff]';
-        rightBox = 'bg-[#5a5e62] text-white shadow-[inset_0_1px_0_#787d82]';
-        break;
+    if (state === 'hovered') {
+      imgSrc = TOGGLE_IMAGES.offHover;
+    } else {
+      imgSrc = TOGGLE_IMAGES.off;
     }
   }
 
@@ -99,38 +74,24 @@ export const VplayToggleSwitch: React.FC<VplayToggleSwitchProps> = ({
       onMouseLeave={() => { setIsHovered(false); setIsPressed(false); }}
       onMouseDown={() => setIsPressed(true)}
       onMouseUp={() => setIsPressed(false)}
-      className={`inline-flex items-center gap-3 cursor-pointer select-none active:translate-y-[1px] ${effectiveDisabled ? 'cursor-not-allowed opacity-90' : ''} ${className}`}
+      className={`inline-flex items-center gap-3 cursor-pointer select-none active:translate-y-[1px] ${effectiveDisabled ? 'cursor-not-allowed opacity-75' : ''} ${className}`}
     >
-      <div
-        className={`
-          relative w-16 h-8 border-2 border-[#141414] bg-[#222426] flex items-center p-[2px] select-none
-          transition-all duration-75 ${transformClass}
-        `}
-      >
-        <div
-          className={`
-            w-1/2 h-full flex items-center justify-center font-montserrat font-extrabold text-[11px] border border-[#141414]
-            transition-colors duration-75 ${leftBox}
-          `}
-        >
-          {isChecked ? 'I' : ''}
-        </div>
-
-        <div
-          className={`
-            w-1/2 h-full flex items-center justify-center font-montserrat font-extrabold text-[11px] border border-[#141414]
-            transition-colors duration-75 ${rightBox}
-          `}
-        >
-          {!isChecked ? 'O' : ''}
-        </div>
+      <div className="relative flex items-center justify-center transition-transform duration-75">
+        <img
+          src={imgSrc}
+          alt={isChecked ? 'Toggle On' : 'Toggle Off'}
+          referrerPolicy="no-referrer"
+          className="h-6 sm:h-7 w-auto max-w-none object-contain [image-rendering:pixelated]"
+          style={{ imageRendering: 'pixelated' }}
+        />
       </div>
 
       {label && (
-        <span className={`font-montserrat font-medium text-xs sm:text-sm ${effectiveDisabled ? 'text-[#8c9196]' : 'text-white'}`}>
+        <span className={`font-jura font-semibold text-xs sm:text-sm ${effectiveDisabled ? 'text-[#8c9196]' : 'text-white'}`}>
           {label}
         </span>
       )}
     </label>
   );
 };
+

@@ -96,14 +96,18 @@ export const VplayCheckbox: React.FC<VplayCheckboxProps> = ({
     >
       <div
         className={`
-          w-6 h-6 border-2 border-[#141414] rounded-none flex items-center justify-center select-none
+          w-6 h-6 sm:w-7 sm:h-7 border-2 border-[#141414] rounded-none flex items-center justify-center select-none p-0.5
           transition-all duration-75 ${boxClass} ${transformClass}
         `}
       >
         {isChecked && (
-          <svg className={`w-4 h-4 ${checkColor} stroke-[3]`} viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path strokeLinecap="square" strokeLinejoin="miter" d="M20 6L9 17l-5-5" />
-          </svg>
+          <img
+            src="https://static.wikia.nocookie.net/ep-deo/images/5/5d/Checkfcbxo.png/revision/latest?cb=20260728024540"
+            alt="Checked"
+            referrerPolicy="no-referrer"
+            className="w-full h-full object-contain [image-rendering:pixelated]"
+            style={{ imageRendering: 'pixelated' }}
+          />
         )}
       </div>
       {label && (
