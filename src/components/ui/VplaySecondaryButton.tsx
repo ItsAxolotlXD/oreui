@@ -6,12 +6,14 @@ interface VplaySecondaryButtonProps extends React.ButtonHTMLAttributes<HTMLButto
   children?: React.ReactNode;
   forcedState?: ComponentState;
   fullWidth?: boolean;
+  size?: 'normal' | 'compact' | 'sm';
 }
 
 export const VplaySecondaryButton: React.FC<VplaySecondaryButtonProps> = ({
   children = 'Secondary button',
   forcedState,
   fullWidth = true,
+  size = 'normal',
   onClick,
   disabled,
   className = '',
@@ -65,6 +67,11 @@ export const VplaySecondaryButton: React.FC<VplaySecondaryButtonProps> = ({
     onClick?.(e);
   };
 
+  const isSmall = size === 'sm' || size === 'compact';
+  const sizeClasses = isSmall
+    ? 'text-xs font-bold py-1 px-3 h-8'
+    : 'text-sm sm:text-base font-semibold py-3 px-6 h-12';
+
   return (
     <button
       disabled={effectiveDisabled}
@@ -74,9 +81,10 @@ export const VplaySecondaryButton: React.FC<VplaySecondaryButtonProps> = ({
       onMouseUp={() => setIsPressed(false)}
       onClick={handleClick}
       className={`
-        relative select-none font-montserrat text-sm sm:text-base font-semibold
-        py-3 px-6 h-12 flex items-center justify-center active:translate-y-[2px] btn-press-effect
+        relative select-none font-montserrat
+        flex items-center justify-center active:translate-y-[2px] btn-press-effect
         border-2 border-[#181818] rounded-none cursor-pointer transition-colors duration-75
+        ${sizeClasses}
         ${bgClass} ${shadowClass} ${transformClass}
         ${fullWidth ? 'w-full' : ''}
         ${className}

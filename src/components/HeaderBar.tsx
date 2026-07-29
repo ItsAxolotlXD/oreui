@@ -89,7 +89,7 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
               value={searchValue}
               onChange={(e) => onSearchChange?.(e.target.value)}
               placeholder="Search Vplay"
-              className="w-full h-7 bg-[#222426] text-white pl-8 pr-7 text-[11px] sm:text-xs font-normal font-montserrat border-2 border-[#141414] focus:outline-none placeholder:text-gray-400 shadow-[inset_0_2px_0_rgba(0,0,0,0.4)]"
+              className="w-full h-7 bg-[#222426] text-white pl-8 pr-7 text-[11px] sm:text-xs font-normal font-montserrat border-2 border-[#141414] focus:outline-none placeholder:text-gray-400 shadow-[inset_0_2px_0_rgba(0,0,0,0.4)] cursor-pointer"
             />
             {searchValue && (
               <button
@@ -102,7 +102,7 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
           </div>
         </div>
       ) : (
-        <div className="text-center font-black font-montserrat font-[900] text-xs sm:text-sm tracking-widest text-[#141414] uppercase">
+        <div className="text-center font-bold font-montserrat text-xs sm:text-sm tracking-normal text-[#141414] uppercase">
           {title}
         </div>
       )}

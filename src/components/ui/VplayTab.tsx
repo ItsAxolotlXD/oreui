@@ -74,10 +74,12 @@ export const VplayTab: React.FC<VplayTabProps> = ({
         ${tabBg} ${transformClass} ${className}
       `}
     >
-      <span className="truncate">{children}</span>
+      <div className="relative inline-flex flex-col items-center max-w-full">
+        <span className="truncate">{children}</span>
 
-      {/* Bottom green bar indicator for "On" / Active state */}
-      <div className={`h-[3px] w-12 mt-1.5 transition-opacity ${isActive ? `opacity-100 ${lineClass}` : 'opacity-0 bg-transparent'}`} />
+        {/* Bottom green bar indicator for "On" / Active state matching character length */}
+        <div className={`h-[3px] w-full mt-1.5 transition-opacity ${isActive ? `opacity-100 ${lineClass}` : 'opacity-0 bg-transparent'}`} />
+      </div>
     </div>
   );
 };

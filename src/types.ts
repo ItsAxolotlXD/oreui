@@ -38,4 +38,7 @@ export interface UserSettings {
   themeMode: 'dark' | 'retro';
   notifications: boolean;
   searchQuery: string;
+  disablePanorama?: boolean;
+  lockPanoramaScroll?: boolean;
+  panoramaScrollSpeed?: number;
 }

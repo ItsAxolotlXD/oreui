@@ -8,11 +8,13 @@ import { playPopSound } from '../utils/sound';
 interface HomeBannerSliderProps {
   onExploreDesignSystem: () => void;
   onWatchNow: () => void;
+  onOpenFeedback?: () => void;
 }
 
 export const HomeBannerSlider: React.FC<HomeBannerSliderProps> = ({
   onExploreDesignSystem,
   onWatchNow,
+  onOpenFeedback,
 }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const totalSlides = 2;
@@ -83,34 +85,21 @@ export const HomeBannerSlider: React.FC<HomeBannerSliderProps> = ({
               transition={{ duration: 0.35, ease: [0.25, 1, 0.5, 1] }}
               className="space-y-4 w-full"
             >
-              {/* IMAGE PLACED SIDE-BY-SIDE WITH TITLE & SUBTITLE */}
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6">
-                <div className="flex-1 space-y-2 text-left">
-                  <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-white uppercase tracking-wide font-jura">
-                    WELCOME TO A DESIGN PREVIEW
-                  </h1>
-                  <p className="text-xs sm:text-sm text-gray-300 leading-relaxed">
-                    We would love to hear your thoughts of this new design. Keep in mind that it's still work in progress and some functionality might be missing. Only available on some devices and scenarios.
-                  </p>
-                </div>
-
-                {/* SMALLER IMAGE NEXT TO TITLE & SUBTITLE */}
-                <div className="flex-shrink-0 flex justify-center py-1">
-                  <img
-                    src="https://static.wikia.nocookie.net/ep-deo/images/3/37/Load_not_done.png/revision/latest?cb=20260724133427"
-                    alt="Work in progress"
-                    referrerPolicy="no-referrer"
-                    className="w-32 sm:w-44 md:w-52 h-auto object-contain [image-rendering:pixelated]"
-                    style={{ imageRendering: 'pixelated' }}
-                  />
-                </div>
+              {/* TITLE & SUBTITLE WITHOUT SIDE IMAGE */}
+              <div className="space-y-2 text-left max-w-3xl mx-auto">
+                <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-white uppercase tracking-wide font-jura text-center sm:text-left">
+                  WELCOME TO A DESIGN PREVIEW
+                </h1>
+                <p className="text-xs sm:text-sm text-gray-300 leading-relaxed text-center sm:text-left">
+                  Bạn đang được trải nghiệm hệ thống giao diện mới của Vplay, lấy cảm hứng từ Minecraft Ore UI, chúng tôi rất muốn nghe ý kiến của bạn. Hãy nhớ rằng là web nói chung và giao diện nói riêng vẫn đang trong quá trình phát triển, vì vậy một số tính năng có thể bị thiếu hoặc bạn sẽ gặp phải khá nhiều lỗi. Ore UI hứa hẹn sẽ đem đến cho bạn một trải nghiệm Vplay đẹp mắt, trực quan và mượt mà nhất.
+                </p>
               </div>
 
               {/* 2 BUTTONS CENTERED */}
               <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
                 <div className="w-auto min-w-[200px]">
                   <VplayHeroButton onClick={onExploreDesignSystem}>
-                    EXPLORE DESIGN SYSTEM
+                    KHÁM PHÁ ORE UI
                   </VplayHeroButton>
                 </div>
                 <div className="w-auto min-w-[160px]">
@@ -118,7 +107,8 @@ export const HomeBannerSlider: React.FC<HomeBannerSliderProps> = ({
                     fullWidth={false}
                     onClick={() => {
                       playPopSound();
-                      alert("Thank you for your feedback!");
+                      if (onOpenFeedback) onOpenFeedback();
+                      else alert("Thank you for your feedback!");
                     }}
                   >
                     <span className="flex items-center justify-center gap-2">
@@ -144,12 +134,13 @@ export const HomeBannerSlider: React.FC<HomeBannerSliderProps> = ({
               className="space-y-4 w-full relative p-4 sm:p-6 -mx-4 sm:-mx-6 -my-1 overflow-hidden min-h-[240px] flex flex-col justify-between border border-[#383a3d]"
             >
               {/* BACKGROUND IMAGE FOR BANNER 2 WITH DARK OVERLAY */}
-              <div
-                className="absolute inset-0 bg-cover bg-center -z-10"
-                style={{
-                  backgroundImage: `url("https://static.wikia.nocookie.net/logos/images/b/b0/VTV6_ident_29.05-07.06.2026_b%E1%BA%A3n_3.png/revision/latest/scale-to-width-down/1000?cb=20260603150528&path-prefix=vi")`,
-                }}
-              >
+              <div className="absolute inset-0 -z-10 overflow-hidden">
+                <img
+                  src="https://static.wikia.nocookie.net/logos/images/b/b0/VTV6_ident_29.05-07.06.2026_b%E1%BA%A3n_3.png/revision/latest/scale-to-width-down/1000?cb=20260603150528&path-prefix=vi"
+                  alt="VTV6 Background"
+                  referrerPolicy="no-referrer"
+                  className="w-full h-full object-cover"
+                />
                 <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/80 to-black/90" />
               </div>
 

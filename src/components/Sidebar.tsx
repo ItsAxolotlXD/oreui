@@ -20,7 +20,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const menuItems: { id: SidebarMenuItem; label: string; badge?: string }[] = [
     { id: 'home', label: 'Home' },
     { id: 'live_tv', label: 'Live TV', badge: `(${channelCount})` },
-    { id: 'design_system', label: 'Design System' },
+    { id: 'design_system', label: 'Ore UI' },
   ];
 
   // Navigate left/right with bumper brackets
@@ -75,17 +75,19 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   }
                 `}
               >
-                <span className="truncate">{item.label}</span>
-                {item.badge && (
-                  <span className={`text-[10px] hidden md:inline-block ${isSelected ? 'text-[#89dc69]' : 'text-gray-400'}`}>
-                    {item.badge}
-                  </span>
-                )}
+                <div className="relative inline-flex items-center gap-1.5 max-w-full pb-0.5">
+                  <span className="truncate">{item.label}</span>
+                  {item.badge && (
+                    <span className={`text-[10px] hidden md:inline-block ${isSelected ? 'text-[#89dc69]' : 'text-gray-400'}`}>
+                      {item.badge}
+                    </span>
+                  )}
 
-                {/* White Underline Bar for Active Tab as seen in reference image */}
-                {isSelected && (
-                  <div className="absolute bottom-0 left-2 right-2 h-[2px] bg-white rounded-full" />
-                )}
+                  {/* White Underline Bar for Active Tab matching text length */}
+                  {isSelected && (
+                    <div className="absolute -bottom-1 left-0 right-0 h-[2px] bg-white rounded-full" />
+                  )}
+                </div>
               </button>
             );
           })}

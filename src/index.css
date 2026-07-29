@@ -70,19 +70,22 @@
   background-size: 100% 3px, 6px 100%;
 }
 
-/* Minecraft Panorama Scrolling Keyframes */
+/* Minecraft Panorama Scrolling Keyframes - 3D accelerated for maximum smoothness */
 @keyframes minecraft-panorama-scroll {
   0% {
-    transform: translateX(0%);
+    transform: translate3d(0%, 0, 0);
   }
   100% {
-    transform: translateX(-50%);
+    transform: translate3d(-50%, 0, 0);
   }
 }
 
 .animate-panorama {
   animation: minecraft-panorama-scroll 75s linear infinite;
   will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
 }
 
 .bg-radial-vignette {

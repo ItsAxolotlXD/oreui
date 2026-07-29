@@ -10,6 +10,7 @@ import { Sidebar, SidebarMenuItem } from './components/Sidebar';
 import { HeaderBar } from './components/HeaderBar';
 import { MinecraftPanorama } from './components/MinecraftPanorama';
 import { HomeBannerSlider } from './components/HomeBannerSlider';
+import { FeedbackModal } from './components/FeedbackModal';
 import { playPopSound } from './utils/sound';
 
 import { VplayHeroButton } from './components/ui/VplayHeroButton';
@@ -27,6 +28,7 @@ export default function App() {
   const [selectedGroup, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [isTabLoading, setIsTabLoading] = useState(false);
 
@@ -47,6 +49,9 @@ export default function App() {
     themeMode: 'dark',
     notifications: true,
     searchQuery: '',
+    disablePanorama: false,
+    lockPanoramaScroll: false,
+    panoramaScrollSpeed: 5,
   });
 
   const handleSelectChannel = (channel: TvChannel) => {
@@ -88,7 +93,7 @@ export default function App() {
       case 'live_tv': return 'TRUYỀN HÌNH';
       case 'search': return 'SEARCH FOR CHANNELS';
       case 'settings': return 'CÀI ĐẶT';
-      case 'design_system': return 'DESIGN SYSTEM';
+      case 'design_system': return 'ORE UI';
       default: return 'CÀI ĐẶT';
     }
   };
@@ -108,10 +113,14 @@ export default function App() {
   return (
     <div className="relative min-h-screen text-white font-jura antialiased selection:bg-[#418a28] selection:text-white flex flex-col">
       {/* Minecraft Panorama Animated Background */}
-      <MinecraftPanorama />
+      <MinecraftPanorama
+        disablePanorama={settings.disablePanorama}
+        lockPanoramaScroll={settings.lockPanoramaScroll}
+        panoramaScrollSpeed={settings.panoramaScrollSpeed}
+      />
       
       {/* STICKY TOP CONTAINER FOR HEADER BAR + HORIZONTAL TAB BAR */}
-      <div className="sticky top-0 z-50 w-full bg-[#242424]/95 backdrop-blur-md border-b-2 border-[#141414] shadow-lg">
+      <div className="sticky top-0 z-50 w-full bg-[#242424]/95 backdrop-blur-md border-b-2 border-[#141414] shadow-[0_8px_24px_rgba(0,0,0,0.85)]">
         <HeaderBar
           title={getHeaderTitle()}
           onBack={handleHeaderBack}
@@ -181,21 +190,28 @@ export default function App() {
               >
                 {sidebarItem === 'settings' || isSettingsOpen ? (
                   <SettingsView
-                  settings={settings}
-                  onSave={(newSet) => {
-                    setSettings(newSet);
-                    setIsSettingsOpen(false);
-                    triggerTabLoading();
-                    setSidebarItem('live_tv');
-                  }}
-                  onCancel={() => {
-                    setIsSettingsOpen(false);
-                    triggerTabLoading();
-                    setSidebarItem('live_tv');
-                  }}
-                />
+                    settings={settings}
+                    onChangeLiveSettings={(newSet) => setSettings(newSet)}
+                    onSave={(newSet) => {
+                      setSettings(newSet);
+                      setIsSettingsOpen(false);
+                      triggerTabLoading();
+                      setSidebarItem('live_tv');
+                    }}
+                    onCancel={() => {
+                      setIsSettingsOpen(false);
+                      triggerTabLoading();
+                      setSidebarItem('live_tv');
+                    }}
+                    onOpenDesignSystem={() => {
+                      setIsSettingsOpen(false);
+                      triggerTabLoading();
+                      setSidebarItem('design_system');
+                    }}
+                    onOpenFeedback={() => setIsFeedbackOpen(true)}
+                  />
               ) : sidebarItem === 'design_system' ? (
-                  <DesignSystemViewer />
+                  <DesignSystemViewer onOpenFeedback={() => setIsFeedbackOpen(true)} />
                 ) : sidebarItem === 'search' ? (
                   <SearchChannelsView
                     channels={TV_CHANNELS}
@@ -237,30 +253,73 @@ export default function App() {
                         triggerTabLoading();
                         setSidebarItem('live_tv');
                       }}
+                      onOpenFeedback={() => setIsFeedbackOpen(true)}
                     />
 
-                  {/* VIP ANNOUNCEMENT HERO BANNER */}
-                  <div className="bg-gradient-to-r from-[#212f1e] via-[#292a2c] to-[#1e2022] border-2 border-[#418a28] p-6 shadow-xl flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 relative overflow-hidden">
-                    <div className="absolute right-0 top-0 bottom-0 opacity-10 pointer-events-none flex items-center pr-8">
-                      <Trophy className="w-64 h-64 text-[#89dc69]" />
-                    </div>
-
-                    <div className="space-y-3 z-10 max-w-2xl">
-                      <div className="inline-flex items-center gap-2 bg-[#418a28] text-white px-3 py-1 text-xs font-bold border border-[#141414]">
-                        <Flame className="w-3.5 h-3.5 text-yellow-300 animate-bounce" /> VPLAY TV VIP 4K MULTI-STREAM
+                  {/* RECOMMENDED CHANNELS SECTION */}
+                  <div className="bg-[#35383b] border-2 border-[#141414] p-4 sm:p-5 shadow-xl space-y-4">
+                    <div className="flex items-center justify-between border-b border-[#2d3033] pb-3">
+                      <div className="flex items-center gap-2">
+                        <span className="w-2.5 h-2.5 bg-[#89dc69] rounded-full animate-pulse" />
+                        <h2 className="text-sm sm:text-base font-black text-white uppercase tracking-wider font-jura">
+                          RECOMMENDED CHANNELS (KÊNH ĐỀ XUẤT)
+                        </h2>
                       </div>
-                      <h2 className="text-xl sm:text-2xl font-black text-white uppercase tracking-tight">
-                        HỆ THỐNG TRUYỀN HÌNH TRỰC TUYẾN CHẤT LƯỢNG CAO
-                      </h2>
-                      <p className="text-xs text-gray-300 leading-relaxed">
-                        Trải nghiệm {TV_CHANNELS.length} Kênh TV Bản Quyền (VTV, HTV, SCTV, VTVcab, Kênh Địa Phương & Quốc Tế) với font Jura hiện đại và nút nhấn hiệu ứng lún độc đáo.
-                      </p>
+                      <button
+                        onClick={() => {
+                          triggerTabLoading();
+                          setSidebarItem('live_tv');
+                        }}
+                        className="text-xs text-[#89dc69] font-bold hover:underline cursor-pointer"
+                      >
+                        [Xem tất cả kênh]
+                      </button>
                     </div>
 
-                    <div className="w-full lg:w-56 z-10">
-                      <VplayHeroButton onClick={() => setSidebarItem('live_tv')}>
-                        ▶ XEM LIVE TV NGAY
-                      </VplayHeroButton>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+                      {TV_CHANNELS.slice(0, 5).map((channel, idx) => {
+                        return (
+                          <div
+                            key={`rec-${channel.id}`}
+                            onClick={() => {
+                              playPopSound();
+                              handleSelectChannel(channel);
+                              triggerTabLoading();
+                              setSidebarItem('live_tv');
+                            }}
+                            className="group bg-[#424548] border-2 border-[#141414] hover:border-[#89dc69] cursor-pointer transition-all duration-150 flex flex-col justify-between overflow-hidden shadow-md select-none active:translate-y-[2px] btn-press-effect"
+                          >
+                            <div className="relative aspect-[16/10] bg-[#1a1c1e] border-b-2 border-[#141414] flex items-center justify-center p-2 overflow-hidden">
+                              {channel.logo ? (
+                                <img
+                                  src={channel.logo}
+                                  alt={channel.name}
+                                  referrerPolicy="no-referrer"
+                                  className="max-h-full max-w-[85%] object-contain filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] group-hover:scale-105 transition-transform duration-200"
+                                  onError={(e) => {
+                                    (e.target as HTMLImageElement).src = `https://via.placeholder.com/150/1c1d1f/89dc69?text=${encodeURIComponent(channel.name)}`;
+                                  }}
+                                />
+                              ) : (
+                                <span className="font-bold text-sm text-[#89dc69] font-mono">
+                                  {channel.name}
+                                </span>
+                              )}
+                              <span className="absolute top-1 left-1 bg-[#141414]/90 text-[#89dc69] text-[9px] font-bold px-1.5 py-0.5 border border-[#418a28]">
+                                CH 0{idx + 1}
+                              </span>
+                            </div>
+                            <div className="p-2 bg-[#2d3033] flex flex-col justify-center">
+                              <span className="text-[11px] font-bold text-white truncate group-hover:text-[#89dc69]">
+                                {channel.name}
+                              </span>
+                              <span className="text-[9px] text-gray-400 truncate">
+                                {channel.groupTitle}
+                              </span>
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 </div>
@@ -449,6 +508,12 @@ export default function App() {
 
         </main>
       </div>
+
+      {/* FEEDBACK MODAL */}
+      <FeedbackModal
+        isOpen={isFeedbackOpen}
+        onClose={() => setIsFeedbackOpen(false)}
+      />
 
     </div>
   );

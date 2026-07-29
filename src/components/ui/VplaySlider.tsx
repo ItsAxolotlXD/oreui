@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ComponentState } from '../../types';
 import { playPopSound } from '../../utils/sound';
 
@@ -32,6 +32,10 @@ export const VplaySlider: React.FC<VplaySliderProps> = ({
   const [isHovered, setIsHovered] = useState(false);
   const [isPressed, setIsPressed] = useState(false);
 
+  useEffect(() => {
+    setVal(value);
+  }, [value]);
+
   const effectiveDisabled = forcedState ? forcedState === 'disabled' : disabled;
   const state: ComponentState = forcedState || (
     effectiveDisabled ? 'disabled' :
@@ -40,15 +44,20 @@ export const VplaySlider: React.FC<VplaySliderProps> = ({
   );
 
   const currentValue = forcedState !== undefined ? value : val;
+  const ratio = Math.max(0, Math.min(1, (max > min ? (currentValue - min) / (max - min) : 0)));
   const totalSegments = 10;
-  const activeSegmentsCount = Math.round(((currentValue - min) / (max - min)) * totalSegments);
+  const activeSegmentsCount = Math.round(ratio * totalSegments);
 
-  const handleStepClick = (segmentIndex: number) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (effectiveDisabled) return;
-    playPopSound();
-    const newVal = Math.round(min + (segmentIndex / totalSegments) * (max - min));
+    const newVal = Number(e.target.value);
     setVal(newVal);
     onChange?.(newVal);
+  };
+
+  const handlePointerUp = () => {
+    setIsPressed(false);
+    playPopSound();
   };
 
   let activeSegmentBg = 'bg-[#418a28] shadow-[inset_0_1px_0_#6bc34b]';
@@ -93,19 +102,30 @@ export const VplaySlider: React.FC<VplaySliderProps> = ({
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => { setIsHovered(false); setIsPressed(false); }}
         onMouseDown={() => setIsPressed(true)}
-        onMouseUp={() => setIsPressed(false)}
+        onMouseUp={handlePointerUp}
+        onTouchStart={() => setIsPressed(true)}
+        onTouchEnd={handlePointerUp}
         className="relative flex items-center h-8 select-none outline-none cursor-pointer"
       >
+        {/* Invisible Native Range Input for Smooth Dragging */}
+        <input
+          type="range"
+          min={min}
+          max={max}
+          step={step}
+          value={currentValue}
+          disabled={effectiveDisabled}
+          onChange={handleInputChange}
+          onInput={handleInputChange}
+          className="absolute inset-0 w-full h-full opacity-0 z-20 cursor-pointer disabled:cursor-not-allowed"
+        />
+
         <div className="w-full h-3 border-2 border-[#141414] bg-[#4e5256] grid grid-cols-10 gap-[1px] p-[1px]">
           {Array.from({ length: totalSegments }).map((_, idx) => {
             const isActive = idx < activeSegmentsCount;
             return (
               <div
                 key={idx}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleStepClick(idx + 1);
-                }}
                 className={`h-full transition-colors duration-75 ${
                   isActive ? activeSegmentBg : 'bg-[#4e5256]'
                 }`}
@@ -116,9 +136,9 @@ export const VplaySlider: React.FC<VplaySliderProps> = ({
 
         <div
           style={{
-            left: `calc(${(activeSegmentsCount / totalSegments) * 100}% - 8px)`,
+            left: `calc(${ratio * 100}% - 8px)`,
           }}
-          className="absolute top-1/2 -translate-y-1/2 transition-all duration-75"
+          className="absolute top-1/2 -translate-y-1/2 transition-all duration-75 pointer-events-none z-10"
         >
           <div className={`w-4 h-6 border-2 border-[#141414] ${thumbBg}`} />
         </div>
