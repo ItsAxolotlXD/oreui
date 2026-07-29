@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { ChevronLeft, Menu, Search, X } from 'lucide-react';
+import React from 'react';
+import { Menu } from 'lucide-react';
 import { playPopSound } from '../utils/sound';
 
 interface HeaderBarProps {
@@ -18,11 +18,7 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
   onToggleMenu,
   onSearchClick,
   onSettingsClick,
-  searchValue = '',
-  onSearchChange,
 }) => {
-  const [isSearching, setIsSearching] = useState(false);
-
   const handleBack = () => {
     playPopSound();
     onBack?.();
@@ -33,9 +29,8 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
     onToggleMenu?.();
   };
 
-  const handleSearchToggle = () => {
+  const handleSearchClick = () => {
     playPopSound();
-    setIsSearching(!isSearching);
     onSearchClick?.();
   };
 
@@ -73,39 +68,10 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
         </button>
       </div>
 
-      {/* Center: Title or Search Bar */}
-      {isSearching ? (
-        <div className="flex-1 max-w-md mx-3">
-          <div className="relative flex items-center">
-            <img
-              src="https://static.wikia.nocookie.net/ep-deo/images/c/c8/MagnifyingGlass-52f96e5f47f42e682a00.png/revision/latest?cb=20260723030208"
-              alt="Search Icon"
-              referrerPolicy="no-referrer"
-              className="absolute left-2.5 w-4 h-4 object-contain pointer-events-none z-10"
-            />
-            <input
-              type="text"
-              autoFocus
-              value={searchValue}
-              onChange={(e) => onSearchChange?.(e.target.value)}
-              placeholder="Search Vplay"
-              className="w-full h-7 bg-[#222426] text-white pl-8 pr-7 text-[11px] sm:text-xs font-normal font-montserrat border-2 border-[#141414] focus:outline-none placeholder:text-gray-400 shadow-[inset_0_2px_0_rgba(0,0,0,0.4)] cursor-pointer"
-            />
-            {searchValue && (
-              <button
-                onClick={() => onSearchChange?.('')}
-                className="absolute right-2 text-gray-400 hover:text-white font-bold text-xs p-1"
-              >
-                ✕
-              </button>
-            )}
-          </div>
-        </div>
-      ) : (
-        <div className="text-center font-bold font-montserrat text-xs sm:text-sm tracking-normal text-[#141414] uppercase">
-          {title}
-        </div>
-      )}
+      {/* Center: Always Title */}
+      <div className="text-center font-bold font-montserrat text-xs sm:text-sm tracking-normal text-[#141414] uppercase">
+        {title}
+      </div>
 
       {/* Right controls: Settings & Custom Search Magnifying Glass Icon */}
       <div className="flex items-center gap-1">
@@ -124,23 +90,17 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
         </button>
 
         <button
-          onClick={handleSearchToggle}
+          onClick={handleSearchClick}
           aria-label="Search"
-          className={`p-1 hover:bg-[#cecece] active:bg-[#bebebe] active:translate-y-[1px] btn-press-effect text-[#141414] cursor-pointer rounded-none ${
-            isSearching ? 'bg-[#cecece]' : ''
-          }`}
+          className="p-1 hover:bg-[#cecece] active:bg-[#bebebe] active:translate-y-[1px] btn-press-effect text-[#141414] cursor-pointer rounded-none flex items-center justify-center"
           title="Tìm kiếm"
         >
-          {isSearching ? (
-            <X className="w-5 h-5 stroke-[2.5]" />
-          ) : (
-            <img
-              src="https://static.wikia.nocookie.net/ep-deo/images/c/c8/MagnifyingGlass-52f96e5f47f42e682a00.png/revision/latest?cb=20260723030208"
-              alt="Search"
-              referrerPolicy="no-referrer"
-              className="w-3.5 h-3.5 sm:w-4 sm:h-4 object-contain filter brightness-0"
-            />
-          )}
+          <img
+            src="https://static.wikia.nocookie.net/ep-deo/images/c/c8/MagnifyingGlass-52f96e5f47f42e682a00.png/revision/latest?cb=20260723030208"
+            alt="Search"
+            referrerPolicy="no-referrer"
+            className="w-4 h-4 sm:w-4.5 sm:h-4.5 object-contain filter brightness-0"
+          />
         </button>
       </div>
     </div>

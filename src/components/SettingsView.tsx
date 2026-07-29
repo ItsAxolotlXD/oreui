@@ -41,6 +41,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   }, [temp, onChangeLiveSettings]);
 
   const [settingSearch, setSettingSearch] = useState('');
+  const [showComingSoonModal, setShowComingSoonModal] = useState(false);
 
   const handleToggleSubtitles = () => {
     playPopSound();
@@ -116,14 +117,14 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             src="https://static.wikia.nocookie.net/ep-deo/images/c/c8/MagnifyingGlass-52f96e5f47f42e682a00.png/revision/latest?cb=20260723030208"
             alt="Search Icon"
             referrerPolicy="no-referrer"
-            className="absolute left-4 w-5 h-5 object-contain pointer-events-none z-10"
+            className="absolute left-3 w-5 h-5 object-contain pointer-events-none z-10"
           />
           <input
             type="text"
-            placeholder="Search"
+            placeholder="Search for settings"
             value={settingSearch}
             onChange={(e) => setSettingSearch(e.target.value)}
-            className="w-full h-11 sm:h-12 bg-[#222426] text-white pl-11 pr-8 text-xs sm:text-sm font-normal font-montserrat border-2 border-[#141414] focus:outline-none focus:border-[#418a28] placeholder:text-gray-400 shadow-[inset_0_2px_0_rgba(0,0,0,0.4)] cursor-pointer"
+            className="w-full h-9.5 bg-[#222426] text-white pl-10 pr-8 text-xs font-medium font-montserrat border-2 border-[#141414] focus:outline-none focus:border-white placeholder:text-gray-400 shadow-[inset_0_2px_0_rgba(0,0,0,0.4)] cursor-pointer"
           />
           {settingSearch && (
             <button
@@ -146,17 +147,19 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             We would love to hear what you think of this new design. Keep in mind that it's still work in progress and some functionality might be missing
           </p>
         </div>
-        <button
+        <VplaySecondaryButton
+          size="sm"
+          fullWidth={false}
           onClick={() => {
             playPopSound();
             if (onOpenFeedback) onOpenFeedback();
             else alert('Cảm ơn bạn đã đóng góp ý kiến về giao diện Vplay!');
           }}
-          className="flex items-center gap-1.5 bg-[#dcdfe2] hover:bg-white text-[#141414] font-bold text-xs px-3 py-1.5 border-2 border-[#141414] cursor-pointer active:translate-y-[1px] btn-press-effect flex-shrink-0"
+          className="flex-shrink-0"
         >
           <ExternalLink className="w-3.5 h-3.5" />
           Give feedback
-        </button>
+        </VplaySecondaryButton>
       </div>
 
       <SettingsDivider />
@@ -247,6 +250,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
       {/* SUBHEADING: TÀI KHOẢN & THÔNG BÁO */}
       {(matchesSearch('Tên người dùng') ||
+        matchesSearch('Sign in with Vplay account') ||
         matchesSearch('Thông báo sự kiện thể thao trực tiếp') ||
         matchesSearch('TÀI KHOẢN & THÔNG BÁO')) && (
         <div>
@@ -257,6 +261,35 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           </div>
 
           <SettingsDivider />
+
+          {/* Sign in with Vplay account */}
+          {matchesSearch('Sign in with Vplay account', 'Experience all the best things of Vplay with an official account.') && (
+            <>
+              <div className="px-3 sm:px-4 py-2.5 hover:bg-[#525559] transition-colors flex items-center justify-between gap-3">
+                <div>
+                  <div className="font-bold text-xs text-white">
+                    Sign in with Vplay account
+                  </div>
+                  <div className="text-[10px] text-gray-300 font-normal">
+                    Experience all the best things of Vplay with an official account.
+                  </div>
+                </div>
+                <div className="w-24 flex-shrink-0">
+                  <VplaySecondaryButton
+                    size="sm"
+                    onClick={() => {
+                      playPopSound();
+                      setShowComingSoonModal(true);
+                    }}
+                    className="w-full text-center"
+                  >
+                    Sign in
+                  </VplaySecondaryButton>
+                </div>
+              </div>
+              <SettingsDivider />
+            </>
+          )}
 
           {/* Gamertag / User Name */}
           {matchesSearch('Tên người dùng', 'Gamertag / User') && (
@@ -273,7 +306,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                     type="text"
                     value={temp.searchQuery}
                     onChange={(e) => setTemp({ ...temp, searchQuery: e.target.value })}
-                    className="w-40 h-8 bg-[#222426] text-white px-2.5 py-1 text-xs font-normal font-montserrat border-2 border-[#141414] focus:outline-none focus:border-[#418a28] shadow-[inset_0_2px_0_rgba(0,0,0,0.4)] cursor-pointer"
+                    className="w-40 h-8 bg-[#222426] text-white px-2.5 py-1 text-xs font-normal font-montserrat border-2 border-[#141414] focus:outline-none focus:border-white shadow-[inset_0_2px_0_rgba(0,0,0,0.4)] cursor-pointer"
                   />
                 </div>
               </div>
@@ -396,6 +429,67 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         <div>VCID: 28601FFA239DADCE</div>
         <div>VERSION: release-preview</div>
       </div>
+
+      {/* COMING SOON MODAL */}
+      {showComingSoonModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 animate-fade-in overflow-y-auto">
+          <div className="bg-[#383b3e] border-2 border-[#787b7f] w-full max-w-sm shadow-2xl text-white font-montserrat select-none flex flex-col max-h-[85vh] my-auto overflow-hidden">
+            
+            {/* Header Bar */}
+            <div className="bg-[#2d3033] border-b-2 border-[#787b7f] px-4 py-2.5 flex items-center justify-between flex-shrink-0">
+              <button
+                onMouseDown={() => playPopSound()}
+                onClick={() => {
+                  playPopSound();
+                  setShowComingSoonModal(false);
+                }}
+                className="text-gray-300 hover:text-white font-bold text-sm px-1.5 py-0.5 cursor-pointer"
+                title="Back"
+              >
+                ‹
+              </button>
+
+              <h2 className="text-xs sm:text-sm font-bold text-white uppercase tracking-wider font-jura">
+                Coming soon
+              </h2>
+
+              <button
+                onMouseDown={() => playPopSound()}
+                onClick={() => {
+                  playPopSound();
+                  setShowComingSoonModal(false);
+                }}
+                className="text-gray-300 hover:text-white font-bold text-xs px-1.5 py-0.5 cursor-pointer"
+                title="Close"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Body / Description */}
+            <div className="p-6 bg-[#383b3e] flex-1 flex flex-col items-center justify-center text-center">
+              <p className="text-xs sm:text-sm text-gray-200 leading-relaxed font-normal">
+                This feature is under major construction.
+              </p>
+            </div>
+
+            {/* Footer / Action Button */}
+            <div className="p-4 pt-3 bg-[#383b3e] border-t-2 border-[#2d3033] flex-shrink-0">
+              <VplaySecondaryButton
+                size="sm"
+                onClick={() => {
+                  playPopSound();
+                  setShowComingSoonModal(false);
+                }}
+                className="w-full text-center"
+              >
+                Understood
+              </VplaySecondaryButton>
+            </div>
+
+          </div>
+        </div>
+      )}
 
     </div>
   );

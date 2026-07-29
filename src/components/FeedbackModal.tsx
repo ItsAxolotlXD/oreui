@@ -76,7 +76,7 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({ isOpen, onClose })
               value={feedbackText}
               onChange={(e) => setFeedbackText(e.target.value)}
               placeholder="Write your thoughts..."
-              className="w-full bg-[#222426] text-white p-3 text-xs sm:text-sm font-normal font-montserrat border-2 border-[#141414] focus:outline-none focus:border-[#418a28] shadow-[inset_0_2px_0_rgba(0,0,0,0.4)] placeholder:text-gray-400 resize-none cursor-pointer"
+              className="w-full bg-[#222426] text-white p-3 text-xs sm:text-sm font-normal font-montserrat border-2 border-[#141414] focus:outline-none focus:border-white shadow-[inset_0_2px_0_rgba(0,0,0,0.4)] placeholder:text-gray-400 resize-none cursor-pointer"
             />
             <p className="text-[10px] text-gray-400">
               Please avoid sharing sensitive personal information.

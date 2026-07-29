@@ -137,7 +137,7 @@ export default function App() {
       />
       
       {/* STICKY TOP CONTAINER FOR HEADER BAR + HORIZONTAL TAB BAR */}
-      <div className="sticky top-0 z-50 w-full bg-[#242424] border-b-2 border-[#141414] shadow-md">
+      <div className="sticky top-0 z-50 w-full bg-[#242424]/85 backdrop-blur-md border-b-2 border-[#141414] shadow-md">
         <HeaderBar
           title={getHeaderTitle()}
           onBack={handleHeaderBack}
@@ -352,19 +352,47 @@ export default function App() {
                       channels={channelsList}
                       settings={settings}
                       onUpdateSettings={setSettings}
+                      onCreateCustomChannel={() => setIsCreateChannelOpen(true)}
                     />
                   </section>
 
               {/* GROUP FILTER TABS, ACTION BAR & CHANNELS GRID */}
-              <section className="space-y-6 pt-2">
-                {/* CENTERED CREATE CUSTOM CHANNEL BUTTON */}
-                <div className="flex items-center justify-center py-1">
+              <section className="space-y-4 pt-2">
+                {/* FULL WIDTH CREATE CUSTOM CHANNEL BUTTON */}
+                <div className="w-full py-1">
                   <VplayPrimaryButton
                     onClick={() => setIsCreateChannelOpen(true)}
-                    className="!w-auto !py-2.5 !px-6 text-xs sm:text-sm tracking-wider"
+                    className="w-full !py-2.5 text-xs sm:text-sm tracking-wider flex justify-center items-center"
                   >
                     + Create custom channel
                   </VplayPrimaryButton>
+                </div>
+
+                {/* SEARCH BAR IN LIVE TV */}
+                <div className="bg-[#3c3f42] border-2 border-[#141414] p-3 shadow-md">
+                  <div className="relative flex items-center w-full">
+                    <img
+                      src="https://static.wikia.nocookie.net/ep-deo/images/c/c8/MagnifyingGlass-52f96e5f47f42e682a00.png/revision/latest?cb=20260723030208"
+                      alt="Search"
+                      referrerPolicy="no-referrer"
+                      className="absolute left-3 w-5 h-5 object-contain pointer-events-none z-10"
+                    />
+                    <input
+                      type="text"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      placeholder="Search for channels"
+                      className="w-full h-9.5 bg-[#222426] text-white pl-10 pr-8 text-xs font-medium font-montserrat border-2 border-[#141414] focus:outline-none focus:border-white placeholder:text-gray-400 shadow-[inset_0_2px_0_rgba(0,0,0,0.5)] cursor-pointer"
+                    />
+                    {searchQuery && (
+                      <button
+                        onClick={() => setSearchQuery('')}
+                        className="absolute right-2.5 text-gray-400 hover:text-white font-bold text-xs p-1 cursor-pointer"
+                      >
+                        ✕
+                      </button>
+                    )}
+                  </div>
                 </div>
 
                 {/* Horizontal Scrollable Category Filter Tabs */}
@@ -500,11 +528,11 @@ export default function App() {
                                         </div>
 
                                         <div className="flex flex-wrap items-center gap-1 sm:gap-1.5 mt-0.5">
-                                          <span className="bg-[#1c1d1f] text-white px-1 sm:px-2 py-0.5 text-[8px] sm:text-[11px] font-bold font-mono border border-[#141414] shadow-sm truncate max-w-[70px] sm:max-w-none">
+                                          <span className="bg-[#1c1d1f] text-white px-1 sm:px-2 py-0.5 text-[8px] sm:text-[11px] font-bold font-montserrat border border-[#141414] shadow-sm truncate max-w-[70px] sm:max-w-none">
                                             {channel.groupTitle}
                                           </span>
 
-                                          <span className="bg-[#ffe866] text-[#141414] px-1 sm:px-2 py-0.5 text-[8px] sm:text-[11px] font-bold font-mono border border-[#141414] shadow-sm">
+                                          <span className="bg-[#ffe866] text-[#141414] px-1 sm:px-2 py-0.5 text-[8px] sm:text-[11px] font-bold font-montserrat border border-[#141414] shadow-sm">
                                             {String(channelsList.findIndex((c) => c.id === channel.id) + 1).padStart(3, '0')}
                                           </span>
                                         </div>

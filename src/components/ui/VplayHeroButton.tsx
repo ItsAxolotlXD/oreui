@@ -6,12 +6,14 @@ interface VplayHeroButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElem
   children?: React.ReactNode;
   forcedState?: ComponentState;
   fullWidth?: boolean;
+  size?: 'normal' | 'compact' | 'sm';
 }
 
 export const VplayHeroButton: React.FC<VplayHeroButtonProps> = ({
   children = 'HERO BUTTON',
   forcedState,
   fullWidth = true,
+  size = 'normal',
   onClick,
   disabled,
   className = '',
@@ -64,6 +66,11 @@ export const VplayHeroButton: React.FC<VplayHeroButtonProps> = ({
     onClick?.(e);
   };
 
+  const isSmall = size === 'sm' || size === 'compact';
+  const sizeClasses = isSmall
+    ? 'text-xs font-bold py-1.5 px-4 h-9'
+    : 'text-sm sm:text-base font-extrabold py-3 px-6 h-12';
+
   return (
     <button
       disabled={effectiveDisabled}
@@ -73,9 +80,10 @@ export const VplayHeroButton: React.FC<VplayHeroButtonProps> = ({
       onMouseUp={() => setIsPressed(false)}
       onClick={handleClick}
       className={`
-        relative select-none font-montserrat font-extrabold uppercase tracking-wider text-sm sm:text-base
-        py-3 px-6 h-12 flex items-center justify-center active:translate-y-[2px] btn-press-effect
+        relative select-none font-montserrat uppercase tracking-wider
+        flex items-center justify-center active:translate-y-[2px] btn-press-effect
         border-2 border-[#181818] rounded-none cursor-pointer transition-colors duration-75
+        ${sizeClasses}
         ${bgClass} ${shadowClass} ${transformClass}
         ${fullWidth ? 'w-full' : ''}
         ${className}

@@ -87,22 +87,22 @@ export const HomeBannerSlider: React.FC<HomeBannerSliderProps> = ({
             >
               {/* TITLE & SUBTITLE WITHOUT SIDE IMAGE */}
               <div className="space-y-2 text-left max-w-3xl mx-auto">
-                <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-white uppercase tracking-wide font-jura text-center sm:text-left">
+                <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-white uppercase tracking-wide font-jura text-center sm:text-left drop-shadow-md">
                   WELCOME TO A DESIGN PREVIEW
                 </h1>
-                <p className="text-xs sm:text-sm text-gray-300 leading-relaxed text-center sm:text-left">
+                <p className="text-xs sm:text-sm text-gray-200 leading-relaxed text-center sm:text-left drop-shadow">
                   Bạn đang được trải nghiệm hệ thống giao diện mới của Vplay, lấy cảm hứng từ Minecraft Ore UI, chúng tôi rất muốn nghe ý kiến của bạn. Hãy nhớ rằng là web nói chung và giao diện nói riêng vẫn đang trong quá trình phát triển, vì vậy một số tính năng có thể bị thiếu hoặc bạn sẽ gặp phải khá nhiều lỗi. Ore UI hứa hẹn sẽ đem đến cho bạn một trải nghiệm Vplay đẹp mắt, trực quan và mượt mà nhất.
                 </p>
               </div>
 
               {/* 2 BUTTONS CENTERED */}
               <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-                <div className="w-auto min-w-[200px]">
+                <div className="w-auto">
                   <VplayHeroButton onClick={onExploreDesignSystem}>
                     KHÁM PHÁ ORE UI
                   </VplayHeroButton>
                 </div>
-                <div className="w-auto min-w-[160px]">
+                <div className="w-auto">
                   <VplaySecondaryButton
                     fullWidth={false}
                     onClick={() => {
@@ -141,7 +141,7 @@ export const HomeBannerSlider: React.FC<HomeBannerSliderProps> = ({
                   referrerPolicy="no-referrer"
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/80 to-black/90" />
+                <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/70" />
               </div>
 
               {/* TEXT ONLY (NO IMAGE NEXT TO TEXT) */}
@@ -156,12 +156,12 @@ export const HomeBannerSlider: React.FC<HomeBannerSliderProps> = ({
 
               {/* 2 BUTTONS CENTERED */}
               <div className="flex flex-wrap items-center justify-center gap-3 pt-2 z-10">
-                <div className="w-auto min-w-[160px]">
+                <div className="w-auto">
                   <VplayHeroButton onClick={onWatchNow}>
                     Watch now
                   </VplayHeroButton>
                 </div>
-                <div className="w-auto min-w-[160px]">
+                <div className="w-auto">
                   <VplaySecondaryButton
                     fullWidth={false}
                     onClick={() => {

@@ -1,14 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { TvChannel, UserSettings } from '../types';
 import { VplayHeroButton } from './ui/VplayHeroButton';
-import { VplayPrimaryButton } from './ui/VplayPrimaryButton';
 import { VplaySecondaryButton } from './ui/VplaySecondaryButton';
-import { VplayCheckbox } from './ui/VplayCheckbox';
-import { VplayDropdown } from './ui/VplayDropdown';
 import { VplaySlider } from './ui/VplaySlider';
-import { VplayToggleSwitch } from './ui/VplayToggleSwitch';
-import { VplayTab } from './ui/VplayTab';
-import { Volume2, VolumeX, Maximize2, Radio, Tv, Eye, Play, Pause, AlertCircle } from 'lucide-react';
+import { Volume2, VolumeX, Maximize2, Heart, PlusCircle } from 'lucide-react';
+import { playPopSound } from '../utils/sound';
 import Hls from 'hls.js';
 
 interface TvPlayerProps {
@@ -17,6 +13,7 @@ interface TvPlayerProps {
   channels: TvChannel[];
   settings: UserSettings;
   onUpdateSettings: (s: UserSettings) => void;
+  onCreateCustomChannel?: () => void;
 }
 
 export const TvPlayer: React.FC<TvPlayerProps> = ({
@@ -25,6 +22,7 @@ export const TvPlayer: React.FC<TvPlayerProps> = ({
   channels,
   settings,
   onUpdateSettings,
+  onCreateCustomChannel,
 }) => {
   const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(false);
@@ -143,10 +141,10 @@ export const TvPlayer: React.FC<TvPlayerProps> = ({
 
   return (
     <div className="w-full space-y-4">
-      {/* GRID CONTAINER: PLAYER & CONTROLS ON LEFT, CHANNEL INFO ON RIGHT */}
+      {/* GRID CONTAINER: PLAYER ON LEFT, CONTROLS ON RIGHT */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6 items-start">
         
-        {/* LEFT COLUMN: SHRUNK CHANNEL PLAYER & CONTROLS (lg:col-span-7) */}
+        {/* LEFT COLUMN: CHANNEL PLAYER (lg:col-span-7) */}
         <div className="lg:col-span-7 space-y-3">
           {/* TV SCREEN / VIDEO PLAYER FRAME */}
           <div className="relative bg-[#0d0e0f] border-4 border-[#141414] shadow-2xl overflow-hidden w-full aspect-video max-h-[380px] sm:max-h-[420px]">
@@ -171,99 +169,107 @@ export const TvPlayer: React.FC<TvPlayerProps> = ({
               )}
             </div>
           </div>
+        </div>
 
-          {/* CONTROL BAR BELOW PLAYER (3 SEPARATE ROWS) */}
-          <div className="bg-[#1e2022] border-4 border-[#141414] p-3 flex flex-col gap-3 z-30 font-montserrat shadow-xl">
-            {/* ROW 1: PLAY / PAUSE BUTTON */}
+        {/* RIGHT COLUMN: CONTROL PANEL (lg:col-span-5) */}
+        <div className="lg:col-span-5">
+          <div className="flex flex-col gap-3 font-montserrat">
+            
+            {/* 1. VOLUME SLIDER */}
+            <div className="w-full flex items-center gap-2.5 py-1">
+              <button
+                onClick={() => {
+                  playPopSound();
+                  setIsMuted(!isMuted);
+                }}
+                className="p-1.5 hover:bg-white/10 text-white active:translate-y-[1px] cursor-pointer flex-shrink-0 rounded-none"
+                title="Tắt/Mở tiếng"
+              >
+                {isMuted ? <VolumeX className="w-5 h-5 text-red-400" /> : <Volume2 className="w-5 h-5 text-[#89dc69]" />}
+              </button>
+
+              <div className="flex-1 min-w-0">
+                <VplaySlider
+                  label=""
+                  value={isMuted ? 0 : volume}
+                  min={0}
+                  max={10}
+                  onChange={(v) => {
+                    setVolume(v);
+                    if (v > 0) setIsMuted(false);
+                  }}
+                  noBackground
+                  className="!p-0"
+                />
+              </div>
+            </div>
+
+            {/* 2. PLAY / PAUSE */}
             <div className="w-full">
-              <VplayHeroButton onClick={togglePlay} className="w-full text-center justify-center py-2.5">
+              <VplayHeroButton
+                onClick={() => {
+                  playPopSound();
+                  togglePlay();
+                }}
+                className="w-full text-center justify-center py-2.5"
+              >
                 {isPlaying ? '⏸ TẠM DỪNG' : '▶ PHÁT'}
               </VplayHeroButton>
             </div>
 
-            {/* ROW 2: VOLUME SLIDER (WITHOUT "Âm lượng" TEXT) & FAVORITE CHECKBOX */}
-            <div className="w-full flex items-center justify-between gap-3 bg-[#282a2c] p-2 sm:p-2.5 border border-[#141414]">
-              {/* Mute Button & Volume Slider */}
-              <div className="flex items-center gap-2 flex-1 min-w-0">
-                <button
-                  onClick={() => setIsMuted(!isMuted)}
-                  className="p-2 bg-[#3a3c3f] border border-[#141414] hover:bg-[#4d5055] text-white active:translate-y-[1px] cursor-pointer flex-shrink-0"
-                  title="Tắt/Mở tiếng"
-                >
-                  {isMuted ? <VolumeX className="w-5 h-5 text-red-400" /> : <Volume2 className="w-5 h-5 text-[#89dc69]" />}
-                </button>
-
-                <div className="flex-1 min-w-0">
-                  <VplaySlider
-                    label=""
-                    value={isMuted ? 0 : volume}
-                    min={0}
-                    max={10}
-                    onChange={(v) => {
-                      setVolume(v);
-                      if (v > 0) setIsMuted(false);
-                    }}
-                    noBackground
-                    className="!p-0"
-                  />
-                </div>
-              </div>
-
-              {/* Favorite Checkbox */}
-              <div className="bg-[#1f2123] px-3 py-2 border border-[#141414] flex items-center flex-shrink-0">
-                <VplayCheckbox
-                  checked={isFavorite}
-                  onChange={setIsFavorite}
-                  label="Yêu thích"
-                />
-              </div>
-            </div>
-
-            {/* ROW 3: FULL SCREEN BUTTON (USES DESIGN SYSTEM SECONDARY BUTTON) */}
+            {/* 3. FULL SCREEN */}
             <div className="w-full">
               <VplaySecondaryButton
-                onClick={toggleFullscreen}
+                onClick={() => {
+                  playPopSound();
+                  toggleFullscreen();
+                }}
                 fullWidth
-                className="w-full"
+                className="w-full justify-center"
               >
                 <Maximize2 className="w-4 h-4 sm:w-5 sm:h-5 text-[#1c1d1f] flex-shrink-0" />
                 <span className="font-bold text-xs uppercase tracking-wider text-[#1c1d1f]">
-                  {isFullscreen ? 'THOÁT TOÀN MÀN HÌNH (EXIT FULLSCREEN)' : 'PHÓNG TO MÀN HÌNH (FULL SCREEN)'}
+                  {isFullscreen ? 'THOÁT TOÀN MÀN HÌNH' : 'PHÓNG TO MÀN HÌNH'}
                 </span>
               </VplaySecondaryButton>
             </div>
-          </div>
-        </div>
 
-        {/* RIGHT COLUMN: CHANNEL INFORMATION & DETAILS (lg:col-span-5) */}
-        <div className="lg:col-span-5 space-y-4">
-          {/* Header Card for Channel */}
-          <div className="bg-[#292a2c] border-4 border-[#141414] p-4 sm:p-5 shadow-xl space-y-4">
-            <div className="flex items-center gap-3 border-b border-[#3e4145] pb-3">
-              {channel.logo ? (
-                <img
-                  src={channel.logo}
-                  alt={channel.name}
-                  referrerPolicy="no-referrer"
-                  className="w-12 h-12 object-contain bg-[#1a1c1e] p-1 border border-[#141414]"
-                />
-              ) : (
-                <div className="w-12 h-12 bg-[#1a1c1e] border border-[#141414] flex items-center justify-center font-bold text-xs text-[#89dc69]">
-                  TV
-                </div>
-              )}
-              <div className="min-w-0 flex-1">
-                <h2 className="text-lg font-black text-white truncate font-montserrat">{channel.name}</h2>
-                <div className="flex items-center gap-2 mt-1">
-                  <span className="bg-[#1c1d1f] text-[#89dc69] px-2 py-0.5 text-[10px] font-bold font-mono border border-[#141414]">
-                    {channel.groupTitle}
-                  </span>
-                  <span className="bg-[#ffe866] text-[#141414] px-2 py-0.5 text-[10px] font-bold font-mono border border-[#141414]">
-                    {channel.resolution}
-                  </span>
-                </div>
-              </div>
+            {/* 4. YÊU THÍCH (SECONDARY BUTTON) */}
+            <div className="w-full">
+              <VplaySecondaryButton
+                onClick={() => {
+                  playPopSound();
+                  setIsFavorite(!isFavorite);
+                }}
+                fullWidth
+                className="w-full justify-center"
+              >
+                <Heart className={`w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0 ${isFavorite ? 'text-red-600 fill-red-600' : 'text-[#1c1d1f]'}`} />
+                <span className="font-bold text-xs uppercase tracking-wider text-[#1c1d1f]">
+                  {isFavorite ? 'ĐÃ YÊU THÍCH' : 'YÊU THÍCH'}
+                </span>
+              </VplaySecondaryButton>
             </div>
+
+            {/* 5. CREATE CUSTOM CHANNEL */}
+            {onCreateCustomChannel && (
+              <div className="w-full">
+                <VplaySecondaryButton
+                  onClick={() => {
+                    playPopSound();
+                    onCreateCustomChannel();
+                  }}
+                  fullWidth
+                  className="w-full justify-center"
+                >
+                  <PlusCircle className="w-4 h-4 sm:w-5 sm:h-5 text-[#1c1d1f] flex-shrink-0" />
+                  <span className="font-bold text-xs uppercase tracking-wider text-[#1c1d1f]">
+                    CREATE CUSTOM CHANNEL
+                  </span>
+                </VplaySecondaryButton>
+              </div>
+            )}
+
           </div>
         </div>
 

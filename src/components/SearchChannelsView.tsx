@@ -96,7 +96,7 @@ export const SearchChannelsView: React.FC<SearchChannelsViewProps> = ({
     <div className="w-full max-w-5xl mx-auto my-2 sm:my-4 font-montserrat select-none text-white">
       <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
         
-        {/* LEFT COLUMN: SHARE & EXPORT PANEL */}
+        {/* LEFT COLUMN (ON DESKTOP) / TOP PANEL (ON MOBILE): SHARE & EXPORT PANEL */}
         <div className="md:col-span-4 bg-[#3c3f42] border-2 border-[#141414] p-4 flex flex-col justify-start shadow-xl space-y-4">
           <div className="border-b border-[#2d3033] pb-2">
             <h3 className="font-black text-sm uppercase text-[#89dc69] tracking-wide">VPLAY CHANNELS</h3>
@@ -117,7 +117,7 @@ export const SearchChannelsView: React.FC<SearchChannelsViewProps> = ({
 
             <button
               onClick={handleExportChannels}
-              className="w-full bg-[#2863a0] hover:bg-[#3174b8] active:bg-[#1f4e80] text-white font-black text-xs uppercase border-2 border-[#141414] py-2.5 px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.3),0_2px_0_#141414] active:translate-y-[1px] btn-press-effect cursor-pointer flex items-center justify-center gap-2"
+              className="w-full bg-[#7b2cbf] hover:bg-[#8f39df] active:bg-[#5f1eb0] text-white font-black text-xs uppercase border-2 border-[#141414] py-2.5 px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.3),0_2px_0_#141414] active:translate-y-[1px] btn-press-effect cursor-pointer flex items-center justify-center gap-2"
             >
               <Download className="w-4 h-4" />
               {exported ? 'ĐÃ TẢI FILE M3U8!' : 'EXPORT CHANNELS (.M3U8)'}
@@ -133,7 +133,7 @@ export const SearchChannelsView: React.FC<SearchChannelsViewProps> = ({
           </div>
         </div>
 
-        {/* RIGHT COLUMN: SEARCH & ACCORDIONS */}
+        {/* RIGHT COLUMN (ON DESKTOP) / MAIN CONTENT (ON MOBILE): SEARCH & ACCORDIONS */}
         <div className="md:col-span-8 space-y-3">
           
           {/* SEARCH INPUT SECTION */}
@@ -147,14 +147,14 @@ export const SearchChannelsView: React.FC<SearchChannelsViewProps> = ({
                 src="https://static.wikia.nocookie.net/ep-deo/images/c/c8/MagnifyingGlass-52f96e5f47f42e682a00.png/revision/latest?cb=20260723030208"
                 alt="Search"
                 referrerPolicy="no-referrer"
-                className="absolute left-3 w-4 h-4 object-contain pointer-events-none z-10"
+                className="absolute left-3 w-5 h-5 object-contain pointer-events-none z-10"
               />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => onSearchChange(e.target.value)}
                 placeholder="Search for channels"
-                className="w-full h-9 bg-[#222426] text-white pl-9 pr-8 text-xs font-medium font-montserrat border-2 border-[#141414] focus:outline-none focus:border-[#418a28] placeholder:text-gray-400 shadow-[inset_0_2px_0_rgba(0,0,0,0.5)]"
+                className="w-full h-9.5 bg-[#222426] text-white pl-10 pr-8 text-xs font-medium font-montserrat border-2 border-[#141414] focus:outline-none focus:border-white placeholder:text-gray-400 shadow-[inset_0_2px_0_rgba(0,0,0,0.5)] cursor-pointer"
               />
               {searchQuery && (
                 <button
@@ -206,7 +206,7 @@ export const SearchChannelsView: React.FC<SearchChannelsViewProps> = ({
 
                         <div className="min-w-0">
                           <div className="flex items-center gap-1.5">
-                            <span className="bg-[#ffe866] text-[#141414] px-1 py-0.2 text-[9px] font-bold font-mono border border-[#141414] flex-shrink-0">
+                            <span className="bg-[#ffe866] text-[#141414] px-1 py-0.2 text-[9px] font-bold font-montserrat border border-[#141414] flex-shrink-0">
                               {String(channels.findIndex((item) => item.id === ch.id) + 1).padStart(3, '0')}
                             </span>
                             <h4 className="font-bold text-xs text-white uppercase group-hover:text-[#89dc69] transition-colors truncate">

@@ -72,7 +72,7 @@ export const VplayInputBox: React.FC<VplayInputBoxProps> = ({
         placeholder={placeholder}
         className={`
           w-full h-9 px-3 font-montserrat text-xs sm:text-sm outline-none rounded-none transition-colors duration-75 cursor-pointer
-          shadow-[inset_0_2px_0_rgba(0,0,0,0.4)] placeholder:text-gray-400 focus:outline-none focus:border-[#418a28]
+          shadow-[inset_0_2px_0_rgba(0,0,0,0.4)] placeholder:text-gray-400 focus:outline-none focus:border-white focus:border-2
           ${borderClass} ${inputBg}
         `}
         {...props}
