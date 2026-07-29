@@ -33,31 +33,33 @@ export const VplayTab: React.FC<VplayTabProps> = ({
     isHovered ? 'hovered' : 'normal'
   );
 
-  let tabBg = 'bg-[#3a3c3f] text-white';
+  let tabBg = isActive
+    ? 'bg-[#26282b] text-[#89dc69] shadow-[inset_0_3px_0_rgba(0,0,0,0.6),inset_0_-1px_0_rgba(255,255,255,0.12)]'
+    : 'bg-[#35383b] text-gray-200 shadow-[inset_0_2px_0_rgba(255,255,255,0.12),inset_0_-3px_0_rgba(0,0,0,0.5)]';
   let lineClass = 'bg-[#89dc69]';
   let transformClass = '';
 
   switch (state) {
     case 'hovered':
-      tabBg = 'bg-[#4d5055] text-white';
+      tabBg = isActive
+        ? 'bg-[#2d3034] text-[#89dc69] shadow-[inset_0_3px_0_rgba(0,0,0,0.6),inset_0_-1px_0_rgba(255,255,255,0.15)]'
+        : 'bg-[#424549] text-white shadow-[inset_0_2px_0_rgba(255,255,255,0.2),inset_0_-2px_0_rgba(0,0,0,0.4)]';
       break;
     case 'pressed':
-      tabBg = 'bg-[#292a2c] text-white';
+      tabBg = 'bg-[#1f2123] text-[#89dc69] shadow-[inset_0_3px_0_rgba(0,0,0,0.7)]';
       transformClass = 'translate-y-[2px]';
       break;
     case 'disabled':
-      tabBg = 'bg-[#3a3c3f] text-[#8c9196] cursor-not-allowed';
-      lineClass = 'bg-[#8c9196]';
+      tabBg = 'bg-[#313336] text-[#7a7e82] cursor-not-allowed shadow-none';
+      lineClass = 'bg-[#7a7e82]';
       break;
     case 'normal':
     default:
-      tabBg = 'bg-[#3a3c3f] text-white';
       break;
   }
 
   const handleClick = () => {
     if (effectiveDisabled) return;
-    playPopSound();
     onClick?.();
   };
 

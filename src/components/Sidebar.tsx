@@ -41,7 +41,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   return (
     <nav className={`w-full select-none ${className}`}>
       {/* Horizontal Tab Bar Container matching Minecraft Realm Hub layout */}
-      <div className="bg-[#2a2c2e]/90 border-2 border-[#141414] p-1 shadow-lg flex items-center justify-between gap-1 overflow-x-auto no-scrollbar">
+      <div className="bg-[#2a2c2e] border-2 border-[#141414] p-1 shadow-lg flex items-center justify-between gap-1 overflow-x-auto no-scrollbar">
         
         {/* Left Bumper Bracket [ */}
         <button

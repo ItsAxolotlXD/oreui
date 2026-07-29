@@ -63,7 +63,6 @@ export const VplaySecondaryButton: React.FC<VplaySecondaryButtonProps> = ({
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (effectiveDisabled) return;
-    playPopSound();
     onClick?.(e);
   };
 

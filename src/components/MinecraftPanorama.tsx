@@ -82,9 +82,8 @@ export const MinecraftPanorama: React.FC<MinecraftPanoramaProps> = ({
         ))}
       </div>
 
-      {/* Classic Menu Dark Tint Overlay & Vignette without heavy backdrop-blur */}
+      {/* Classic Menu Dark Tint Overlay */}
       <div className="absolute inset-0 bg-black/20" />
-      <div className="absolute inset-0 bg-radial-vignette pointer-events-none" />
     </div>
   );
 };

@@ -1,8 +1,16 @@
 // Web Audio API pop sound generator for UI button press feedback
 let sharedAudioCtx: AudioContext | null = null;
+let lastPlayTime = 0;
 
 export const playPopSound = () => {
   try {
+    const nowTime = Date.now();
+    // Cooldown of 80ms prevents double sound on mousedown + click/mouseup events
+    if (nowTime - lastPlayTime < 80) {
+      return;
+    }
+    lastPlayTime = nowTime;
+
     const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
     if (!AudioContextClass) return;
 

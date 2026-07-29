@@ -82,7 +82,6 @@ export const VplayDropdown: React.FC<VplayDropdownProps> = ({
         disabled={effectiveDisabled}
         onClick={() => {
           if (!effectiveDisabled && !forcedState) {
-            playPopSound();
             setIsOpen(!isOpen);
           }
         }}

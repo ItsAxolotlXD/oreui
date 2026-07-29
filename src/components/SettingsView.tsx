@@ -116,14 +116,14 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             src="https://static.wikia.nocookie.net/ep-deo/images/c/c8/MagnifyingGlass-52f96e5f47f42e682a00.png/revision/latest?cb=20260723030208"
             alt="Search Icon"
             referrerPolicy="no-referrer"
-            className="absolute left-3 w-4 h-4 object-contain pointer-events-none z-10"
+            className="absolute left-4 w-5 h-5 object-contain pointer-events-none z-10"
           />
           <input
             type="text"
             placeholder="Search"
             value={settingSearch}
             onChange={(e) => setSettingSearch(e.target.value)}
-            className="w-full h-11 sm:h-12 bg-[#222426] text-white pl-9 pr-8 text-xs sm:text-sm font-normal font-montserrat border-2 border-[#141414] focus:outline-none focus:border-[#418a28] placeholder:text-gray-400 shadow-[inset_0_2px_0_rgba(0,0,0,0.4)] cursor-pointer"
+            className="w-full h-11 sm:h-12 bg-[#222426] text-white pl-11 pr-8 text-xs sm:text-sm font-normal font-montserrat border-2 border-[#141414] focus:outline-none focus:border-[#418a28] placeholder:text-gray-400 shadow-[inset_0_2px_0_rgba(0,0,0,0.4)] cursor-pointer"
           />
           {settingSearch && (
             <button

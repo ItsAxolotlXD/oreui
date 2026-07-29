@@ -11,6 +11,7 @@ import { HeaderBar } from './components/HeaderBar';
 import { MinecraftPanorama } from './components/MinecraftPanorama';
 import { HomeBannerSlider } from './components/HomeBannerSlider';
 import { FeedbackModal } from './components/FeedbackModal';
+import { CreateChannelModal } from './components/CreateChannelModal';
 import { playPopSound } from './utils/sound';
 
 import { VplayHeroButton } from './components/ui/VplayHeroButton';
@@ -23,12 +24,14 @@ import { Settings, Trophy, Flame, Menu, X, Radio, Pencil } from 'lucide-react';
 
 export default function App() {
   const [sidebarItem, setSidebarItem] = useState<SidebarMenuItem>('home');
+  const [channelsList, setChannelsList] = useState<TvChannel[]>(TV_CHANNELS);
   const [selectedChannel, setSelectedChannel] = useState<TvChannel>(TV_CHANNELS[0]);
   const [recentlyWatched, setRecentlyWatched] = useState<TvChannel[]>([TV_CHANNELS[0], TV_CHANNELS[1], TV_CHANNELS[2]]);
   const [selectedGroup, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
+  const [isCreateChannelOpen, setIsCreateChannelOpen] = useState(false);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [isTabLoading, setIsTabLoading] = useState(false);
 
@@ -59,15 +62,29 @@ export default function App() {
     setRecentlyWatched((prev) => [channel, ...prev.filter((c) => c.id !== channel.id)].slice(0, 10));
   };
 
+  const handleAddChannel = (newChannel: TvChannel) => {
+    setChannelsList((prev) => [newChannel, ...prev]);
+    setSelectedChannel(newChannel);
+    triggerTabLoading();
+  };
+
   // Extract unique group titles from parsed channels
-  const groupsList = ['all', ...Array.from(new Set(TV_CHANNELS.map(c => c.groupTitle)))];
+  const groupsList = ['all', ...Array.from(new Set(channelsList.map((c) => c.groupTitle)))];
 
   // Filter channels based on search and selected group
-  const filteredChannels = TV_CHANNELS.filter((ch) => {
+  const filteredChannels = channelsList.filter((ch) => {
+    const idx = channelsList.findIndex((c) => c.id === ch.id);
+    const channelNumStr = String(idx >= 0 ? idx + 1 : 1).padStart(3, '0');
+    const rawNumStr = String(idx >= 0 ? idx + 1 : 1);
+    const q = searchQuery.trim().toLowerCase();
+
     const matchGroup = selectedGroup === 'all' || ch.groupTitle === selectedGroup;
-    const matchSearch = ch.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                        ch.groupTitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                        ch.currentProgram.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchSearch = !q ||
+                        ch.name.toLowerCase().includes(q) ||
+                        ch.groupTitle.toLowerCase().includes(q) ||
+                        ch.currentProgram.toLowerCase().includes(q) ||
+                        channelNumStr.includes(q) ||
+                        rawNumStr === q;
     return matchGroup && matchSearch;
   });
 
@@ -120,7 +137,7 @@ export default function App() {
       />
       
       {/* STICKY TOP CONTAINER FOR HEADER BAR + HORIZONTAL TAB BAR */}
-      <div className="sticky top-0 z-50 w-full bg-[#242424]/95 backdrop-blur-md border-b-2 border-[#141414] shadow-[0_8px_24px_rgba(0,0,0,0.85)]">
+      <div className="sticky top-0 z-50 w-full bg-[#242424] border-b-2 border-[#141414] shadow-md">
         <HeaderBar
           title={getHeaderTitle()}
           onBack={handleHeaderBack}
@@ -150,7 +167,7 @@ export default function App() {
           <Sidebar
             activeItem={sidebarItem}
             onSelectItem={handleSidebarSelect}
-            channelCount={TV_CHANNELS.length}
+            channelCount={channelsList.length}
           />
         </div>
       </div>
@@ -214,7 +231,7 @@ export default function App() {
                   <DesignSystemViewer onOpenFeedback={() => setIsFeedbackOpen(true)} />
                 ) : sidebarItem === 'search' ? (
                   <SearchChannelsView
-                    channels={TV_CHANNELS}
+                    channels={channelsList}
                     searchQuery={searchQuery}
                     onSearchChange={setSearchQuery}
                     onSelectChannel={(ch) => {
@@ -277,7 +294,7 @@ export default function App() {
                     </div>
 
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
-                      {TV_CHANNELS.slice(0, 5).map((channel, idx) => {
+                      {channelsList.slice(0, 5).map((channel, idx) => {
                         return (
                           <div
                             key={`rec-${channel.id}`}
@@ -325,37 +342,33 @@ export default function App() {
                 </div>
               ) : (
                 /* LIVE TV FULL VIEW */
-                <div className="space-y-8">
+                <div className="space-y-6">
                   
                   {/* LIVE TV PLAYER */}
                   <section className="space-y-3">
                     <TvPlayer
                       channel={selectedChannel}
                       onSelectChannel={handleSelectChannel}
-                      channels={TV_CHANNELS}
+                      channels={channelsList}
                       settings={settings}
                       onUpdateSettings={setSettings}
                     />
                   </section>
 
-              {/* GROUP FILTER TABS & CHANNELS GRID */}
+              {/* GROUP FILTER TABS, ACTION BAR & CHANNELS GRID */}
               <section className="space-y-6 pt-2">
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-gray-400 uppercase">
-                      DANH MỤC CÁC KÊNH TRUYỀN HÌNH ({filteredChannels.length})
-                    </span>
-                    {selectedGroup !== 'all' && (
-                      <button
-                        onClick={() => setSelectedCategory('all')}
-                        className="text-xs text-[#89dc69] hover:underline cursor-pointer"
-                      >
-                        [Xem tất cả nhóm]
-                      </button>
-                    )}
-                  </div>
+                {/* CENTERED CREATE CUSTOM CHANNEL BUTTON */}
+                <div className="flex items-center justify-center py-1">
+                  <VplayPrimaryButton
+                    onClick={() => setIsCreateChannelOpen(true)}
+                    className="!w-auto !py-2.5 !px-6 text-xs sm:text-sm tracking-wider"
+                  >
+                    + Create custom channel
+                  </VplayPrimaryButton>
+                </div>
 
-                  {/* Horizontal Scrollable Tabs */}
+                {/* Horizontal Scrollable Category Filter Tabs */}
+                <div className="space-y-3">
                   <div className="flex items-center gap-2 overflow-x-auto pb-2 border-b border-[#2d3033]">
                     {groupsList.map((grp) => (
                       <VplayTab
@@ -363,140 +376,151 @@ export default function App() {
                         active={selectedGroup === grp}
                         onClick={() => setSelectedCategory(grp)}
                       >
-                        {grp === 'all' ? `Tất cả (${TV_CHANNELS.length})` : grp}
+                        {grp === 'all' ? `Tất cả (${channelsList.length})` : grp}
                       </VplayTab>
                     ))}
                   </div>
                 </div>
 
-                {/* Channels Grid: 3 columns on mobile, 5 columns on desktop */}
-                <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-3 lg:gap-4">
-                  {filteredChannels.map((channel) => {
-                    const isSelected = selectedChannel.id === channel.id;
+                {/* CHANNELS GROUPED BY CATEGORY WITH ORE UI FOLDER TABS */}
+                {(() => {
+                  const categoryGroupsToDisplay = selectedGroup === 'all'
+                    ? Array.from(new Set(filteredChannels.map((c) => c.groupTitle)))
+                    : [selectedGroup];
+
+                  if (filteredChannels.length === 0) {
                     return (
-                      <div
-                        key={channel.id}
-                        onClick={() => {
-                          playPopSound();
-                          handleSelectChannel(channel);
-                        }}
-                        className={`
-                          group relative bg-[#4c4f52] border-2 cursor-pointer transition-all duration-150 flex flex-col justify-between overflow-hidden shadow-xl select-none active:translate-y-[2px] btn-press-effect rounded-none
-                          ${isSelected ? 'border-[#418a28] shadow-[0_0_15px_rgba(65,138,40,0.4)]' : 'border-[#141414] hover:border-[#89dc69]'}
-                        `}
-                      >
-                        {/* TOP IMAGE AREA: Channel Logo with Wavy Background */}
-                        <div className="relative aspect-[16/10] bg-[#1a1c1e] border-b-2 border-[#141414] flex items-center justify-center p-1.5 sm:p-3 overflow-hidden">
-                          {/* Background Wavy Lines Pattern */}
-                          <svg
-                            className="absolute inset-0 w-full h-full opacity-35 pointer-events-none text-[#45494e]"
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="100%"
-                            height="100%"
-                          >
-                            <defs>
-                              <pattern
-                                id={`wavy-pattern-${channel.id}`}
-                                x="0"
-                                y="0"
-                                width="32"
-                                height="12"
-                                patternUnits="userSpaceOnUse"
-                              >
-                                <path
-                                  d="M 0 6 Q 8 0, 16 6 T 32 6"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  strokeWidth="1.5"
-                                />
-                              </pattern>
-                            </defs>
-                            <rect width="100%" height="100%" fill={`url(#wavy-pattern-${channel.id})`} />
-                          </svg>
-
-                          {channel.logo ? (
-                            <img
-                              src={channel.logo}
-                              alt={channel.name}
-                              referrerPolicy="no-referrer"
-                              className="max-h-full max-w-[85%] object-contain filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] group-hover:scale-105 transition-transform duration-200 z-10"
-                              onError={(e) => {
-                                (e.target as HTMLImageElement).src = `https://via.placeholder.com/150/1c1d1f/89dc69?text=${encodeURIComponent(channel.name)}`;
-                              }}
-                            />
-                          ) : (
-                            <span className="font-extrabold text-xs sm:text-sm text-[#89dc69] tracking-wider font-mono uppercase z-10">{channel.name}</span>
-                          )}
-
-                          {/* Live Indicator Badge on top right */}
-                          {isSelected && (
-                            <div className="absolute top-1 right-1 sm:top-2 sm:right-2 bg-[#418a28] text-white px-1 sm:px-2 py-0.5 text-[8px] sm:text-[10px] font-bold border border-[#141414] font-mono shadow z-10">
-                              ● LIVE
-                            </div>
-                          )}
+                      <div className="bg-[#292a2c] p-8 text-center border-2 border-[#141414] space-y-3">
+                        <p className="text-sm font-bold text-yellow-400">KHÔNG TÌM THẤY KÊNH NÀO MATCH TỪ KHÓA</p>
+                        <p className="text-xs text-gray-300">Thử tìm từ khóa khác hoặc bấm nút bên dưới để chọn lại toàn bộ kênh.</p>
+                        <div className="w-48 mx-auto pt-2">
+                          <VplaySecondaryButton onClick={() => { setSearchQuery(''); setSelectedCategory('all'); }}>
+                            XÓA TÌM KIẾM
+                          </VplaySecondaryButton>
                         </div>
-
-                        {/* MIDDLE CONTENT: Title & Tags */}
-                        <div className="p-2 sm:p-3 bg-[#4c4f52] flex flex-col justify-between gap-1.5 sm:gap-2 flex-1">
-                          <div>
-                            <h3 className="font-bold text-xs sm:text-sm text-white truncate tracking-tight font-montserrat">
-                              {channel.name}
-                            </h3>
-                            <p className="text-[9px] sm:text-[11px] text-gray-300 line-clamp-1 mt-0.5">
-                              {channel.currentProgram || 'Đang phát sóng'}
-                            </p>
-                          </div>
-
-                          {/* Tag Badges Row (Survival, Creative, Experimental style) */}
-                          <div className="flex flex-wrap items-center gap-1 sm:gap-1.5 mt-0.5">
-                            {/* Black Badge (Group/Category) */}
-                            <span className="bg-[#1c1d1f] text-white px-1 sm:px-2 py-0.5 text-[8px] sm:text-[11px] font-bold font-mono border border-[#141414] shadow-sm truncate max-w-[70px] sm:max-w-none">
-                              {channel.groupTitle}
-                            </span>
-
-                            {/* Yellow Badge (Badge / Status / Experimental style) */}
-                            {channel.badge ? (
-                              <span className="bg-[#ffe866] text-[#141414] px-1 sm:px-2 py-0.5 text-[8px] sm:text-[11px] font-bold font-mono border border-[#141414] shadow-sm">
-                                {channel.badge}
-                              </span>
-                            ) : isSelected ? (
-                              <span className="bg-[#ffe866] text-[#141414] px-1 sm:px-2 py-0.5 text-[8px] sm:text-[11px] font-bold font-mono border border-[#141414] shadow-sm">
-                                Đang xem
-                              </span>
-                            ) : (
-                              <span className="bg-[#ffe866] text-[#141414] px-1 sm:px-2 py-0.5 text-[8px] sm:text-[11px] font-bold font-mono border border-[#141414] shadow-sm">
-                                HD
-                              </span>
-                            )}
-                          </div>
-                        </div>
-
-                        {/* BOTTOM DIVIDER & EDIT BUTTON BAR */}
-                        <div className="border-t-2 border-[#1c1d1f]">
-                          <div className="bg-[#3e4144] group-hover:bg-[#484b4e] transition-colors py-1.5 sm:py-2 px-1.5 sm:px-3 flex items-center justify-center gap-1 sm:gap-2 text-center text-white cursor-pointer select-none">
-                            <Pencil className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
-                            <span className="font-bold text-[9px] sm:text-xs uppercase tracking-wider text-white font-montserrat">
-                              {isSelected ? 'Đang xem' : 'Xem ngay'}
-                            </span>
-                          </div>
-                        </div>
-
                       </div>
                     );
-                  })}
-                </div>
+                  }
 
-                {filteredChannels.length === 0 && (
-                  <div className="bg-[#292a2c] p-8 text-center border-2 border-[#141414] space-y-3">
-                    <p className="text-sm font-bold text-yellow-400">KHÔNG TÌM THẤY KÊNH NÀO MATCH TỪ KHÓA</p>
-                    <p className="text-xs text-gray-300">Thử tìm từ khóa khác hoặc bấm nút bên dưới để chọn lại toàn bộ kênh.</p>
-                    <div className="w-48 mx-auto pt-2">
-                      <VplaySecondaryButton onClick={() => { setSearchQuery(''); setSelectedCategory('all'); }}>
-                        XÓA TÌM KIẾM
-                      </VplaySecondaryButton>
+                  return (
+                    <div className="space-y-8">
+                      {categoryGroupsToDisplay.map((groupName) => {
+                        const groupChannels = filteredChannels.filter((c) => c.groupTitle === groupName);
+                        if (groupChannels.length === 0) return null;
+
+                        return (
+                          <div key={groupName} className="space-y-0">
+                            {/* Folder Tab Header */}
+                            <div className="flex flex-col select-none">
+                              {/* Green Folder Tab Box */}
+                              <div className="flex items-end">
+                                <div className="bg-[#89dc69] text-[#141414] font-bold font-montserrat text-xs sm:text-sm px-3.5 py-1.5 flex items-center gap-2">
+                                  <span>{groupName} ({groupChannels.length})</span>
+                                </div>
+                              </div>
+                              {/* Green Underline Bar spanning across without black border */}
+                              <div className="h-1 bg-[#89dc69] w-full" />
+                            </div>
+
+                            {/* Group Channels Grid Container */}
+                            <div className="pt-3 sm:pt-4">
+                              <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-3 lg:gap-4">
+                                {groupChannels.map((channel) => {
+                                  const isSelected = selectedChannel.id === channel.id;
+                                  return (
+                                    <div
+                                      key={channel.id}
+                                      onClick={() => {
+                                        playPopSound();
+                                        handleSelectChannel(channel);
+                                      }}
+                                      className={`
+                                        group relative bg-[#4c4f52] border-2 cursor-pointer transition-all duration-150 flex flex-col justify-between overflow-hidden shadow-xl select-none active:translate-y-[2px] btn-press-effect rounded-none
+                                        ${isSelected ? 'border-[#418a28] shadow-[0_0_15px_rgba(65,138,40,0.4)]' : 'border-[#141414] hover:border-[#89dc69]'}
+                                      `}
+                                    >
+                                      {/* TOP IMAGE AREA */}
+                                      <div className="relative aspect-[16/10] bg-[#1a1c1e] border-b-2 border-[#141414] flex items-center justify-center p-1.5 sm:p-3 overflow-hidden">
+                                        <svg
+                                          className="absolute inset-0 w-full h-full opacity-35 pointer-events-none text-[#45494e]"
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          width="100%"
+                                          height="100%"
+                                        >
+                                          <defs>
+                                            <pattern
+                                              id={`wavy-pattern-${channel.id}`}
+                                              x="0"
+                                              y="0"
+                                              width="32"
+                                              height="12"
+                                              patternUnits="userSpaceOnUse"
+                                            >
+                                              <path
+                                                d="M 0 6 Q 8 0, 16 6 T 32 6"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                strokeWidth="1.5"
+                                              />
+                                            </pattern>
+                                          </defs>
+                                          <rect width="100%" height="100%" fill={`url(#wavy-pattern-${channel.id})`} />
+                                        </svg>
+
+                                        {channel.logo ? (
+                                          <img
+                                            src={channel.logo}
+                                            alt={channel.name}
+                                            referrerPolicy="no-referrer"
+                                            className="max-h-full max-w-[85%] object-contain filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] group-hover:scale-105 transition-transform duration-200 z-10"
+                                            onError={(e) => {
+                                              (e.target as HTMLImageElement).src = `https://via.placeholder.com/150/1c1d1f/89dc69?text=${encodeURIComponent(channel.name)}`;
+                                            }}
+                                          />
+                                        ) : (
+                                          <span className="font-extrabold text-xs sm:text-sm text-[#89dc69] tracking-wider font-mono uppercase z-10">{channel.name}</span>
+                                        )}
+
+                                        {isSelected && (
+                                          <div className="absolute top-1 right-1 sm:top-2 sm:right-2 bg-[#418a28] text-white px-1 sm:px-2 py-0.5 text-[8px] sm:text-[10px] font-bold border border-[#141414] font-mono shadow z-10">
+                                            ● LIVE
+                                          </div>
+                                        )}
+                                      </div>
+
+                                      {/* MIDDLE CONTENT */}
+                                      <div className="p-2 sm:p-3 bg-[#4c4f52] flex flex-col justify-between gap-1.5 sm:gap-2 flex-1">
+                                        <div>
+                                          <h3 className="font-bold text-xs sm:text-sm text-white truncate tracking-tight font-montserrat">
+                                            {channel.name}
+                                          </h3>
+                                          <p className="text-[9px] sm:text-[11px] text-gray-300 line-clamp-1 mt-0.5">
+                                            {channel.currentProgram || 'Đang phát sóng'}
+                                          </p>
+                                        </div>
+
+                                        <div className="flex flex-wrap items-center gap-1 sm:gap-1.5 mt-0.5">
+                                          <span className="bg-[#1c1d1f] text-white px-1 sm:px-2 py-0.5 text-[8px] sm:text-[11px] font-bold font-mono border border-[#141414] shadow-sm truncate max-w-[70px] sm:max-w-none">
+                                            {channel.groupTitle}
+                                          </span>
+
+                                          <span className="bg-[#ffe866] text-[#141414] px-1 sm:px-2 py-0.5 text-[8px] sm:text-[11px] font-bold font-mono border border-[#141414] shadow-sm">
+                                            {String(channelsList.findIndex((c) => c.id === channel.id) + 1).padStart(3, '0')}
+                                          </span>
+                                        </div>
+                                      </div>
+
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
-                  </div>
-                )}
+                  );
+                })()}
 
               </section>
 
@@ -513,6 +537,14 @@ export default function App() {
       <FeedbackModal
         isOpen={isFeedbackOpen}
         onClose={() => setIsFeedbackOpen(false)}
+      />
+
+      {/* CREATE CUSTOM CHANNEL MODAL */}
+      <CreateChannelModal
+        isOpen={isCreateChannelOpen}
+        onClose={() => setIsCreateChannelOpen(false)}
+        onAddChannel={handleAddChannel}
+        categories={Array.from(new Set(channelsList.map((c) => c.groupTitle)))}
       />
 
     </div>

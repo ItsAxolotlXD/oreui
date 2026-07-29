@@ -27,11 +27,16 @@ export const SearchChannelsView: React.FC<SearchChannelsViewProps> = ({
   // Filter channels based on search query
   const searchResults = channels.filter((c) => {
     if (!searchQuery.trim()) return true;
-    const q = searchQuery.toLowerCase();
+    const q = searchQuery.trim().toLowerCase();
+    const idx = channels.findIndex((item) => item.id === c.id);
+    const channelNumStr = String(idx >= 0 ? idx + 1 : 1).padStart(3, '0');
+    const rawNumStr = String(idx >= 0 ? idx + 1 : 1);
     return (
       c.name.toLowerCase().includes(q) ||
       c.groupTitle.toLowerCase().includes(q) ||
-      c.currentProgram.toLowerCase().includes(q)
+      c.currentProgram.toLowerCase().includes(q) ||
+      channelNumStr.includes(q) ||
+      rawNumStr === q
     );
   });
 
@@ -200,10 +205,15 @@ export const SearchChannelsView: React.FC<SearchChannelsViewProps> = ({
                         </div>
 
                         <div className="min-w-0">
-                          <h4 className="font-bold text-xs text-white uppercase group-hover:text-[#89dc69] transition-colors truncate">
-                            {ch.name}
-                          </h4>
-                          <p className="text-[10px] text-gray-400 truncate">
+                          <div className="flex items-center gap-1.5">
+                            <span className="bg-[#ffe866] text-[#141414] px-1 py-0.2 text-[9px] font-bold font-mono border border-[#141414] flex-shrink-0">
+                              {String(channels.findIndex((item) => item.id === ch.id) + 1).padStart(3, '0')}
+                            </span>
+                            <h4 className="font-bold text-xs text-white uppercase group-hover:text-[#89dc69] transition-colors truncate">
+                              {ch.name}
+                            </h4>
+                          </div>
+                          <p className="text-[10px] text-gray-400 truncate mt-0.5">
                             {ch.groupTitle} • {ch.currentProgram}
                           </p>
                         </div>
