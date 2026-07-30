@@ -30,7 +30,7 @@ export const DesignSystemViewer: React.FC<DesignSystemViewerProps> = ({ onOpenFe
   const [pgSelectedTab, setPgSelectedTab] = useState(0);
 
   return (
-    <div className="w-full max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 text-white font-montserrat">
+    <div className="w-full text-white font-montserrat">
       {/* Welcome to design preview banner */}
       <div className="p-4 sm:p-5 mb-6 bg-[#292a2c] border-2 border-[#141414] shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>

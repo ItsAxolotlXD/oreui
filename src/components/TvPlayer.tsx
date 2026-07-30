@@ -173,16 +173,16 @@ export const TvPlayer: React.FC<TvPlayerProps> = ({
 
         {/* RIGHT COLUMN: CONTROL PANEL (lg:col-span-5) */}
         <div className="lg:col-span-5">
-          <div className="flex flex-col gap-3 font-montserrat">
+          <div className="flex flex-col gap-1.5 font-montserrat">
             
             {/* 1. VOLUME SLIDER */}
-            <div className="w-full flex items-center gap-2.5 py-1">
+            <div className="w-full flex items-center gap-2 py-0.5">
               <button
                 onClick={() => {
                   playPopSound();
                   setIsMuted(!isMuted);
                 }}
-                className="p-1.5 hover:bg-white/10 text-white active:translate-y-[1px] cursor-pointer flex-shrink-0 rounded-none"
+                className="p-1 hover:bg-white/10 text-white active:translate-y-[1px] cursor-pointer flex-shrink-0 rounded-none"
                 title="Tắt/Mở tiếng"
               >
                 {isMuted ? <VolumeX className="w-5 h-5 text-red-400" /> : <Volume2 className="w-5 h-5 text-[#89dc69]" />}
@@ -211,7 +211,7 @@ export const TvPlayer: React.FC<TvPlayerProps> = ({
                   playPopSound();
                   togglePlay();
                 }}
-                className="w-full text-center justify-center py-2.5"
+                className="w-full text-center justify-center py-2"
               >
                 {isPlaying ? '⏸ TẠM DỪNG' : '▶ PHÁT'}
               </VplayHeroButton>
@@ -250,25 +250,6 @@ export const TvPlayer: React.FC<TvPlayerProps> = ({
                 </span>
               </VplaySecondaryButton>
             </div>
-
-            {/* 5. CREATE CUSTOM CHANNEL */}
-            {onCreateCustomChannel && (
-              <div className="w-full">
-                <VplaySecondaryButton
-                  onClick={() => {
-                    playPopSound();
-                    onCreateCustomChannel();
-                  }}
-                  fullWidth
-                  className="w-full justify-center"
-                >
-                  <PlusCircle className="w-4 h-4 sm:w-5 sm:h-5 text-[#1c1d1f] flex-shrink-0" />
-                  <span className="font-bold text-xs uppercase tracking-wider text-[#1c1d1f]">
-                    CREATE CUSTOM CHANNEL
-                  </span>
-                </VplaySecondaryButton>
-              </div>
-            )}
 
           </div>
         </div>

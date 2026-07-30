@@ -141,12 +141,6 @@ export default function App() {
         <HeaderBar
           title={getHeaderTitle()}
           onBack={handleHeaderBack}
-          onToggleMenu={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
-          onSettingsClick={() => {
-            if (!isSettingsOpen) triggerTabLoading();
-            setIsSettingsOpen(true);
-            setSidebarItem('settings');
-          }}
           onSearchClick={() => {
             if (sidebarItem !== 'search' || isSettingsOpen) triggerTabLoading();
             setIsSettingsOpen(false);
@@ -163,7 +157,7 @@ export default function App() {
           }}
         />
 
-        <div className="w-full max-w-7xl mx-auto px-3 sm:px-6 py-1">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-1">
           <Sidebar
             activeItem={sidebarItem}
             onSelectItem={handleSidebarSelect}
@@ -173,7 +167,7 @@ export default function App() {
       </div>
 
       {/* MAIN CONTAINER CONTENT AREA */}
-      <div className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 pt-2 pb-6 lg:pb-8 relative">
+      <div className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-2 pb-6 lg:pb-8 relative">
         <main className="w-full min-w-0 overflow-hidden">
           <AnimatePresence mode="wait">
             {isTabLoading ? (
