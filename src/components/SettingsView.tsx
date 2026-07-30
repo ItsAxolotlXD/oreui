@@ -16,7 +16,10 @@ interface SettingsViewProps {
 }
 
 const SettingsDivider = () => (
-  <div className="w-full h-[2px] border-t border-[#1c1d1f] border-b border-[#56595d]" />
+  <div className="w-full flex flex-col select-none pointer-events-none">
+    <div className="w-full h-[1px] bg-[#18191b]" />
+    <div className="w-full h-[1px] bg-[#5e6266]" />
+  </div>
 );
 
 export const SettingsView: React.FC<SettingsViewProps> = ({
@@ -111,7 +114,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
     <div className="w-full max-w-3xl mx-auto my-2 sm:my-4 bg-[#4c4f52] border-2 border-[#141414] text-white font-montserrat shadow-2xl rounded-none overflow-hidden select-none">
       
       {/* SEARCH BAR AT THE TOP OF SETTINGS */}
-      <div className="p-3 sm:p-4 bg-[#35383b] border-b-2 border-[#141414]">
+      <div className="p-3 sm:p-4 bg-[#35383b]">
         <div className="relative flex items-center w-full">
           <img
             src="https://static.wikia.nocookie.net/ep-deo/images/c/c8/MagnifyingGlass-52f96e5f47f42e682a00.png/revision/latest?cb=20260723030208"
@@ -137,8 +140,10 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         </div>
       </div>
 
+      <SettingsDivider />
+
       {/* Welcome & Feedback Banner Box */}
-      <div className="p-3 sm:p-4 bg-[#424548] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-[#2d3033]">
+      <div className="p-3 sm:p-4 bg-[#424548] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div>
           <h2 className="text-[11px] text-gray-300 font-normal leading-normal mb-0.5">
             Welcome to design preview!
@@ -406,6 +411,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
       )}
 
       {/* Save Action Bar */}
+      <SettingsDivider />
       <div className="p-3 bg-[#3d4043] flex items-center justify-end gap-2.5">
         <button
           onClick={handleCancelClick}
@@ -424,11 +430,12 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
       <SettingsDivider />
 
       {/* Footer Diagnostic Info */}
-      <div className="px-3 sm:px-4 py-2.5 bg-[#383b3e] text-[10px] font-mono text-gray-400 space-y-0.5 border-t border-[#2d3033]">
+      <div className="px-3 sm:px-4 py-2.5 bg-[#383b3e] text-[10px] font-mono text-gray-400 space-y-0.5">
         <div>DID: cf4bef566256457eb1391a01b5b02e2c</div>
         <div>VCID: 28601FFA239DADCE</div>
         <div>VERSION: release-preview</div>
       </div>
+      <SettingsDivider />
 
       {/* COMING SOON MODAL */}
       {showComingSoonModal && (
