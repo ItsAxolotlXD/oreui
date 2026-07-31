@@ -410,22 +410,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         </div>
       )}
 
-      {/* Save Action Bar */}
-      <SettingsDivider />
-      <div className="p-3 bg-[#3d4043] flex items-center justify-end gap-2.5">
-        <button
-          onClick={handleCancelClick}
-          className="bg-[#323437] hover:bg-[#3d4043] text-gray-200 font-bold text-xs px-4 py-1.5 border-2 border-[#141414] cursor-pointer active:translate-y-[1px] btn-press-effect"
-        >
-          HỦY BỎ
-        </button>
-        <button
-          onClick={handleSaveClick}
-          className="bg-[#55b331] hover:bg-[#62c938] text-white font-extrabold text-xs px-5 py-1.5 border-2 border-[#141414] shadow-[inset_0_1px_0_#89dc69] cursor-pointer active:translate-y-[1px] btn-press-effect"
-        >
-          LƯU CÀI ĐẶT
-        </button>
-      </div>
+
 
       <SettingsDivider />
 

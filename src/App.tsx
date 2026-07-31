@@ -298,8 +298,10 @@ export default function App() {
                               triggerTabLoading();
                               setSidebarItem('live_tv');
                             }}
-                            className="group bg-[#424548] border-2 border-[#141414] hover:border-[#89dc69] cursor-pointer transition-all duration-150 flex flex-col justify-between overflow-hidden shadow-md select-none active:translate-y-[2px] btn-press-effect"
+                            className="group relative bg-[#3f4246] hover:bg-[#484c50] border-2 border-[#141414] hover:border-[#89dc69] cursor-pointer transition-all duration-150 flex flex-col justify-between overflow-hidden shadow-md select-none active:translate-y-[2px] btn-press-effect"
                           >
+                            {/* Secondary button dark 3D bevel & top highlight overlay */}
+                            <div className="absolute inset-0 pointer-events-none z-20 shadow-[inset_2px_2px_0_rgba(255,255,255,0.25),inset_-2px_-4px_0_rgba(0,0,0,0.5)]" />
                             <div className="relative aspect-[16/10] bg-[#1a1c1e] border-b-2 border-[#141414] flex items-center justify-center p-2 overflow-hidden">
                               {channel.logo ? (
                                 <img
@@ -320,11 +322,11 @@ export default function App() {
                                 CH 0{idx + 1}
                               </span>
                             </div>
-                            <div className="p-2 bg-[#2d3033] flex flex-col justify-center">
+                            <div className="p-2 bg-transparent flex flex-col justify-center">
                               <span className="text-[11px] font-bold text-white truncate group-hover:text-[#89dc69]">
                                 {channel.name}
                               </span>
-                              <span className="text-[9px] text-gray-400 truncate">
+                              <span className="text-[9px] text-gray-300 truncate">
                                 {channel.groupTitle}
                               </span>
                             </div>
@@ -444,8 +446,8 @@ export default function App() {
                               <div className="h-1 bg-[#89dc69] w-full" />
                             </div>
 
-                            {/* Group Channels Grid Container */}
-                            <div className="pt-3 sm:pt-4">
+                            {/* Group Channels Grid Container - placed flush against category text header */}
+                            <div className="pt-0 mt-0">
                               <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-3 lg:gap-4">
                                 {groupChannels.map((channel) => {
                                   const isSelected = selectedChannel.id === channel.id;
@@ -457,10 +459,21 @@ export default function App() {
                                         handleSelectChannel(channel);
                                       }}
                                       className={`
-                                        group relative bg-[#4c4f52] border-2 cursor-pointer transition-all duration-150 flex flex-col justify-between overflow-hidden shadow-xl select-none active:translate-y-[2px] btn-press-effect rounded-none
-                                        ${isSelected ? 'border-[#418a28] shadow-[0_0_15px_rgba(65,138,40,0.4)]' : 'border-[#141414] hover:border-[#89dc69]'}
+                                        group relative border-2 cursor-pointer transition-all duration-150 flex flex-col justify-between overflow-hidden shadow-xl select-none active:translate-y-[2px] btn-press-effect rounded-none
+                                        ${isSelected
+                                          ? 'bg-[#2d2f31] border-[#418a28]'
+                                          : 'bg-[#3f4246] hover:bg-[#484c50] border-[#141414] hover:border-[#89dc69]'
+                                        }
                                       `}
                                     >
+                                      {/* Secondary button dark 3D bevel & top highlight overlay */}
+                                      <div
+                                        className={`absolute inset-0 pointer-events-none z-20 ${
+                                          isSelected
+                                            ? 'shadow-[inset_2px_2px_0_rgba(0,0,0,0.65)]'
+                                            : 'shadow-[inset_2px_2px_0_rgba(255,255,255,0.25),inset_-2px_-4px_0_rgba(0,0,0,0.5)]'
+                                        }`}
+                                      />
                                       {/* TOP IMAGE AREA */}
                                       <div className="relative aspect-[16/10] bg-[#1a1c1e] border-b-2 border-[#141414] flex items-center justify-center p-1.5 sm:p-3 overflow-hidden">
                                         <svg
@@ -511,7 +524,7 @@ export default function App() {
                                       </div>
 
                                       {/* MIDDLE CONTENT */}
-                                      <div className="p-2 sm:p-3 bg-[#4c4f52] flex flex-col justify-between gap-1.5 sm:gap-2 flex-1">
+                                      <div className="p-2 sm:p-3 bg-transparent flex flex-col justify-between gap-1.5 sm:gap-2 flex-1">
                                         <div>
                                           <h3 className="font-bold text-xs sm:text-sm text-white truncate tracking-tight font-montserrat">
                                             {channel.name}

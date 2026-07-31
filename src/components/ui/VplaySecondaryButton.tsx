@@ -29,28 +29,38 @@ export const VplaySecondaryButton: React.FC<VplaySecondaryButtonProps> = ({
     isHovered ? 'hovered' : 'normal'
   );
 
-  let bgClass = 'bg-[#cdd1d4] text-[#1c1d1f]';
-  let shadowClass = 'shadow-[inset_0_2px_0_#f4f6f8,inset_0_-3px_0_#9ea2a6]';
+  let layer1Bg = 'bg-[#cdd1d4]';
+  let layer2Bg = 'bg-[#9ea2a6]';
+  let layer3Bg = 'bg-[#f4f6f8]';
+  let textColor = 'text-[#1c1d1f]';
   let transformClass = '';
 
   switch (state) {
     case 'hovered':
-      bgClass = 'bg-[#f4f6f8] text-[#1c1d1f]';
-      shadowClass = 'shadow-[inset_0_2px_0_#ffffff,inset_0_-2px_0_#b5b9bd]';
+      layer1Bg = 'bg-[#f4f6f8]';
+      layer2Bg = 'bg-[#b5b9bd]';
+      layer3Bg = 'bg-[#ffffff]';
+      textColor = 'text-[#1c1d1f]';
       break;
     case 'pressed':
-      bgClass = 'bg-[#abafb3] text-[#1c1d1f]';
-      shadowClass = 'shadow-[inset_0_3px_0_#898d91,inset_0_-1px_0_#cdd1d4]';
+      layer1Bg = 'bg-[#abafb3]';
+      layer2Bg = 'bg-[#cdd1d4]';
+      layer3Bg = 'bg-[#898d91]';
+      textColor = 'text-[#1c1d1f]';
       transformClass = 'translate-y-[2px]';
       break;
     case 'disabled':
-      bgClass = 'bg-[#cdd1d4] text-[#7c8084] cursor-not-allowed';
-      shadowClass = 'shadow-[inset_0_2px_0_#e2e5e8,inset_0_-3px_0_#9ea2a6]';
+      layer1Bg = 'bg-[#cdd1d4]';
+      layer2Bg = 'bg-[#9ea2a6]';
+      layer3Bg = 'bg-[#e2e5e8]';
+      textColor = 'text-[#7c8084]';
       break;
     case 'normal':
     default:
-      bgClass = 'bg-[#cdd1d4] text-[#1c1d1f]';
-      shadowClass = 'shadow-[inset_0_2px_0_#f4f6f8,inset_0_-3px_0_#9ea2a6]';
+      layer1Bg = 'bg-[#cdd1d4]';
+      layer2Bg = 'bg-[#9ea2a6]';
+      layer3Bg = 'bg-[#f4f6f8]';
+      textColor = 'text-[#1c1d1f]';
       break;
   }
 
@@ -67,9 +77,10 @@ export const VplaySecondaryButton: React.FC<VplaySecondaryButtonProps> = ({
   };
 
   const isSmall = size === 'sm' || size === 'compact';
-  const sizeClasses = isSmall
-    ? 'text-xs font-bold py-1 px-3 h-8'
-    : 'text-sm sm:text-base font-semibold py-3 px-6 h-12';
+  const fontClasses = isSmall
+    ? 'text-xs font-bold'
+    : 'text-sm sm:text-base font-semibold';
+  const padClasses = isSmall ? 'px-2.5 py-1' : 'px-4 py-2';
 
   return (
     <button
@@ -79,19 +90,33 @@ export const VplaySecondaryButton: React.FC<VplaySecondaryButtonProps> = ({
       onMouseDown={handleMouseDown}
       onMouseUp={() => setIsPressed(false)}
       onClick={handleClick}
+      /* LAYER 4: Outer 2px dark border frame */
       className={`
-        relative select-none font-montserrat
-        flex items-center justify-center active:translate-y-[2px] btn-press-effect
-        border-2 border-[#181818] rounded-none cursor-pointer transition-colors duration-75
-        ${sizeClasses}
-        ${bgClass} ${shadowClass} ${transformClass}
+        relative select-none font-montserrat overflow-hidden !p-0 inline-flex flex-col
+        border-2 border-[#141414] bg-[#141414] rounded-none cursor-pointer transition-transform duration-75
+        ${effectiveDisabled ? 'cursor-not-allowed opacity-80' : 'active:translate-y-[1px] btn-press-effect'}
         ${fullWidth ? 'w-full' : ''}
         ${className}
       `}
       {...props}
     >
-      <div className="flex items-center justify-center gap-2 w-full h-full">
-        {children}
+      {/* LAYER 3: Top & Side highlight frame */}
+      <div className={`relative w-full h-full flex flex-col ${layer3Bg}`}>
+        {/* LAYER 2: Bottom dark bevel bar (hidden when pressed) */}
+        <div className={`absolute inset-x-0 bottom-0 h-[4px] ${layer2Bg} ${state === 'pressed' ? 'hidden' : 'block'}`} />
+
+        {/* LAYER 1: Center main face containing text */}
+        <div
+          className={`
+            relative z-10 w-full flex items-center justify-center gap-2
+            ${state === 'pressed' ? 'm-[2px] mb-[2px]' : 'm-[2px] mb-[4px]'}
+            ${padClasses} ${fontClasses} ${layer1Bg} ${textColor}
+          `}
+        >
+          <div className="flex items-center justify-center gap-2 w-full h-full truncate">
+            {children}
+          </div>
+        </div>
       </div>
     </button>
   );

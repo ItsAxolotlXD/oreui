@@ -41,21 +41,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   return (
     <nav className={`w-full select-none ${className}`}>
-      {/* Horizontal Tab Bar Container matching Minecraft Realm Hub layout */}
-      <div className="bg-[#2a2c2e] border-2 border-[#141414] p-1 shadow-lg flex items-center justify-between gap-1 overflow-x-auto no-scrollbar">
+      {/* Horizontal Tab Bar without container background, buttons touching each other */}
+      <div className="flex items-center justify-center w-full overflow-x-auto no-scrollbar -space-x-[2px] py-0.5">
         
         {/* Left Bumper Bracket [ */}
         <button
           onClick={handlePrevTab}
           title="Previous Tab"
           aria-label="Previous Tab"
-          className="hidden sm:flex items-center justify-center bg-[#1d1e20] hover:bg-[#34373a] text-gray-300 font-bold font-mono text-xs px-2.5 py-2 border border-[#141414] flex-shrink-0 cursor-pointer active:translate-y-[1px]"
+          className="hidden sm:flex items-center justify-center bg-[#cdd1d4] hover:bg-[#e2e5e8] active:bg-[#abafb3] text-[#141414] font-extrabold font-mono text-xs px-2.5 py-2 border-2 border-[#141414] shadow-[inset_2px_2px_0_#ffffff,inset_-2px_-2px_0_#9ea2a6] flex-shrink-0 cursor-pointer active:translate-y-[1px] z-10"
         >
           [
         </button>
 
         {/* Tab Items */}
-        <div className="flex-1 flex items-center gap-1.5 min-w-0 overflow-x-auto no-scrollbar">
+        <div className="flex-1 flex items-center -space-x-[2px] min-w-0 overflow-x-auto no-scrollbar">
           {menuItems.map((item) => {
             const isSelected = activeItem === item.id;
             return (
@@ -63,12 +63,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 key={item.id}
                 active={isSelected}
                 onClick={() => onSelectItem(item.id)}
-                className="flex-1 !min-w-[90px] sm:!min-w-[120px] !py-1.5"
+                className="flex-1 !min-w-[90px] sm:!min-w-[120px] !py-2"
               >
                 <span className="flex items-center justify-center gap-1">
                   <span>{item.label}</span>
                   {item.badge && (
-                    <span className={`text-[10px] sm:text-xs ${isSelected ? 'text-[#89dc69]' : 'text-gray-400'}`}>
+                    <span className={`text-[10px] sm:text-xs ${isSelected ? 'text-[#89dc69]' : 'text-gray-300'}`}>
                       {item.badge}
                     </span>
                   )}
@@ -83,7 +83,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           onClick={handleNextTab}
           title="Next Tab"
           aria-label="Next Tab"
-          className="hidden sm:flex items-center justify-center bg-[#1d1e20] hover:bg-[#34373a] text-gray-300 font-bold font-mono text-xs px-2.5 py-2 border border-[#141414] flex-shrink-0 cursor-pointer active:translate-y-[1px]"
+          className="hidden sm:flex items-center justify-center bg-[#cdd1d4] hover:bg-[#e2e5e8] active:bg-[#abafb3] text-[#141414] font-extrabold font-mono text-xs px-2.5 py-2 border-2 border-[#141414] shadow-[inset_2px_2px_0_#ffffff,inset_-2px_-2px_0_#9ea2a6] flex-shrink-0 cursor-pointer active:translate-y-[1px] z-10"
         >
           ]
         </button>

@@ -28,26 +28,28 @@ export const VplayTab: React.FC<VplayTabProps> = ({
   const effectiveDisabled = forcedState ? forcedState === 'disabled' : disabled;
 
   const state: ComponentState = forcedState || (
-    effectiveDisabled ? 'disabled' :
-    isPressed ? 'pressed' :
-    isHovered ? 'hovered' : 'normal'
+    effectiveDisabled ? 'disabled' : (
+      isPressed ? 'pressed' : (
+        isHovered ? 'hovered' : 'normal'
+      )
+    )
   );
 
   let tabBg = isActive
-    ? 'bg-[#26282b] text-white shadow-[inset_0_3px_0_rgba(0,0,0,0.6),inset_0_-1px_0_rgba(255,255,255,0.12)]'
-    : 'bg-[#35383b] text-gray-200 shadow-[inset_0_2px_0_rgba(255,255,255,0.12),inset_0_-3px_0_rgba(0,0,0,0.5)]';
-  let lineClass = 'bg-white';
+    ? 'bg-[#2d2f31] text-white shadow-[inset_2px_2px_0_rgba(0,0,0,0.65)]'
+    : 'bg-[#3f4246] text-white shadow-[inset_2px_2px_0_rgba(255,255,255,0.18),inset_-2px_-2px_0_rgba(0,0,0,0.5)]';
+  let lineClass = 'bg-[#89dc69]';
   let transformClass = '';
 
   switch (state) {
     case 'hovered':
       tabBg = isActive
-        ? 'bg-[#2d3034] text-white shadow-[inset_0_3px_0_rgba(0,0,0,0.6),inset_0_-1px_0_rgba(255,255,255,0.15)]'
-        : 'bg-[#424549] text-white shadow-[inset_0_2px_0_rgba(255,255,255,0.2),inset_0_-2px_0_rgba(0,0,0,0.4)]';
+        ? 'bg-[#333639] text-white shadow-[inset_2px_2px_0_rgba(0,0,0,0.65)]'
+        : 'bg-[#484c50] text-white shadow-[inset_2px_2px_0_rgba(255,255,255,0.25),inset_-2px_-2px_0_rgba(0,0,0,0.4)]';
       break;
     case 'pressed':
-      tabBg = 'bg-[#1f2123] text-white shadow-[inset_0_3px_0_rgba(0,0,0,0.7)]';
-      transformClass = 'translate-y-[2px]';
+      tabBg = 'bg-[#222426] text-white shadow-[inset_2px_2px_0_rgba(0,0,0,0.75)]';
+      transformClass = 'translate-y-[1px]';
       break;
     case 'disabled':
       tabBg = 'bg-[#313336] text-[#7a7e82] cursor-not-allowed shadow-none';
@@ -71,19 +73,19 @@ export const VplayTab: React.FC<VplayTabProps> = ({
       onMouseDown={() => { if (!effectiveDisabled) { setIsPressed(true); playPopSound(); } }}
       onMouseUp={() => setIsPressed(false)}
       className={`
-        relative px-4 py-2 min-w-[100px] flex items-center justify-center text-center font-montserrat font-bold text-xs sm:text-sm select-none
-        border-2 border-[#141414] rounded-none outline-none cursor-pointer btn-press-effect active:translate-y-[2px] transition-colors duration-75
+        relative px-4 py-2 min-w-[90px] sm:min-w-[120px] flex items-center justify-center text-center font-montserrat font-bold text-xs sm:text-sm select-none
+        border-2 border-[#141414] rounded-none outline-none cursor-pointer btn-press-effect active:translate-y-[1px] transition-colors duration-75
         ${tabBg} ${transformClass} ${className}
       `}
     >
       <div className="relative inline-flex flex-col items-center max-w-full">
-        <span className={`truncate transition-transform ${!isActive ? '-translate-y-[1.5px]' : ''}`}>
+        <span className={`truncate transition-transform ${!isActive ? '-translate-y-[1px]' : ''}`}>
           {children}
         </span>
 
-        {/* Bottom line indicator placed at the bottom edge of the button */}
+        {/* Bottom line indicator */}
         <div
-          className={`absolute -bottom-2 left-0 right-0 h-[2px] transition-opacity ${
+          className={`absolute -bottom-2 left-0 right-0 h-[2px] transition-opacity pointer-events-none ${
             isActive ? `opacity-100 ${lineClass}` : 'opacity-0 bg-transparent'
           }`}
         />

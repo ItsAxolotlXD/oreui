@@ -30,49 +30,7 @@ export const HomeBannerSlider: React.FC<HomeBannerSliderProps> = ({
   };
 
   return (
-    <div className="bg-black/50 border-2 border-[#141414] p-4 sm:p-6 shadow-xl flex flex-col gap-4 relative overflow-hidden min-h-[320px] justify-between">
-      {/* TOP HEADER / SLIDE CONTROLS OVERLAY */}
-      <div className="flex items-center justify-between z-20 w-full border-b border-[#3d4043]/60 pb-2.5">
-        <div className="inline-flex items-center gap-1.5 bg-[#1e2022]/80 text-[#89dc69] px-2.5 py-1 text-[11px] font-bold border border-[#383a3d] font-mono">
-          {currentSlide + 1} / {totalSlides}
-        </div>
-
-        {/* ARROW NAVIGATION BUTTONS USING VPLAY SECONDARY BUTTON */}
-        <div className="flex items-center gap-2">
-          <VplaySecondaryButton
-            fullWidth={false}
-            onClick={handlePrev}
-            aria-label="Previous Banner"
-            title="Trang trước"
-            className="!h-8 !py-1 !px-2.5 !min-w-0"
-          >
-            <img
-              src="https://static.wikia.nocookie.net/ep-deo/images/a/ab/ArrowLeft.png/revision/latest?cb=20260728033445"
-              alt="Back"
-              referrerPolicy="no-referrer"
-              className="w-3.5 h-3.5 object-contain [image-rendering:pixelated]"
-              style={{ imageRendering: 'pixelated' }}
-            />
-          </VplaySecondaryButton>
-
-          <VplaySecondaryButton
-            fullWidth={false}
-            onClick={handleNext}
-            aria-label="Next Banner"
-            title="Trang sau"
-            className="!h-8 !py-1 !px-2.5 !min-w-0"
-          >
-            <img
-              src="https://static.wikia.nocookie.net/ep-deo/images/a/a4/ArrowForward-03da527a1dfdbb6f55c5.png/revision/latest?cb=20260728071724"
-              alt="Forward"
-              referrerPolicy="no-referrer"
-              className="w-3.5 h-3.5 object-contain [image-rendering:pixelated]"
-              style={{ imageRendering: 'pixelated' }}
-            />
-          </VplaySecondaryButton>
-        </div>
-      </div>
-
+    <div className="bg-black/50 border-2 border-[#141414] p-4 sm:p-6 shadow-xl flex flex-col gap-4 relative overflow-hidden min-h-[300px] justify-between">
       {/* SLIDE CONTENT AREA WITH ANIMATION */}
       <div className="relative z-10 w-full flex-1 flex flex-col justify-between py-1 overflow-hidden">
         <AnimatePresence mode="popLayout" initial={false}>
@@ -95,8 +53,20 @@ export const HomeBannerSlider: React.FC<HomeBannerSliderProps> = ({
                 </p>
               </div>
 
-              {/* 2 BUTTONS CENTERED */}
-              <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+              {/* ACTION BUTTONS WITH LEFT AND RIGHT ARROWS AT BOTH ENDS */}
+              <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 pt-2">
+                {/* Left Arrow Button */}
+                <VplaySecondaryButton
+                  fullWidth={false}
+                  size="compact"
+                  onClick={handlePrev}
+                  aria-label="Previous Banner"
+                  title="Trang trước"
+                  className="!w-11 !h-11 !px-0 flex items-center justify-center"
+                >
+                  <ChevronLeft className="w-5 h-5 text-[#1c1d1f]" />
+                </VplaySecondaryButton>
+
                 <div className="w-auto">
                   <VplayHeroButton onClick={onExploreDesignSystem}>
                     KHÁM PHÁ ORE UI
@@ -122,6 +92,18 @@ export const HomeBannerSlider: React.FC<HomeBannerSliderProps> = ({
                     </span>
                   </VplaySecondaryButton>
                 </div>
+
+                {/* Right Arrow Button */}
+                <VplaySecondaryButton
+                  fullWidth={false}
+                  size="compact"
+                  onClick={handleNext}
+                  aria-label="Next Banner"
+                  title="Trang sau"
+                  className="!w-11 !h-11 !px-0 flex items-center justify-center"
+                >
+                  <ChevronRight className="w-5 h-5 text-[#1c1d1f]" />
+                </VplaySecondaryButton>
               </div>
             </motion.div>
           ) : (
@@ -154,8 +136,20 @@ export const HomeBannerSlider: React.FC<HomeBannerSliderProps> = ({
                 </p>
               </div>
 
-              {/* 2 BUTTONS CENTERED */}
-              <div className="flex flex-wrap items-center justify-center gap-3 pt-2 z-10">
+              {/* ACTION BUTTONS WITH LEFT AND RIGHT ARROWS AT BOTH ENDS */}
+              <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 pt-2 z-10">
+                {/* Left Arrow Button */}
+                <VplaySecondaryButton
+                  fullWidth={false}
+                  size="compact"
+                  onClick={handlePrev}
+                  aria-label="Previous Banner"
+                  title="Trang trước"
+                  className="!w-11 !h-11 !px-0 flex items-center justify-center"
+                >
+                  <ChevronLeft className="w-5 h-5 text-[#1c1d1f]" />
+                </VplaySecondaryButton>
+
                 <div className="w-auto">
                   <VplayHeroButton onClick={onWatchNow}>
                     Watch now
@@ -172,6 +166,18 @@ export const HomeBannerSlider: React.FC<HomeBannerSliderProps> = ({
                     Learn more
                   </VplaySecondaryButton>
                 </div>
+
+                {/* Right Arrow Button */}
+                <VplaySecondaryButton
+                  fullWidth={false}
+                  size="compact"
+                  onClick={handleNext}
+                  aria-label="Next Banner"
+                  title="Trang sau"
+                  className="!w-11 !h-11 !px-0 flex items-center justify-center"
+                >
+                  <ChevronRight className="w-5 h-5 text-[#1c1d1f]" />
+                </VplaySecondaryButton>
               </div>
             </motion.div>
           )}

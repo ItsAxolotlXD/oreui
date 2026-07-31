@@ -173,10 +173,10 @@ export const TvPlayer: React.FC<TvPlayerProps> = ({
 
         {/* RIGHT COLUMN: CONTROL PANEL (lg:col-span-5) */}
         <div className="lg:col-span-5">
-          <div className="flex flex-col gap-1.5 font-montserrat">
+          <div className="bg-[#35383b] border-4 border-[#141414] p-3.5 sm:p-4 shadow-2xl flex flex-col gap-3 font-montserrat">
             
             {/* 1. VOLUME SLIDER */}
-            <div className="w-full flex items-center gap-2 py-0.5">
+            <div className="w-full bg-[#282a2d] border-2 border-[#141414] p-2 flex items-center gap-2">
               <button
                 onClick={() => {
                   playPopSound();
@@ -211,7 +211,7 @@ export const TvPlayer: React.FC<TvPlayerProps> = ({
                   playPopSound();
                   togglePlay();
                 }}
-                className="w-full text-center justify-center py-2"
+                className="w-full text-center justify-center py-2.5"
               >
                 {isPlaying ? '⏸ TẠM DỪNG' : '▶ PHÁT'}
               </VplayHeroButton>

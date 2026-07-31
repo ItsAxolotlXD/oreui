@@ -104,19 +104,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           </div>
         </div>
 
-        {/* Footer buttons */}
-        <div className="flex items-center justify-end gap-3 pt-2 border-t-2 border-[#3e4145]">
-          <div className="w-32">
-            <VplaySecondaryButton onClick={onClose}>
-              HỦY BỎ
-            </VplaySecondaryButton>
-          </div>
-          <div className="w-44">
-            <VplayHeroButton onClick={() => { onSave(temp); onClose(); }}>
-              LƯU CÀI ĐẶT
-            </VplayHeroButton>
-          </div>
-        </div>
+
 
       </div>
     </div>
