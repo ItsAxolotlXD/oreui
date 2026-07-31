@@ -108,6 +108,7 @@ export default function App() {
     switch (sidebarItem) {
       case 'home': return 'TRANG CHỦ';
       case 'live_tv': return 'TRUYỀN HÌNH';
+      case 'your_realm': return 'YOUR REALM';
       case 'search': return 'SEARCH FOR CHANNELS';
       case 'settings': return 'CÀI ĐẶT';
       case 'design_system': return 'ORE UI';
@@ -136,34 +137,33 @@ export default function App() {
         panoramaScrollSpeed={settings.panoramaScrollSpeed}
       />
       
-      {/* STICKY TOP CONTAINER FOR HEADER BAR + HORIZONTAL TAB BAR */}
-      <div className="sticky top-0 z-50 w-full bg-[#242424]/85 backdrop-blur-md border-b-2 border-[#141414] shadow-md">
-        <HeaderBar
-          title={getHeaderTitle()}
-          onBack={handleHeaderBack}
-          onSearchClick={() => {
-            if (sidebarItem !== 'search' || isSettingsOpen) triggerTabLoading();
-            setIsSettingsOpen(false);
+      {/* STICKY TOP HEADER BAR */}
+      <HeaderBar
+        title={getHeaderTitle()}
+        onBack={handleHeaderBack}
+        onSearchClick={() => {
+          if (sidebarItem !== 'search' || isSettingsOpen) triggerTabLoading();
+          setIsSettingsOpen(false);
+          setSidebarItem('search');
+        }}
+        searchValue={searchQuery}
+        onSearchChange={(q) => {
+          setSearchQuery(q);
+          setIsSettingsOpen(false);
+          if (sidebarItem !== 'search') {
+            triggerTabLoading();
             setSidebarItem('search');
-          }}
-          searchValue={searchQuery}
-          onSearchChange={(q) => {
-            setSearchQuery(q);
-            setIsSettingsOpen(false);
-            if (sidebarItem !== 'search') {
-              triggerTabLoading();
-              setSidebarItem('search');
-            }
-          }}
-        />
+          }
+        }}
+      />
 
-        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-1">
-          <Sidebar
-            activeItem={sidebarItem}
-            onSelectItem={handleSidebarSelect}
-            channelCount={channelsList.length}
-          />
-        </div>
+      {/* HORIZONTAL TAB BAR (WITHOUT DARK BACKGROUND BEHIND TABS) */}
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 relative z-40">
+        <Sidebar
+          activeItem={sidebarItem}
+          onSelectItem={handleSidebarSelect}
+          channelCount={channelsList.length}
+        />
       </div>
 
       {/* MAIN CONTAINER CONTENT AREA */}
@@ -223,6 +223,45 @@ export default function App() {
                   />
               ) : sidebarItem === 'design_system' ? (
                   <DesignSystemViewer onOpenFeedback={() => setIsFeedbackOpen(true)} />
+                ) : sidebarItem === 'your_realm' ? (
+                  /* YOUR REALM UNDER CONSTRUCTION VIEW */
+                  <div className="w-full bg-[#383a3d] border-2 border-[#141414] shadow-2xl p-6 sm:p-10 text-center select-none my-2 space-y-6">
+                    <div className="font-montserrat font-extrabold text-base sm:text-xl text-white tracking-wide uppercase">
+                      This tab is under construction
+                    </div>
+
+                    <div className="flex justify-center my-4">
+                      <img
+                        src="https://static.wikia.nocookie.net/ep-deo/images/3/37/Load_not_done.png/revision/latest?cb=20260724133427"
+                        alt="Under construction"
+                        referrerPolicy="no-referrer"
+                        className="max-w-[300px] sm:max-w-[420px] w-full h-auto object-contain [image-rendering:pixelated]"
+                        style={{ imageRendering: 'pixelated' }}
+                      />
+                    </div>
+
+                    <div className="font-montserrat font-medium text-xs sm:text-sm text-gray-300 max-w-md mx-auto">
+                      We are working incredibly hard on this feature. Check back soon for more updates.
+                    </div>
+
+                    <div className="flex items-center justify-center gap-3 pt-2 max-w-sm mx-auto">
+                      <div className="w-1/2">
+                        <VplaySecondaryButton onClick={() => setIsFeedbackOpen(true)}>
+                          Give Feedback
+                        </VplaySecondaryButton>
+                      </div>
+                      <div className="w-1/2">
+                        <VplayHeroButton
+                          onClick={() => {
+                            triggerTabLoading();
+                            setSidebarItem('home');
+                          }}
+                        >
+                          Go Back
+                        </VplayHeroButton>
+                      </div>
+                    </div>
+                  </div>
                 ) : sidebarItem === 'search' ? (
                   <SearchChannelsView
                     channels={channelsList}
@@ -517,8 +556,9 @@ export default function App() {
                                         )}
 
                                         {isSelected && (
-                                          <div className="absolute top-1 right-1 sm:top-2 sm:right-2 bg-[#418a28] text-white px-1 sm:px-2 py-0.5 text-[8px] sm:text-[10px] font-bold border border-[#141414] font-mono shadow z-10">
-                                            ● LIVE
+                                          <div className="absolute top-1 right-1 sm:top-2 sm:right-2 bg-[#ff7b7b] text-[#141414] px-1 sm:px-2 py-0.5 text-[8px] sm:text-[10px] font-bold border border-[#141414] font-mono shadow z-10 flex items-center gap-1 select-none">
+                                            <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-[#141414] inline-block flex-shrink-0" />
+                                            <span>LIVE</span>
                                           </div>
                                         )}
                                       </div>

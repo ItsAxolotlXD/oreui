@@ -205,15 +205,21 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           {/* Item 2: Lock panorama scroll */}
           {matchesSearch('Lock panorama scroll', 'Khóa nền không gian đứng yên thay vì quay.') && (
             <>
-              <div className="px-3 sm:px-4 py-3 hover:bg-[#525559] transition-colors flex items-center justify-between gap-3">
+              <div className={`px-3 sm:px-4 py-3 transition-colors flex items-center justify-between gap-3 ${
+                temp.disablePanorama ? 'opacity-60 bg-[#3f4245]' : 'hover:bg-[#525559]'
+              }`}>
                 <div>
-                  <div className="font-bold text-xs text-white">Lock panorama scroll</div>
-                  <div className="text-[10px] text-gray-300 font-normal">
+                  <div className={`font-bold text-xs ${temp.disablePanorama ? 'text-gray-400' : 'text-white'}`}>
+                    Lock panorama scroll
+                  </div>
+                  <div className="text-[10px] text-gray-400 font-normal">
                     Khóa nền không gian đứng yên thay vì quay.
                   </div>
                 </div>
                 <VplayToggleSwitch
                   checked={temp.lockPanoramaScroll || false}
+                  disabled={temp.disablePanorama}
+                  forcedState={temp.disablePanorama ? 'disabled' : undefined}
                   onChange={handleToggleLockPanorama}
                 />
               </div>
@@ -224,15 +230,19 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           {/* Item 3: Panorama scroll speed */}
           {matchesSearch('Panorama scroll speed', 'Tùy chỉnh độ quay nền không gian nhanh hay chậm.') && (
             <>
-              <div className="px-3 sm:px-4 py-3 hover:bg-[#525559] transition-colors space-y-2">
+              <div className={`px-3 sm:px-4 py-3 transition-colors space-y-2 ${
+                temp.disablePanorama ? 'opacity-60 bg-[#3f4245]' : 'hover:bg-[#525559]'
+              }`}>
                 <div className="flex items-center justify-between">
                   <div>
-                    <div className="font-bold text-xs text-white">Panorama scroll speed</div>
-                    <div className="text-[10px] text-gray-300 font-normal">
+                    <div className={`font-bold text-xs ${temp.disablePanorama ? 'text-gray-400' : 'text-white'}`}>
+                      Panorama scroll speed
+                    </div>
+                    <div className="text-[10px] text-gray-400 font-normal">
                       Tùy chỉnh độ quay nền không gian nhanh hay chậm.
                     </div>
                   </div>
-                  <span className="font-mono font-bold text-xs text-gray-200">
+                  <span className={`font-mono font-bold text-xs ${temp.disablePanorama ? 'text-gray-400' : 'text-gray-200'}`}>
                     {temp.panoramaScrollSpeed || 5}
                   </span>
                 </div>
@@ -242,7 +252,9 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                   value={temp.panoramaScrollSpeed || 5}
                   min={1}
                   max={10}
-                  onChange={(v) => setTemp({ ...temp, panoramaScrollSpeed: v })}
+                  disabled={temp.disablePanorama}
+                  forcedState={temp.disablePanorama ? 'disabled' : undefined}
+                  onChange={(v) => !temp.disablePanorama && setTemp({ ...temp, panoramaScrollSpeed: v })}
                   noBackground
                   className="!p-0"
                 />

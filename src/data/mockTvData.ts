@@ -343,7 +343,7 @@ export function parseM3UPlaylist(m3uContent: string): TvChannel[] {
         groupTitle: group,
         logo: logo || `https://via.placeholder.com/150/1c1d1f/ffffff?text=${encodeURIComponent(displayName)}`,
         badge: group.includes('phát thanh') ? 'AUDIO' : 'LIVE HD',
-        currentProgram: `Trực tiếp 24/7 - ${displayName}`,
+        currentProgram: 'Đang phát sóng',
         nextProgram: `Chương trình tiếp theo trên ${displayName}`,
         viewers: `${Math.floor(Math.random() * 300 + 50)}.${Math.floor(Math.random() * 9)}K`,
         rating: (4.5 + Math.random() * 0.5).toFixed(1) + '/5',

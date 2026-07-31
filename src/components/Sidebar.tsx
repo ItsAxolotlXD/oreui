@@ -2,7 +2,7 @@ import React from 'react';
 import { playPopSound } from '../utils/sound';
 import { VplayTab } from './ui/VplayTab';
 
-export type SidebarMenuItem = 'home' | 'live_tv' | 'search' | 'settings' | 'design_system';
+export type SidebarMenuItem = 'home' | 'live_tv' | 'your_realm' | 'search' | 'settings' | 'design_system';
 
 interface SidebarProps {
   activeItem: SidebarMenuItem;
@@ -21,6 +21,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const menuItems: { id: SidebarMenuItem; label: string; badge?: string }[] = [
     { id: 'home', label: 'Home' },
     { id: 'live_tv', label: 'Live TV', badge: `(${channelCount})` },
+    { id: 'your_realm', label: 'Your Realm' },
     { id: 'settings', label: 'Settings' },
   ];
 

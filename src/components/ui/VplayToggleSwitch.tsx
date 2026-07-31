@@ -53,7 +53,9 @@ export const VplayToggleSwitch: React.FC<VplayToggleSwitchProps> = ({
 
   // Determine which pixel image asset to show based on state & checked
   let imgSrc = TOGGLE_IMAGES.off;
-  if (isChecked) {
+  if (effectiveDisabled || state === 'disabled') {
+    imgSrc = isChecked ? TOGGLE_IMAGES.on : TOGGLE_IMAGES.offHover;
+  } else if (isChecked) {
     if (state === 'hovered') {
       imgSrc = TOGGLE_IMAGES.onHover;
     } else {

@@ -61,20 +61,28 @@ export const VplaySlider: React.FC<VplaySliderProps> = ({
   };
 
   let activeSegmentBg = 'bg-[#418a28] shadow-[inset_0_1px_0_#6bc34b]';
-  let thumbBg = 'bg-[#cdd1d4] shadow-[inset_0_1px_0_#ffffff,inset_0_-2px_0_#9ea2a6]';
+  let layer3Bg = 'bg-[#ffffff]';
+  let layer2Bg = 'bg-[#8d9195]';
+  let layer1Bg = 'bg-[#e2e5e8]';
 
   switch (state) {
     case 'hovered':
       activeSegmentBg = 'bg-[#51a233] shadow-[inset_0_1px_0_#89dc69]';
-      thumbBg = 'bg-[#f4f6f8] shadow-[inset_0_1px_0_#ffffff,inset_0_-2px_0_#b5b9bd]';
+      layer3Bg = 'bg-[#ffffff]';
+      layer2Bg = 'bg-[#9ea2a6]';
+      layer1Bg = 'bg-[#ffffff]';
       break;
     case 'pressed':
-      activeSegmentBg = 'bg-[#2b611a] shadow-[inset_0_2px_0_#18370d]';
-      thumbBg = 'bg-[#abafb3] shadow-[inset_0_2px_0_#898d91]';
+      activeSegmentBg = 'bg-[#2b611a] shadow-[inset_0_1px_0_#3d8225]';
+      layer3Bg = 'bg-[#828588]';
+      layer2Bg = 'bg-[#484b4e]';
+      layer1Bg = 'bg-[#6e7174]';
       break;
     case 'disabled':
-      activeSegmentBg = 'bg-[#9da1a5] shadow-none';
-      thumbBg = 'bg-[#c8cbce] shadow-none cursor-not-allowed';
+      activeSegmentBg = 'bg-[#6b6e73] shadow-none';
+      layer3Bg = 'bg-[#9ea1a4]';
+      layer2Bg = 'bg-[#5d6063]';
+      layer1Bg = 'bg-[#838688]';
       break;
     case 'normal':
     default:
@@ -105,7 +113,7 @@ export const VplaySlider: React.FC<VplaySliderProps> = ({
         onMouseUp={handlePointerUp}
         onTouchStart={() => setIsPressed(true)}
         onTouchEnd={handlePointerUp}
-        className="relative flex items-center h-8 select-none outline-none cursor-pointer"
+        className="relative flex items-center h-8 select-none outline-none cursor-pointer px-1"
       >
         {/* Invisible Native Range Input for Smooth Dragging */}
         <input
@@ -120,27 +128,27 @@ export const VplaySlider: React.FC<VplaySliderProps> = ({
           className="absolute inset-0 w-full h-full opacity-0 z-20 cursor-pointer disabled:cursor-not-allowed"
         />
 
-        <div className="w-full h-3 border-2 border-[#141414] bg-[#4e5256] grid grid-cols-10 gap-[1px] p-[1px]">
-          {Array.from({ length: totalSegments }).map((_, idx) => {
-            const isActive = idx < activeSegmentsCount;
-            return (
-              <div
-                key={idx}
-                className={`h-full transition-colors duration-75 ${
-                  isActive ? activeSegmentBg : 'bg-[#4e5256]'
-                }`}
-              />
-            );
-          })}
+        {/* Track with Continuous Green Fill Bar */}
+        <div className="relative w-full h-3 border-2 border-[#141414] bg-[#2a2c2e] p-[1px] overflow-hidden">
+          <div
+            className={`h-full transition-all duration-75 ${activeSegmentBg}`}
+            style={{ width: `${ratio * 100}%` }}
+          />
         </div>
 
+        {/* Square Knob with Secondary Button Bevel Texture */}
         <div
           style={{
-            left: `calc(${ratio * 100}% - 8px)`,
+            left: `calc(${ratio * 100}% - 12px)`,
           }}
           className="absolute top-1/2 -translate-y-1/2 transition-all duration-75 pointer-events-none z-10"
         >
-          <div className={`w-4 h-6 border-2 border-[#141414] ${thumbBg}`} />
+          <div className="w-6 h-6 border-2 border-[#141414] bg-[#141414] relative overflow-hidden select-none">
+            <div className={`relative w-full h-full flex flex-col ${layer3Bg}`}>
+              <div className={`absolute inset-x-0 bottom-0 h-[3px] ${layer2Bg} ${state === 'pressed' ? 'hidden' : 'block'}`} />
+              <div className={`relative z-10 w-full h-full ${state === 'pressed' ? 'm-[1px]' : 'm-[1px] mb-[3px]'} ${layer1Bg}`} />
+            </div>
+          </div>
         </div>
       </div>
     </div>
