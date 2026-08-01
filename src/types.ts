@@ -41,4 +41,11 @@ export interface UserSettings {
   disablePanorama?: boolean;
   lockPanoramaScroll?: boolean;
   panoramaScrollSpeed?: number;
+  reduceMotion?: boolean;
+}
+
+export interface Realm {
+  id: string;
+  name: string;
+  channels: TvChannel[];
 }

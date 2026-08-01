@@ -5,6 +5,7 @@ import { playPopSound } from '../utils/sound';
 import { VplayHeroButton } from './ui/VplayHeroButton';
 import { VplayPrimaryButton } from './ui/VplayPrimaryButton';
 import { VplaySecondaryButton } from './ui/VplaySecondaryButton';
+import { VplaySecondaryButtonDark } from './ui/VplaySecondaryButtonDark';
 import { VplayCheckbox } from './ui/VplayCheckbox';
 import { VplayDropdown } from './ui/VplayDropdown';
 import { VplaySlider } from './ui/VplaySlider';
@@ -137,6 +138,23 @@ export const DesignSystemViewer: React.FC<DesignSystemViewerProps> = ({ onOpenFe
                   <span className="text-sm text-gray-300 capitalize font-montserrat font-semibold">{st}</span>
                   <div className="sm:col-span-3">
                     <VplaySecondaryButton forcedState={st}>Secondary button</VplaySecondaryButton>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* SECTION 3B: SECONDARY BUTTON DARK */}
+          <section className="bg-[#292a2c] p-6 border-2 border-[#141414] rounded-none">
+            <h2 className="text-base sm:text-lg font-bold text-gray-200 mb-6 flex items-center gap-2 border-b border-[#3e4145] pb-2">
+              <span className="text-xs text-gray-400">03B.</span> Secondary button dark (Nút xám tối)
+            </h2>
+            <div className="space-y-4 max-w-3xl">
+              {STATES.map((st) => (
+                <div key={st} className="grid grid-cols-1 sm:grid-cols-4 items-center gap-4">
+                  <span className="text-sm text-gray-300 capitalize font-montserrat font-semibold">{st}</span>
+                  <div className="sm:col-span-3">
+                    <VplaySecondaryButtonDark forcedState={st}>Secondary button dark</VplaySecondaryButtonDark>
                   </div>
                 </div>
               ))}
@@ -319,7 +337,7 @@ export const DesignSystemViewer: React.FC<DesignSystemViewerProps> = ({ onOpenFe
             {/* Column 1 */}
             <div className="space-y-6">
               <div className="bg-[#1f2123] p-4 border border-[#383a3d]">
-                <h3 className="text-xs text-gray-400 mb-3">01 & 02. Buttons</h3>
+                <h3 className="text-xs text-gray-400 mb-3">01, 02 & 03. Buttons</h3>
                 <div className="space-y-3">
                   <VplayHeroButton onClick={() => alert('HERO BUTTON Clicked!')}>
                     HERO BUTTON
@@ -330,6 +348,9 @@ export const DesignSystemViewer: React.FC<DesignSystemViewerProps> = ({ onOpenFe
                   <VplaySecondaryButton onClick={() => alert('Secondary Button Clicked!')}>
                     Secondary button
                   </VplaySecondaryButton>
+                  <VplaySecondaryButtonDark onClick={() => alert('Secondary Button Dark Clicked!')}>
+                    Secondary button dark
+                  </VplaySecondaryButtonDark>
                 </div>
               </div>
 

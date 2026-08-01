@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { TvChannel, UserSettings } from './types';
+import { Realm, TvChannel, UserSettings } from './types';
 import { TV_CHANNELS } from './data/mockTvData';
 import { DesignSystemViewer } from './components/DesignSystemViewer';
 import { TvPlayer } from './components/TvPlayer';
 import { SettingsView } from './components/SettingsView';
 import { SearchChannelsView } from './components/SearchChannelsView';
+import { YourRealmView } from './components/YourRealmView';
 import { Sidebar, SidebarMenuItem } from './components/Sidebar';
 import { HeaderBar } from './components/HeaderBar';
 import { MinecraftPanorama } from './components/MinecraftPanorama';
@@ -34,8 +35,20 @@ export default function App() {
   const [isCreateChannelOpen, setIsCreateChannelOpen] = useState(false);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [isTabLoading, setIsTabLoading] = useState(false);
+  const [isDeveloperUnlocked, setIsDeveloperUnlocked] = useState<boolean>(false);
+  const [realms, setRealms] = useState<Realm[]>([
+    {
+      id: 'realm-1',
+      name: 'Realm #1',
+      channels: [],
+    },
+  ]);
 
   const triggerTabLoading = () => {
+    if (settings.reduceMotion) {
+      setIsTabLoading(false);
+      return;
+    }
     setIsTabLoading(true);
     setTimeout(() => {
       setIsTabLoading(false);
@@ -55,6 +68,7 @@ export default function App() {
     disablePanorama: false,
     lockPanoramaScroll: false,
     panoramaScrollSpeed: 5,
+    reduceMotion: false,
   });
 
   const handleSelectChannel = (channel: TvChannel) => {
@@ -64,6 +78,12 @@ export default function App() {
 
   const handleAddChannel = (newChannel: TvChannel) => {
     setChannelsList((prev) => [newChannel, ...prev]);
+    setRealms((prev) => {
+      if (prev.length === 0) return prev;
+      return prev.map((r, idx) =>
+        idx === 0 ? { ...r, channels: [newChannel, ...r.channels] } : r
+      );
+    });
     setSelectedChannel(newChannel);
     triggerTabLoading();
   };
@@ -220,48 +240,60 @@ export default function App() {
                       setSidebarItem('design_system');
                     }}
                     onOpenFeedback={() => setIsFeedbackOpen(true)}
+                    isDeveloperUnlocked={isDeveloperUnlocked}
+                    onToggleDeveloperUnlocked={setIsDeveloperUnlocked}
                   />
               ) : sidebarItem === 'design_system' ? (
                   <DesignSystemViewer onOpenFeedback={() => setIsFeedbackOpen(true)} />
                 ) : sidebarItem === 'your_realm' ? (
-                  /* YOUR REALM UNDER CONSTRUCTION VIEW */
-                  <div className="w-full bg-[#383a3d] border-2 border-[#141414] shadow-2xl p-6 sm:p-10 text-center select-none my-2 space-y-6">
-                    <div className="font-montserrat font-extrabold text-base sm:text-xl text-white tracking-wide uppercase">
-                      This tab is under construction
-                    </div>
-
-                    <div className="flex justify-center my-4">
-                      <img
-                        src="https://static.wikia.nocookie.net/ep-deo/images/3/37/Load_not_done.png/revision/latest?cb=20260724133427"
-                        alt="Under construction"
-                        referrerPolicy="no-referrer"
-                        className="max-w-[300px] sm:max-w-[420px] w-full h-auto object-contain [image-rendering:pixelated]"
-                        style={{ imageRendering: 'pixelated' }}
-                      />
-                    </div>
-
-                    <div className="font-montserrat font-medium text-xs sm:text-sm text-gray-300 max-w-md mx-auto">
-                      We are working incredibly hard on this feature. Check back soon for more updates.
-                    </div>
-
-                    <div className="flex items-center justify-center gap-3 pt-2 max-w-sm mx-auto">
-                      <div className="w-1/2">
-                        <VplaySecondaryButton onClick={() => setIsFeedbackOpen(true)}>
-                          Give Feedback
-                        </VplaySecondaryButton>
+                  isDeveloperUnlocked ? (
+                    <YourRealmView
+                      realms={realms}
+                      onUpdateRealms={setRealms}
+                      settings={settings}
+                      onUpdateSettings={setSettings}
+                      onOpenCreateChannelModal={() => setIsCreateChannelOpen(true)}
+                    />
+                  ) : (
+                    /* YOUR REALM UNDER CONSTRUCTION VIEW */
+                    <div className="w-full bg-[#383a3d] border-2 border-[#141414] shadow-2xl p-6 sm:p-10 text-center select-none my-2 space-y-6">
+                      <div className="font-montserrat font-extrabold text-base sm:text-xl text-white tracking-wide uppercase">
+                        This tab is under construction
                       </div>
-                      <div className="w-1/2">
-                        <VplayHeroButton
-                          onClick={() => {
-                            triggerTabLoading();
-                            setSidebarItem('home');
-                          }}
-                        >
-                          Go Back
-                        </VplayHeroButton>
+
+                      <div className="flex justify-center my-4">
+                        <img
+                          src="https://static.wikia.nocookie.net/ep-deo/images/3/37/Load_not_done.png/revision/latest?cb=20260724133427"
+                          alt="Under construction"
+                          referrerPolicy="no-referrer"
+                          className="max-w-[300px] sm:max-w-[420px] w-full h-auto object-contain [image-rendering:pixelated]"
+                          style={{ imageRendering: 'pixelated' }}
+                        />
+                      </div>
+
+                      <div className="font-montserrat font-medium text-xs sm:text-sm text-gray-300 max-w-md mx-auto">
+                        We are working incredibly hard on this feature. Check back soon for more updates.
+                      </div>
+
+                      <div className="flex items-center justify-center gap-3 pt-2 max-w-sm mx-auto">
+                        <div className="w-1/2">
+                          <VplaySecondaryButton onClick={() => setIsFeedbackOpen(true)}>
+                            Give Feedback
+                          </VplaySecondaryButton>
+                        </div>
+                        <div className="w-1/2">
+                          <VplayHeroButton
+                            onClick={() => {
+                              triggerTabLoading();
+                              setSidebarItem('home');
+                            }}
+                          >
+                            Go Back
+                          </VplayHeroButton>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  )
                 ) : sidebarItem === 'search' ? (
                   <SearchChannelsView
                     channels={channelsList}
@@ -393,16 +425,6 @@ export default function App() {
 
               {/* GROUP FILTER TABS, ACTION BAR & CHANNELS GRID */}
               <section className="space-y-4 pt-2">
-                {/* FULL WIDTH CREATE CUSTOM CHANNEL BUTTON */}
-                <div className="w-full py-1">
-                  <VplayPrimaryButton
-                    onClick={() => setIsCreateChannelOpen(true)}
-                    className="w-full !py-2.5 text-xs sm:text-sm tracking-wider flex justify-center items-center"
-                  >
-                    + Create custom channel
-                  </VplayPrimaryButton>
-                </div>
-
                 {/* SEARCH BAR IN LIVE TV */}
                 <div className="bg-[#3c3f42] border-2 border-[#141414] p-3 shadow-md">
                   <div className="relative flex items-center w-full">

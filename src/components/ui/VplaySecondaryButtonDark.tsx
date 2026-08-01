@@ -2,18 +2,20 @@ import React, { useState } from 'react';
 import { ComponentState } from '../../types';
 import { playPopSound } from '../../utils/sound';
 
-interface VplayPrimaryButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface VplaySecondaryButtonDarkProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children?: React.ReactNode;
   forcedState?: ComponentState;
   fullWidth?: boolean;
   size?: 'normal' | 'compact' | 'sm';
+  active?: boolean;
 }
 
-export const VplayPrimaryButton: React.FC<VplayPrimaryButtonProps> = ({
-  children = 'Primary button',
+export const VplaySecondaryButtonDark: React.FC<VplaySecondaryButtonDarkProps> = ({
+  children = 'Secondary button dark',
   forcedState,
   fullWidth = true,
   size = 'normal',
+  active = false,
   onClick,
   disabled,
   className = '',
@@ -29,39 +31,46 @@ export const VplayPrimaryButton: React.FC<VplayPrimaryButtonProps> = ({
     isHovered ? 'hovered' : 'normal'
   );
 
-  let layer1Bg = 'bg-[#418a28]';
-  let layer2Bg = 'bg-[#1e4511]';
-  let layer3Bg = 'bg-[#6bc34b]';
+  let layer1Bg = 'bg-[#313437]';
+  let layer2Bg = 'bg-[#1e2022]';
+  let layer3Bg = 'bg-[#52565a]';
   let textColor = 'text-white';
   let transformClass = '';
 
-  switch (state) {
-    case 'hovered':
-      layer1Bg = 'bg-[#51a233]';
-      layer2Bg = 'bg-[#285718]';
-      layer3Bg = 'bg-[#89dc69]';
-      textColor = 'text-white';
-      break;
-    case 'pressed':
-      layer1Bg = 'bg-[#2b611a]';
-      layer2Bg = 'bg-[#418a28]';
-      layer3Bg = 'bg-[#18370d]';
-      textColor = 'text-white';
-      transformClass = 'translate-y-[2px]';
-      break;
-    case 'disabled':
-      layer1Bg = 'bg-[#c8cbce]';
-      layer2Bg = 'bg-[#9ea2a6]';
-      layer3Bg = 'bg-[#e2e5e8]';
-      textColor = 'text-[#5e6266]';
-      break;
-    case 'normal':
-    default:
-      layer1Bg = 'bg-[#418a28]';
-      layer2Bg = 'bg-[#1e4511]';
-      layer3Bg = 'bg-[#6bc34b]';
-      textColor = 'text-white';
-      break;
+  if (active && state === 'normal') {
+    layer1Bg = 'bg-[#383d41]';
+    layer2Bg = 'bg-[#1e2022]';
+    layer3Bg = 'bg-[#6bc34b]'; // Green active highlight
+    textColor = 'text-white';
+  } else {
+    switch (state) {
+      case 'hovered':
+        layer1Bg = 'bg-[#42464a]';
+        layer2Bg = 'bg-[#282a2d]';
+        layer3Bg = 'bg-[#676c72]';
+        textColor = 'text-white';
+        break;
+      case 'pressed':
+        layer1Bg = 'bg-[#242628]';
+        layer2Bg = 'bg-[#313437]';
+        layer3Bg = 'bg-[#191a1b]';
+        textColor = 'text-white';
+        transformClass = 'translate-y-[2px]';
+        break;
+      case 'disabled':
+        layer1Bg = 'bg-[#282a2c]';
+        layer2Bg = 'bg-[#191a1b]';
+        layer3Bg = 'bg-[#3c3e41]';
+        textColor = 'text-[#73777b]';
+        break;
+      case 'normal':
+      default:
+        layer1Bg = 'bg-[#313437]';
+        layer2Bg = 'bg-[#1e2022]';
+        layer3Bg = 'bg-[#52565a]';
+        textColor = 'text-white';
+        break;
+    }
   }
 
   const handleMouseDown = () => {
@@ -79,8 +88,8 @@ export const VplayPrimaryButton: React.FC<VplayPrimaryButtonProps> = ({
   const isSmall = size === 'sm' || size === 'compact';
   const fontClasses = isSmall
     ? 'text-xs font-bold'
-    : 'text-sm sm:text-base font-bold';
-  const padClasses = isSmall ? 'px-2.5 py-1' : 'px-5 py-2';
+    : 'text-sm sm:text-base font-semibold';
+  const padClasses = isSmall ? 'px-2.5 py-1' : 'px-4 py-2';
 
   return (
     <button
@@ -113,9 +122,9 @@ export const VplayPrimaryButton: React.FC<VplayPrimaryButtonProps> = ({
             ${padClasses} ${fontClasses} ${layer1Bg} ${textColor}
           `}
         >
-          <span className="drop-shadow-[1px_1px_0_rgba(0,0,0,0.6)] flex items-center justify-center gap-2 w-full truncate">
+          <div className="flex items-center justify-center gap-2 w-full h-full truncate">
             {children}
-          </span>
+          </div>
         </div>
       </div>
     </button>

@@ -3,6 +3,7 @@ import { UserSettings } from '../types';
 import { ExternalLink, Search } from 'lucide-react';
 import { playPopSound } from '../utils/sound';
 import { VplayToggleSwitch } from './ui/VplayToggleSwitch';
+import { VplayPrimaryButton } from './ui/VplayPrimaryButton';
 import { VplaySecondaryButton } from './ui/VplaySecondaryButton';
 import { VplaySlider } from './ui/VplaySlider';
 
@@ -13,6 +14,8 @@ interface SettingsViewProps {
   onChangeLiveSettings?: (newSettings: UserSettings) => void;
   onOpenFeedback?: () => void;
   onOpenDesignSystem?: () => void;
+  isDeveloperUnlocked?: boolean;
+  onToggleDeveloperUnlocked?: (unlocked: boolean) => void;
 }
 
 const SettingsDivider = () => (
@@ -29,12 +32,15 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   onChangeLiveSettings,
   onOpenFeedback,
   onOpenDesignSystem,
+  isDeveloperUnlocked = false,
+  onToggleDeveloperUnlocked,
 }) => {
   const [initialSettings] = useState<UserSettings>(settings);
   const [temp, setTemp] = useState<UserSettings>({
     disablePanorama: false,
     lockPanoramaScroll: false,
     panoramaScrollSpeed: 5,
+    reduceMotion: false,
     ...settings,
   });
 
@@ -45,6 +51,9 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
   const [settingSearch, setSettingSearch] = useState('');
   const [showComingSoonModal, setShowComingSoonModal] = useState(false);
+  const [showDevKeyModal, setShowDevKeyModal] = useState(false);
+  const [devKeyInput, setDevKeyInput] = useState('');
+  const [devKeyStatus, setDevKeyStatus] = useState<string | null>(null);
 
   const handleToggleSubtitles = () => {
     playPopSound();
@@ -71,6 +80,11 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
     setTemp((prev) => ({ ...prev, lockPanoramaScroll: !prev.lockPanoramaScroll }));
   };
 
+  const handleToggleReduceMotion = () => {
+    playPopSound();
+    setTemp((prev) => ({ ...prev, reduceMotion: !prev.reduceMotion }));
+  };
+
   const handleResetDefault = () => {
     playPopSound();
     setTemp({
@@ -86,6 +100,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
       disablePanorama: false,
       lockPanoramaScroll: false,
       panoramaScrollSpeed: 5,
+      reduceMotion: false,
     });
   };
 
@@ -173,6 +188,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
       {(matchesSearch('Disable panorama') ||
         matchesSearch('Lock panorama scroll') ||
         matchesSearch('Panorama scroll speed') ||
+        matchesSearch('Reduce motion') ||
         matchesSearch('GIAO DIỆN VÀ TÙY BIẾN')) && (
         <div>
           <div className="px-3 sm:px-4 py-2 bg-[#3d4043]">
@@ -262,6 +278,25 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
               <SettingsDivider />
             </>
           )}
+
+          {/* Item 4: Reduce motion */}
+          {matchesSearch('Reduce motion', 'Loại bỏ toàn bộ hiệu ứng khi di chuyển giữa các trang.') && (
+            <>
+              <div className="px-3 sm:px-4 py-3 hover:bg-[#525559] transition-colors flex items-center justify-between gap-3">
+                <div>
+                  <div className="font-bold text-xs text-white">Reduce motion</div>
+                  <div className="text-[10px] text-gray-300 font-normal">
+                    Loại bỏ toàn bộ hiệu ứng khi di chuyển giữa các trang.
+                  </div>
+                </div>
+                <VplayToggleSwitch
+                  checked={temp.reduceMotion || false}
+                  onChange={handleToggleReduceMotion}
+                />
+              </div>
+              <SettingsDivider />
+            </>
+          )}
         </div>
       )}
 
@@ -331,32 +366,16 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             </>
           )}
 
-          {/* Notifications Toggle */}
-          {matchesSearch('Thông báo sự kiện thể thao trực tiếp', 'Nhận nhắc nhở lịch thi đấu Ngoại hạng Anh & sự kiện trực tiếp') && (
-            <>
-              <div className="px-3 sm:px-4 py-2.5 hover:bg-[#525559] transition-colors flex items-center justify-between gap-3">
-                <div>
-                  <div className="font-bold text-xs text-white">
-                    Thông báo sự kiện thể thao trực tiếp
-                  </div>
-                  <div className="text-[10px] text-gray-300 font-normal">
-                    Nhận nhắc nhở lịch thi đấu Ngoại hạng Anh & sự kiện trực tiếp
-                  </div>
-                </div>
-                <VplayToggleSwitch
-                  checked={temp.notifications}
-                  onChange={handleToggleNotifications}
-                />
-              </div>
-              <SettingsDivider />
-            </>
-          )}
+          {/* Notifications Toggle removed as requested */}
         </div>
       )}
 
       {/* SUBHEADING 5: TÙY CHỌN NHÀ PHÁT TRIỂN */}
       {(matchesSearch('Ore UI design components') ||
         matchesSearch('Design components') ||
+        matchesSearch('Unlock restricted features') ||
+        matchesSearch('Enter password') ||
+        matchesSearch('Disable features') ||
         matchesSearch('Reset settings to default') ||
         matchesSearch('TÙY CHỌN NHÀ PHÁT TRIỂN')) && (
         <div>
@@ -368,7 +387,49 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
           <SettingsDivider />
 
-          {/* Item 1: Ore UI design components */}
+          {/* Item 1: Unlock restricted features */}
+          {(matchesSearch('Unlock restricted features', 'Enables features that are currently under development.') ||
+            matchesSearch('Enter password') ||
+            matchesSearch('Disable features')) && (
+            <>
+              <div className="px-3 sm:px-4 py-2.5 hover:bg-[#525559] transition-colors flex items-center justify-between gap-3">
+                <div>
+                  <div className="font-bold text-xs text-white">Unlock restricted features</div>
+                  <div className="text-[10px] text-gray-300 font-normal">
+                    Enables features that are currently under development.
+                  </div>
+                </div>
+                <div className="w-36 flex-shrink-0">
+                  {isDeveloperUnlocked ? (
+                    <VplaySecondaryButton
+                      size="sm"
+                      onClick={() => {
+                        playPopSound();
+                        onToggleDeveloperUnlocked?.(false);
+                      }}
+                      className="w-full text-center whitespace-nowrap !bg-[#8c2d2d] hover:!bg-[#a33838]"
+                    >
+                      Disable features
+                    </VplaySecondaryButton>
+                  ) : (
+                    <VplaySecondaryButton
+                      size="sm"
+                      onClick={() => {
+                        playPopSound();
+                        setShowDevKeyModal(true);
+                      }}
+                      className="w-full text-center whitespace-nowrap"
+                    >
+                      Enter password
+                    </VplaySecondaryButton>
+                  )}
+                </div>
+              </div>
+              <SettingsDivider />
+            </>
+          )}
+
+          {/* Item 2: Ore UI design components */}
           {(matchesSearch('Ore UI design components', 'Hệ thống ngôn ngữ thiết kế giao diện của Vplay.') ||
             matchesSearch('Design components')) && (
             <>
@@ -396,7 +457,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             </>
           )}
 
-          {/* Item 2: Reset settings to default */}
+          {/* Item 3: Reset settings to default */}
           {matchesSearch('Reset settings to default', 'Restore all above options to their original values.') && (
             <>
               <div className="px-3 sm:px-4 py-2.5 hover:bg-[#525559] transition-colors flex items-center justify-between gap-3">
@@ -488,6 +549,113 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                 className="w-full text-center"
               >
                 Understood
+              </VplaySecondaryButton>
+            </div>
+
+          </div>
+        </div>
+      )}
+
+      {/* DEVELOPER KEY REQUIRED MODAL */}
+      {showDevKeyModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 animate-fade-in overflow-y-auto">
+          <div className="bg-[#383b3e] border-2 border-[#787b7f] w-full max-w-md shadow-2xl text-white font-montserrat select-none flex flex-col max-h-[85vh] my-auto overflow-hidden">
+            
+            {/* Header Bar */}
+            <div className="bg-[#2d3033] border-b-2 border-[#787b7f] px-4 py-2.5 flex items-center justify-between flex-shrink-0">
+              <button
+                onMouseDown={() => playPopSound()}
+                onClick={() => {
+                  playPopSound();
+                  setShowDevKeyModal(false);
+                  setDevKeyInput('');
+                  setDevKeyStatus(null);
+                }}
+                className="text-gray-300 hover:text-white font-bold text-sm px-1.5 py-0.5 cursor-pointer"
+                title="Back"
+              >
+                ‹
+              </button>
+
+              <h2 className="text-xs sm:text-sm font-bold text-white uppercase tracking-wider font-jura">
+                A developer key is required
+              </h2>
+
+              <button
+                onMouseDown={() => playPopSound()}
+                onClick={() => {
+                  playPopSound();
+                  setShowDevKeyModal(false);
+                  setDevKeyInput('');
+                  setDevKeyStatus(null);
+                }}
+                className="text-gray-300 hover:text-white font-bold text-xs px-1.5 py-0.5 cursor-pointer"
+                title="Close"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Subtitle / Description Section */}
+            <div className="p-4 bg-[#383b3e] border-b border-[#2d3033] flex-shrink-0">
+              <p className="text-xs text-gray-200 leading-relaxed font-normal">
+                This feature is locked behind a developer access key. Please enter a 6-digits key if you are the developer.
+              </p>
+            </div>
+
+            {/* Form Body - Input box */}
+            <div className="p-4 space-y-3 bg-[#383b3e] flex-1 overflow-y-auto custom-scrollbar">
+              <div className="space-y-1.5">
+                <input
+                  type="text"
+                  maxLength={6}
+                  value={devKeyInput}
+                  onChange={(e) => {
+                    const val = e.target.value.slice(0, 6);
+                    setDevKeyInput(val);
+                    if (devKeyStatus) setDevKeyStatus(null);
+                  }}
+                  placeholder="Enter 6-digits key"
+                  className="w-full h-10 bg-[#222426] text-white px-3 text-xs sm:text-sm font-normal font-montserrat border-2 border-[#141414] focus:outline-none focus:border-white shadow-[inset_0_2px_0_rgba(0,0,0,0.4)] placeholder:text-gray-400 cursor-pointer tracking-widest text-center"
+                />
+                {devKeyStatus && (
+                  <p className={`text-[11px] font-medium text-center ${devKeyStatus.includes('successfully') || devKeyStatus.includes('Unlocked') ? 'text-green-400' : 'text-red-400'}`}>
+                    {devKeyStatus}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="p-4 pt-3 bg-[#383b3e] border-t-2 border-[#2d3033] flex-shrink-0 space-y-2.5">
+              <VplayPrimaryButton
+                onClick={() => {
+                  playPopSound();
+                  if (devKeyInput.trim() === '366761') {
+                    setDevKeyStatus('Unlocked restricted features successfully!');
+                    onToggleDeveloperUnlocked?.(true);
+                    setTimeout(() => {
+                      setShowDevKeyModal(false);
+                      setDevKeyInput('');
+                      setDevKeyStatus(null);
+                    }, 800);
+                  } else {
+                    setDevKeyStatus('Developer key is invalid. Please try again.');
+                  }
+                }}
+              >
+                Unlock restricted features
+              </VplayPrimaryButton>
+
+              <VplaySecondaryButton
+                onClick={() => {
+                  playPopSound();
+                  setShowDevKeyModal(false);
+                  setDevKeyInput('');
+                  setDevKeyStatus(null);
+                }}
+              >
+                Close
               </VplaySecondaryButton>
             </div>
 
