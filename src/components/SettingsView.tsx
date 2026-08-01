@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { UserSettings } from '../types';
+import { UserSettings, TvChannel } from '../types';
 import { ExternalLink, Search } from 'lucide-react';
 import { playPopSound } from '../utils/sound';
 import { VplayToggleSwitch } from './ui/VplayToggleSwitch';
@@ -16,6 +16,7 @@ interface SettingsViewProps {
   onOpenDesignSystem?: () => void;
   isDeveloperUnlocked?: boolean;
   onToggleDeveloperUnlocked?: (unlocked: boolean) => void;
+  channels?: TvChannel[];
 }
 
 const SettingsDivider = () => (
@@ -34,6 +35,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   onOpenDesignSystem,
   isDeveloperUnlocked = false,
   onToggleDeveloperUnlocked,
+  channels = [],
 }) => {
   const [initialSettings] = useState<UserSettings>(settings);
   const [temp, setTemp] = useState<UserSettings>({
@@ -54,6 +56,29 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   const [showDevKeyModal, setShowDevKeyModal] = useState(false);
   const [devKeyInput, setDevKeyInput] = useState('');
   const [devKeyStatus, setDevKeyStatus] = useState<string | null>(null);
+  const [exported, setExported] = useState(false);
+
+  const handleExportChannels = () => {
+    playPopSound();
+    let m3u8Content = '#EXTM3U\n';
+    channels.forEach((ch) => {
+      const stream = ch.streamUrl || 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8';
+      m3u8Content += `#EXTINF:-1 tvg-id="${ch.id}" tvg-name="${ch.name}" tvg-logo="${ch.logo}" group-title="${ch.groupTitle}",${ch.name}\n${stream}\n\n`;
+    });
+
+    const blob = new Blob([m3u8Content], { type: 'audio/x-mpegurl;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.setAttribute('download', 'Vplay_channels.m3u8');
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    setExported(true);
+    setTimeout(() => setExported(false), 2000);
+  };
 
   const handleToggleSubtitles = () => {
     playPopSound();
@@ -407,7 +432,6 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                         playPopSound();
                         onToggleDeveloperUnlocked?.(false);
                       }}
-                      className="w-full text-center whitespace-nowrap !bg-[#8c2d2d] hover:!bg-[#a33838]"
                     >
                       Disable features
                     </VplaySecondaryButton>
@@ -418,7 +442,6 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                         playPopSound();
                         setShowDevKeyModal(true);
                       }}
-                      className="w-full text-center whitespace-nowrap"
                     >
                       Enter password
                     </VplaySecondaryButton>
@@ -440,14 +463,13 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                     Hệ thống ngôn ngữ thiết kế giao diện Ore UI của Vplay.
                   </div>
                 </div>
-                <div className="w-20 flex-shrink-0">
+                <div className="w-24 flex-shrink-0">
                   <VplaySecondaryButton
                     size="sm"
                     onClick={() => {
                       playPopSound();
                       if (onOpenDesignSystem) onOpenDesignSystem();
                     }}
-                    className="w-full text-center"
                   >
                     Open
                   </VplaySecondaryButton>
@@ -457,23 +479,49 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             </>
           )}
 
-          {/* Item 3: Reset settings to default */}
+          {/* Item 3: Export channels (.m3u8) */}
+          {(matchesSearch('Export channels (.m3u8)', 'Tải file m3u8 danh sách các kênh.') ||
+            matchesSearch('Export channels') ||
+            matchesSearch('m3u8')) && (
+            <>
+              <div className="px-3 sm:px-4 py-3 hover:bg-[#525559] transition-colors space-y-2.5">
+                <div>
+                  <div className="font-bold text-xs text-white">Export channels (.m3u8)</div>
+                  <div className="text-[10px] text-gray-300 font-normal">
+                    Tải file danh sách toàn bộ {channels.length} kênh Vplay dưới dạng .m3u8.
+                  </div>
+                </div>
+                <div className="w-full">
+                  <VplaySecondaryButton
+                    size="sm"
+                    fullWidth
+                    onClick={handleExportChannels}
+                  >
+                    {exported ? 'Đã tải file .m3u8!' : 'Export channels (.m3u8)'}
+                  </VplaySecondaryButton>
+                </div>
+              </div>
+              <SettingsDivider />
+            </>
+          )}
+
+          {/* Item 4: Reset settings to default */}
           {matchesSearch('Reset settings to default', 'Restore all above options to their original values.') && (
             <>
-              <div className="px-3 sm:px-4 py-2.5 hover:bg-[#525559] transition-colors flex items-center justify-between gap-3">
+              <div className="px-3 sm:px-4 py-3 hover:bg-[#525559] transition-colors space-y-2.5">
                 <div>
                   <div className="font-bold text-xs text-white">Reset settings to default</div>
                   <div className="text-[10px] text-gray-300 font-normal">
                     Restore all above options to their original values.
                   </div>
                 </div>
-                <div className="w-20 flex-shrink-0">
+                <div className="w-full">
                   <VplaySecondaryButton
                     size="sm"
+                    fullWidth
                     onClick={handleResetDefault}
-                    className="w-full text-center"
                   >
-                    Reset
+                    Reset settings to default
                   </VplaySecondaryButton>
                 </div>
               </div>
@@ -489,7 +537,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
       {/* Footer Diagnostic Info */}
       <div className="px-3 sm:px-4 py-2.5 bg-[#383b3e] text-[10px] font-mono text-gray-400 space-y-0.5">
-        <div>DID: cf4bef566256457eb1391a01b5b02e2c</div>
+        <div>DDUI: cf4bef566256457eb1391a01b5b02e2c</div>
         <div>VCID: 28601FFA239DADCE</div>
         <div>VERSION: release-preview</div>
       </div>
@@ -546,7 +594,6 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                   playPopSound();
                   setShowComingSoonModal(false);
                 }}
-                className="w-full text-center"
               >
                 Understood
               </VplaySecondaryButton>

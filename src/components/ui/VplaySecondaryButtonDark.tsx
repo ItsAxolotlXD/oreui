@@ -89,7 +89,7 @@ export const VplaySecondaryButtonDark: React.FC<VplaySecondaryButtonDarkProps> =
   const fontClasses = isSmall
     ? 'text-xs font-bold'
     : 'text-sm sm:text-base font-semibold';
-  const padClasses = isSmall ? 'px-2.5 py-1' : 'px-4 py-2';
+  const padClasses = isSmall ? 'px-3 py-1.5' : 'px-4 py-2';
 
   return (
     <button
@@ -102,8 +102,8 @@ export const VplaySecondaryButtonDark: React.FC<VplaySecondaryButtonDarkProps> =
       /* LAYER 4: Outer 2px dark border frame */
       className={`
         relative select-none font-montserrat overflow-hidden !p-0 inline-flex flex-col
-        border-2 border-[#141414] bg-[#141414] rounded-none cursor-pointer transition-transform duration-75
-        ${effectiveDisabled ? 'cursor-not-allowed opacity-80' : 'active:translate-y-[1px] btn-press-effect'}
+        border-2 border-[#141414] bg-[#141414] rounded-none cursor-pointer
+        ${effectiveDisabled ? 'cursor-not-allowed opacity-80' : ''}
         ${fullWidth ? 'w-full' : ''}
         ${className}
       `}
@@ -111,14 +111,14 @@ export const VplaySecondaryButtonDark: React.FC<VplaySecondaryButtonDarkProps> =
     >
       {/* LAYER 3: Top & Side highlight frame */}
       <div className={`relative w-full h-full flex flex-col ${layer3Bg}`}>
-        {/* LAYER 2: Bottom dark bevel bar (hidden when pressed) */}
-        <div className={`absolute inset-x-0 bottom-0 h-[4px] ${layer2Bg} ${state === 'pressed' ? 'hidden' : 'block'}`} />
+        {/* LAYER 2: Bottom dark bevel bar */}
+        <div className={`absolute inset-x-0 bottom-0 h-[4px] ${layer2Bg}`} />
 
         {/* LAYER 1: Center main face containing text */}
         <div
           className={`
             relative z-10 w-full flex items-center justify-center gap-2
-            ${state === 'pressed' ? 'm-[2px] mb-[2px]' : 'm-[2px] mb-[4px]'}
+            ${state === 'pressed' ? 'mt-[4px] mb-[2px] mx-[2px]' : 'mt-[2px] mb-[4px] mx-[2px]'}
             ${padClasses} ${fontClasses} ${layer1Bg} ${textColor}
           `}
         >

@@ -189,7 +189,6 @@ export const YourRealmView: React.FC<YourRealmViewProps> = ({
           {/* ACTION BUTTONS: CREATE REALM (SECONDARY) & NHẬP FILE M3U8 (PRIMARY) */}
           <div className="space-y-2">
             <VplaySecondaryButton
-              size="sm"
               onClick={() => {
                 playPopSound();
                 if (realms.length >= 3) {
@@ -206,7 +205,6 @@ export const YourRealmView: React.FC<YourRealmViewProps> = ({
             </VplaySecondaryButton>
 
             <VplayPrimaryButton
-              size="sm"
               onClick={() => {
                 playPopSound();
                 fileInputRef.current?.click();
@@ -233,7 +231,6 @@ export const YourRealmView: React.FC<YourRealmViewProps> = ({
                 <VplaySecondaryButtonDark
                   key={realm.id}
                   active={isActive}
-                  size="compact"
                   fullWidth
                   onClick={() => {
                     playPopSound();
@@ -306,7 +303,6 @@ export const YourRealmView: React.FC<YourRealmViewProps> = ({
                 {/* + CREATE CUSTOM CHANNEL BUTTON */}
                 <div className="w-full sm:w-auto flex-shrink-0">
                   <VplayPrimaryButton
-                    size="sm"
                     fullWidth={false}
                     onClick={() => {
                       playPopSound();
@@ -414,7 +410,6 @@ export const YourRealmView: React.FC<YourRealmViewProps> = ({
                   </div>
                   <div className="pt-2 flex justify-center">
                     <VplayPrimaryButton
-                      size="sm"
                       fullWidth={false}
                       onClick={() => {
                         playPopSound();
@@ -446,11 +441,10 @@ export const YourRealmView: React.FC<YourRealmViewProps> = ({
               className="w-full h-9 bg-[#222426] text-white px-3 text-xs font-montserrat border-2 border-[#141414] focus:outline-none focus:border-white shadow-[inset_0_2px_0_rgba(0,0,0,0.4)]"
             />
             <div className="flex items-center gap-2 pt-2">
-              <VplayPrimaryButton size="sm" onClick={handleSaveRename} className="flex-1">
+              <VplayPrimaryButton onClick={handleSaveRename} className="flex-1">
                 Lưu
               </VplayPrimaryButton>
               <VplaySecondaryButton
-                size="sm"
                 onClick={() => setRenameModalRealmId(null)}
                 className="flex-1"
               >
@@ -479,11 +473,10 @@ export const YourRealmView: React.FC<YourRealmViewProps> = ({
               className="w-full h-9 bg-[#222426] text-white px-3 text-xs font-montserrat border-2 border-[#141414] focus:outline-none focus:border-white shadow-[inset_0_2px_0_rgba(0,0,0,0.4)]"
             />
             <div className="flex items-center gap-2 pt-2">
-              <VplayPrimaryButton size="sm" onClick={handleCreateRealm} className="flex-1">
+              <VplayPrimaryButton onClick={handleCreateRealm} className="flex-1">
                 Tạo Realm
               </VplayPrimaryButton>
               <VplaySecondaryButton
-                size="sm"
                 onClick={() => setShowCreateRealmModal(false)}
                 className="flex-1"
               >

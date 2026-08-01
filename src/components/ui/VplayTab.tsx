@@ -38,7 +38,7 @@ export const VplayTab: React.FC<VplayTabProps> = ({
   let tabBg = isActive
     ? 'bg-[#2d2f31] text-white shadow-[inset_2px_2px_0_rgba(0,0,0,0.65)]'
     : 'bg-[#3f4246] text-white shadow-[inset_2px_2px_0_rgba(255,255,255,0.18),inset_-2px_-2px_0_rgba(0,0,0,0.5)]';
-  let lineClass = 'bg-[#89dc69]';
+  let lineClass = 'bg-white';
   let transformClass = '';
 
   switch (state) {

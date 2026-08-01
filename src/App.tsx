@@ -45,10 +45,6 @@ export default function App() {
   ]);
 
   const triggerTabLoading = () => {
-    if (settings.reduceMotion) {
-      setIsTabLoading(false);
-      return;
-    }
     setIsTabLoading(true);
     setTimeout(() => {
       setIsTabLoading(false);
@@ -193,10 +189,10 @@ export default function App() {
             {isTabLoading ? (
               <motion.div
                 key="loading"
-                initial={{ x: '100%', opacity: 0 }}
+                initial={settings.reduceMotion ? { opacity: 1, x: 0 } : { x: '100%', opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
-                exit={{ opacity: 1, transition: { duration: 0 } }}
-                transition={{ duration: 0.22, ease: 'easeInOut' }}
+                exit={settings.reduceMotion ? { opacity: 1, x: 0 } : { opacity: 1, transition: { duration: 0 } }}
+                transition={settings.reduceMotion ? { duration: 0 } : { duration: 0.22, ease: 'easeInOut' }}
               >
                 <div className="w-full min-h-[380px] bg-black/50 border-2 border-[#141414] shadow-2xl flex items-center justify-center p-8 text-center select-none my-2 rounded-none">
                   <img
@@ -211,13 +207,17 @@ export default function App() {
             ) : (
               <motion.div
                 key={isSettingsOpen ? 'settings' : sidebarItem}
-                initial={{ opacity: 0, x: 0 }}
+                initial={settings.reduceMotion ? { opacity: 1, x: 0 } : { opacity: 0, x: 0 }}
                 animate={{ opacity: 1, x: 0 }}
-                exit={{ x: '-100%', opacity: 1 }}
-                transition={{
-                  opacity: { duration: 0.5, ease: 'easeInOut' },
-                  x: { duration: 0.22, ease: 'easeInOut' },
-                }}
+                exit={settings.reduceMotion ? { opacity: 1, x: 0 } : { x: '-100%', opacity: 1 }}
+                transition={
+                  settings.reduceMotion
+                    ? { duration: 0 }
+                    : {
+                        opacity: { duration: 0.5, ease: 'easeInOut' },
+                        x: { duration: 0.22, ease: 'easeInOut' },
+                      }
+                }
               >
                 {sidebarItem === 'settings' || isSettingsOpen ? (
                   <SettingsView
@@ -242,6 +242,7 @@ export default function App() {
                     onOpenFeedback={() => setIsFeedbackOpen(true)}
                     isDeveloperUnlocked={isDeveloperUnlocked}
                     onToggleDeveloperUnlocked={setIsDeveloperUnlocked}
+                    channels={channelsList}
                   />
               ) : sidebarItem === 'design_system' ? (
                   <DesignSystemViewer onOpenFeedback={() => setIsFeedbackOpen(true)} />
@@ -257,7 +258,7 @@ export default function App() {
                   ) : (
                     /* YOUR REALM UNDER CONSTRUCTION VIEW */
                     <div className="w-full bg-[#383a3d] border-2 border-[#141414] shadow-2xl p-6 sm:p-10 text-center select-none my-2 space-y-6">
-                      <div className="font-montserrat font-extrabold text-base sm:text-xl text-white tracking-wide uppercase">
+                      <div className="font-montserrat font-extrabold text-base sm:text-xl text-white tracking-wide">
                         This tab is under construction
                       </div>
 
@@ -327,6 +328,7 @@ export default function App() {
 
                     {/* SLIDING BANNER */}
                     <HomeBannerSlider
+                      reduceMotion={settings.reduceMotion}
                       onExploreDesignSystem={() => {
                         triggerTabLoading();
                         setSidebarItem('design_system');
