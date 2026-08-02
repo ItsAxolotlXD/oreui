@@ -32,41 +32,40 @@ export const VplaySecondaryButtonDark: React.FC<VplaySecondaryButtonDarkProps> =
   );
 
   let layer1Bg = 'bg-[#313437]';
-  let layer2Bg = 'bg-[#1e2022]';
+  let layer2Bg = 'bg-[#5a5a5c]';
   let layer3Bg = 'bg-[#52565a]';
   let textColor = 'text-white';
   let transformClass = '';
 
   if (active && state === 'normal') {
     layer1Bg = 'bg-[#383d41]';
-    layer2Bg = 'bg-[#1e2022]';
+    layer2Bg = 'bg-[#5a5a5c]';
     layer3Bg = 'bg-[#6bc34b]'; // Green active highlight
     textColor = 'text-white';
   } else {
     switch (state) {
       case 'hovered':
         layer1Bg = 'bg-[#42464a]';
-        layer2Bg = 'bg-[#282a2d]';
+        layer2Bg = 'bg-[#5a5a5c]';
         layer3Bg = 'bg-[#676c72]';
         textColor = 'text-white';
         break;
       case 'pressed':
-        layer1Bg = 'bg-[#242628]';
-        layer2Bg = 'bg-[#313437]';
-        layer3Bg = 'bg-[#191a1b]';
+        layer1Bg = active ? 'bg-[#383d41]' : 'bg-[#313437]';
+        layer2Bg = 'bg-[#5a5a5c]';
+        layer3Bg = active ? 'bg-[#6bc34b]' : 'bg-[#52565a]';
         textColor = 'text-white';
-        transformClass = 'translate-y-[2px]';
         break;
       case 'disabled':
         layer1Bg = 'bg-[#282a2c]';
-        layer2Bg = 'bg-[#191a1b]';
+        layer2Bg = 'bg-[#5a5a5c]';
         layer3Bg = 'bg-[#3c3e41]';
         textColor = 'text-[#73777b]';
         break;
       case 'normal':
       default:
         layer1Bg = 'bg-[#313437]';
-        layer2Bg = 'bg-[#1e2022]';
+        layer2Bg = 'bg-[#5a5a5c]';
         layer3Bg = 'bg-[#52565a]';
         textColor = 'text-white';
         break;
@@ -110,19 +109,19 @@ export const VplaySecondaryButtonDark: React.FC<VplaySecondaryButtonDarkProps> =
       {...props}
     >
       {/* LAYER 3: Top & Side highlight frame */}
-      <div className={`relative w-full h-full flex flex-col ${layer3Bg}`}>
+      <div className={`relative w-full h-full flex flex-col px-[2px] ${layer3Bg}`}>
         {/* LAYER 2: Bottom dark bevel bar */}
-        <div className={`absolute inset-x-0 bottom-0 h-[4px] ${layer2Bg}`} />
+        <div className={`absolute inset-x-0 bottom-0 h-[4px] ${layer2Bg} ${state === 'pressed' ? 'hidden' : 'block'}`} />
 
         {/* LAYER 1: Center main face containing text */}
         <div
           className={`
             relative z-10 w-full flex items-center justify-center gap-2
-            ${state === 'pressed' ? 'mt-[4px] mb-[2px] mx-[2px]' : 'mt-[2px] mb-[4px] mx-[2px]'}
+            ${state === 'pressed' ? 'mt-0 mb-0' : 'mt-0 mb-[4px]'}
             ${padClasses} ${fontClasses} ${layer1Bg} ${textColor}
           `}
         >
-          <div className="flex items-center justify-center gap-2 w-full h-full truncate">
+          <div className="flex items-center justify-center gap-2 w-full h-full truncate -translate-y-[1px]">
             {children}
           </div>
         </div>

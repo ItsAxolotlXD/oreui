@@ -43,11 +43,10 @@ export const VplayHeroButton: React.FC<VplayHeroButtonProps> = ({
       textColor = 'text-white';
       break;
     case 'pressed':
-      layer1Bg = 'bg-[#2b611a]';
-      layer2Bg = 'bg-[#418a28]';
-      layer3Bg = 'bg-[#18370d]';
+      layer1Bg = 'bg-[#418a28]';
+      layer2Bg = 'bg-[#1e4511]';
+      layer3Bg = 'bg-[#6bc34b]';
       textColor = 'text-white';
-      transformClass = 'translate-y-[2px]';
       break;
     case 'disabled':
       layer1Bg = 'bg-[#c8cbce]';
@@ -101,19 +100,19 @@ export const VplayHeroButton: React.FC<VplayHeroButtonProps> = ({
       {...props}
     >
       {/* LAYER 3: Top & Side highlight frame */}
-      <div className={`relative w-full h-full flex flex-col ${layer3Bg}`}>
+      <div className={`relative w-full h-full flex flex-col px-[2px] ${layer3Bg}`}>
         {/* LAYER 2: Bottom dark bevel bar */}
-        <div className={`absolute inset-x-0 bottom-0 h-[4px] ${layer2Bg}`} />
+        <div className={`absolute inset-x-0 bottom-0 h-[4px] ${layer2Bg} ${state === 'pressed' ? 'hidden' : 'block'}`} />
 
         {/* LAYER 1: Center main face containing text */}
         <div
           className={`
             relative z-10 w-full flex items-center justify-center gap-2
-            ${state === 'pressed' ? 'mt-[4px] mb-[2px] mx-[2px]' : 'mt-[2px] mb-[4px] mx-[2px]'}
+            ${state === 'pressed' ? 'mt-0 mb-0' : 'mt-0 mb-[4px]'}
             ${padClasses} ${fontClasses} ${layer1Bg} ${textColor}
           `}
         >
-          <span className="drop-shadow-[1px_1px_0_rgba(0,0,0,0.8)] flex items-center justify-center gap-2 w-full truncate">
+          <span className="drop-shadow-[1px_1px_0_rgba(0,0,0,0.8)] flex items-center justify-center gap-2 w-full truncate -translate-y-[1px]">
             {children}
           </span>
         </div>

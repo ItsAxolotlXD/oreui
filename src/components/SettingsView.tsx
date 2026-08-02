@@ -369,13 +369,13 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           )}
 
           {/* Gamertag / User Name */}
-          {matchesSearch('Tên người dùng', 'Gamertag / User') && (
+          {matchesSearch('Biệt danh người dùng', 'Gamertag / User') && (
             <>
               <div className="px-3 sm:px-4 py-2.5 hover:bg-[#525559] transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div>
-                  <div className="font-bold text-xs text-white">Tên người dùng (Gamertag / User)</div>
+                  <div className="font-bold text-xs text-white">Biệt danh người dùng</div>
                   <div className="text-[10px] text-gray-300 font-normal">
-                    Tên danh xưng hiển thị trên thiết bị đầu thu Vplay
+                    Tên danh xưng hiển thị trong ứng dụng.
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
@@ -484,20 +484,19 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             matchesSearch('Export channels') ||
             matchesSearch('m3u8')) && (
             <>
-              <div className="px-3 sm:px-4 py-3 hover:bg-[#525559] transition-colors space-y-2.5">
+              <div className="px-3 sm:px-4 py-2.5 hover:bg-[#525559] transition-colors flex items-center justify-between gap-3">
                 <div>
                   <div className="font-bold text-xs text-white">Export channels (.m3u8)</div>
                   <div className="text-[10px] text-gray-300 font-normal">
                     Tải file danh sách toàn bộ {channels.length} kênh Vplay dưới dạng .m3u8.
                   </div>
                 </div>
-                <div className="w-full">
+                <div className="w-24 flex-shrink-0">
                   <VplaySecondaryButton
                     size="sm"
-                    fullWidth
                     onClick={handleExportChannels}
                   >
-                    {exported ? 'Đã tải file .m3u8!' : 'Export channels (.m3u8)'}
+                    {exported ? 'Exported!' : 'Export'}
                   </VplaySecondaryButton>
                 </div>
               </div>
@@ -508,20 +507,19 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           {/* Item 4: Reset settings to default */}
           {matchesSearch('Reset settings to default', 'Restore all above options to their original values.') && (
             <>
-              <div className="px-3 sm:px-4 py-3 hover:bg-[#525559] transition-colors space-y-2.5">
+              <div className="px-3 sm:px-4 py-2.5 hover:bg-[#525559] transition-colors flex items-center justify-between gap-3">
                 <div>
                   <div className="font-bold text-xs text-white">Reset settings to default</div>
                   <div className="text-[10px] text-gray-300 font-normal">
                     Restore all above options to their original values.
                   </div>
                 </div>
-                <div className="w-full">
+                <div className="w-24 flex-shrink-0">
                   <VplaySecondaryButton
                     size="sm"
-                    fullWidth
                     onClick={handleResetDefault}
                   >
-                    Reset settings to default
+                    Reset
                   </VplaySecondaryButton>
                 </div>
               </div>

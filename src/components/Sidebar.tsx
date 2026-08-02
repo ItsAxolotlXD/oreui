@@ -50,7 +50,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           onClick={handlePrevTab}
           title="Previous Tab"
           aria-label="Previous Tab"
-          className="hidden sm:flex items-center justify-center bg-[#cdd1d4] hover:bg-[#e2e5e8] active:bg-[#abafb3] text-[#141414] font-extrabold font-mono text-xs px-2.5 py-2 border-2 border-[#141414] shadow-[inset_2px_2px_0_#ffffff,inset_-2px_-2px_0_#9ea2a6] flex-shrink-0 cursor-pointer active:translate-y-[1px] z-10"
+          className="hidden sm:flex items-center justify-center bg-[#cdd1d4] hover:bg-[#e2e5e8] active:bg-[#abafb3] text-[#141414] font-extrabold font-mono text-xs px-2.5 py-2 border-2 border-[#141414] shadow-[inset_2px_2px_0_#ffffff,inset_-2px_-2px_0_#9ea2a6] flex-shrink-0 cursor-pointer z-10"
         >
           [
         </button>
@@ -84,7 +84,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           onClick={handleNextTab}
           title="Next Tab"
           aria-label="Next Tab"
-          className="hidden sm:flex items-center justify-center bg-[#cdd1d4] hover:bg-[#e2e5e8] active:bg-[#abafb3] text-[#141414] font-extrabold font-mono text-xs px-2.5 py-2 border-2 border-[#141414] shadow-[inset_2px_2px_0_#ffffff,inset_-2px_-2px_0_#9ea2a6] flex-shrink-0 cursor-pointer active:translate-y-[1px] z-10"
+          className="hidden sm:flex items-center justify-center bg-[#cdd1d4] hover:bg-[#e2e5e8] active:bg-[#abafb3] text-[#141414] font-extrabold font-mono text-xs px-2.5 py-2 border-2 border-[#141414] shadow-[inset_2px_2px_0_#ffffff,inset_-2px_-2px_0_#9ea2a6] flex-shrink-0 cursor-pointer z-10"
         >
           ]
         </button>

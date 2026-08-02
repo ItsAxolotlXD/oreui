@@ -76,7 +76,7 @@ export const VplayToggleSwitch: React.FC<VplayToggleSwitchProps> = ({
       onMouseLeave={() => { setIsHovered(false); setIsPressed(false); }}
       onMouseDown={() => setIsPressed(true)}
       onMouseUp={() => setIsPressed(false)}
-      className={`inline-flex items-center gap-3 cursor-pointer select-none active:translate-y-[1px] ${effectiveDisabled ? 'cursor-not-allowed opacity-75' : ''} ${className}`}
+      className={`inline-flex items-center gap-3 cursor-pointer select-none ${effectiveDisabled ? 'cursor-not-allowed opacity-75' : ''} ${className}`}
     >
       <div className="relative flex items-center justify-center transition-transform duration-75">
         <img

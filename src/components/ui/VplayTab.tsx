@@ -49,7 +49,6 @@ export const VplayTab: React.FC<VplayTabProps> = ({
       break;
     case 'pressed':
       tabBg = 'bg-[#222426] text-white shadow-[inset_2px_2px_0_rgba(0,0,0,0.75)]';
-      transformClass = 'translate-y-[1px]';
       break;
     case 'disabled':
       tabBg = 'bg-[#313336] text-[#7a7e82] cursor-not-allowed shadow-none';
@@ -74,12 +73,12 @@ export const VplayTab: React.FC<VplayTabProps> = ({
       onMouseUp={() => setIsPressed(false)}
       className={`
         relative px-4 py-2 min-w-[90px] sm:min-w-[120px] flex items-center justify-center text-center font-montserrat font-bold text-xs sm:text-sm select-none
-        border-2 border-[#141414] rounded-none outline-none cursor-pointer btn-press-effect active:translate-y-[1px] transition-colors duration-75
+        border-2 border-[#141414] rounded-none outline-none cursor-pointer btn-press-effect transition-colors duration-75
         ${tabBg} ${transformClass} ${className}
       `}
     >
       <div className="relative inline-flex flex-col items-center max-w-full">
-        <span className={`truncate transition-transform ${!isActive ? '-translate-y-[1px]' : ''}`}>
+        <span className={`truncate transition-transform ${state === 'pressed' ? 'translate-y-[1px]' : (!isActive ? '-translate-y-[1px]' : '')}`}>
           {children}
         </span>
 

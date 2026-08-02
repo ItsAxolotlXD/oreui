@@ -371,7 +371,7 @@ export default function App() {
                               triggerTabLoading();
                               setSidebarItem('live_tv');
                             }}
-                            className="group relative bg-[#3f4246] hover:bg-[#484c50] border-2 border-[#141414] hover:border-[#89dc69] cursor-pointer transition-all duration-150 flex flex-col justify-between overflow-hidden shadow-md select-none active:translate-y-[2px] btn-press-effect"
+                            className="group relative bg-[#3f4246] hover:bg-[#484c50] border-2 border-[#141414] hover:border-[#89dc69] cursor-pointer transition-all duration-150 flex flex-col justify-between overflow-hidden shadow-md select-none btn-press-effect"
                           >
                             {/* Secondary button dark 3D bevel & top highlight overlay */}
                             <div className="absolute inset-0 pointer-events-none z-20 shadow-[inset_2px_2px_0_rgba(255,255,255,0.25),inset_-2px_-4px_0_rgba(0,0,0,0.5)]" />
@@ -522,7 +522,7 @@ export default function App() {
                                         handleSelectChannel(channel);
                                       }}
                                       className={`
-                                        group relative border-2 cursor-pointer transition-all duration-150 flex flex-col justify-between overflow-hidden shadow-xl select-none active:translate-y-[2px] btn-press-effect rounded-none
+                                        group relative border-2 cursor-pointer transition-all duration-150 flex flex-col justify-between overflow-hidden shadow-xl select-none btn-press-effect rounded-none
                                         ${isSelected
                                           ? 'bg-[#2d2f31] border-[#418a28]'
                                           : 'bg-[#3f4246] hover:bg-[#484c50] border-[#141414] hover:border-[#89dc69]'

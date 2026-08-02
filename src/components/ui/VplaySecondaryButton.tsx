@@ -30,7 +30,7 @@ export const VplaySecondaryButton: React.FC<VplaySecondaryButtonProps> = ({
   );
 
   let layer1Bg = 'bg-[#cdd1d4]';
-  let layer2Bg = 'bg-[#9ea2a6]';
+  let layer2Bg = 'bg-[#5a5a5c]';
   let layer3Bg = 'bg-[#f4f6f8]';
   let textColor = 'text-[#1c1d1f]';
   let transformClass = '';
@@ -38,27 +38,26 @@ export const VplaySecondaryButton: React.FC<VplaySecondaryButtonProps> = ({
   switch (state) {
     case 'hovered':
       layer1Bg = 'bg-[#f4f6f8]';
-      layer2Bg = 'bg-[#b5b9bd]';
+      layer2Bg = 'bg-[#5a5a5c]';
       layer3Bg = 'bg-[#ffffff]';
       textColor = 'text-[#1c1d1f]';
       break;
     case 'pressed':
-      layer1Bg = 'bg-[#abafb3]';
-      layer2Bg = 'bg-[#cdd1d4]';
-      layer3Bg = 'bg-[#898d91]';
+      layer1Bg = 'bg-[#cdd1d4]';
+      layer2Bg = 'bg-[#5a5a5c]';
+      layer3Bg = 'bg-[#f4f6f8]';
       textColor = 'text-[#1c1d1f]';
-      transformClass = 'translate-y-[2px]';
       break;
     case 'disabled':
       layer1Bg = 'bg-[#cdd1d4]';
-      layer2Bg = 'bg-[#9ea2a6]';
+      layer2Bg = 'bg-[#5a5a5c]';
       layer3Bg = 'bg-[#e2e5e8]';
       textColor = 'text-[#7c8084]';
       break;
     case 'normal':
     default:
       layer1Bg = 'bg-[#cdd1d4]';
-      layer2Bg = 'bg-[#9ea2a6]';
+      layer2Bg = 'bg-[#5a5a5c]';
       layer3Bg = 'bg-[#f4f6f8]';
       textColor = 'text-[#1c1d1f]';
       break;
@@ -101,19 +100,19 @@ export const VplaySecondaryButton: React.FC<VplaySecondaryButtonProps> = ({
       {...props}
     >
       {/* LAYER 3: Top & Side highlight frame */}
-      <div className={`relative w-full h-full flex flex-col ${layer3Bg}`}>
+      <div className={`relative w-full h-full flex flex-col px-[2px] ${layer3Bg}`}>
         {/* LAYER 2: Bottom dark bevel bar */}
-        <div className={`absolute inset-x-0 bottom-0 h-[4px] ${layer2Bg}`} />
+        <div className={`absolute inset-x-0 bottom-0 h-[4px] ${layer2Bg} ${state === 'pressed' ? 'hidden' : 'block'}`} />
 
         {/* LAYER 1: Center main face containing text */}
         <div
           className={`
             relative z-10 w-full flex items-center justify-center gap-2
-            ${state === 'pressed' ? 'mt-[4px] mb-[2px] mx-[2px]' : 'mt-[2px] mb-[4px] mx-[2px]'}
+            ${state === 'pressed' ? 'mt-0 mb-0' : 'mt-0 mb-[4px]'}
             ${padClasses} ${fontClasses} ${layer1Bg} ${textColor}
           `}
         >
-          <div className="flex items-center justify-center gap-2 w-full h-full truncate">
+          <div className="flex items-center justify-center gap-2 w-full h-full truncate -translate-y-[1px]">
             {children}
           </div>
         </div>

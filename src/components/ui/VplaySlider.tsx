@@ -139,11 +139,11 @@ export const VplaySlider: React.FC<VplaySliderProps> = ({
         {/* Square Knob with Secondary Button Bevel Texture */}
         <div
           style={{
-            left: `calc(${ratio * 100}% - 12px)`,
+            left: `calc(${ratio * 100}% - 16px)`,
           }}
           className="absolute top-1/2 -translate-y-1/2 transition-all duration-75 pointer-events-none z-10"
         >
-          <div className="w-6 h-6 border-2 border-[#141414] bg-[#141414] relative overflow-hidden select-none">
+          <div className="w-8 h-8 border-2 border-[#141414] bg-[#141414] relative overflow-hidden select-none">
             <div className={`relative w-full h-full flex flex-col ${layer3Bg}`}>
               <div className={`absolute inset-x-0 bottom-0 h-[3px] ${layer2Bg} ${state === 'pressed' ? 'hidden' : 'block'}`} />
               <div className={`relative z-10 w-full h-full ${state === 'pressed' ? 'm-[1px]' : 'm-[1px] mb-[3px]'} ${layer1Bg}`} />

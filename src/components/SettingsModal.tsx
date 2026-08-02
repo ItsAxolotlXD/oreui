@@ -91,8 +91,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           <div className="space-y-4 bg-[#1f2123] p-4 border border-[#383a3d]">
             <h3 className="text-xs font-bold text-[#89dc69]">3. TÙY CHỌN TÀI KHOẢN</h3>
             <VplayInputBox
-              label="Tên tài khoản người dùng"
-              description="Sử dụng hiển thị trên đầu thu TV"
+              label="Biệt danh người dùng"
+              description="Sử dụng hiển thị trong ứng dụng."
               value={temp.searchQuery}
               onChange={(e) => setTemp({ ...temp, searchQuery: e.target.value })}
             />
