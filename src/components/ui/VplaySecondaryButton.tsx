@@ -102,13 +102,13 @@ export const VplaySecondaryButton: React.FC<VplaySecondaryButtonProps> = ({
       {/* LAYER 3: Top & Side highlight frame */}
       <div className={`relative w-full h-full flex flex-col px-[2px] ${layer3Bg}`}>
         {/* LAYER 2: Bottom dark bevel bar */}
-        <div className={`absolute inset-x-0 bottom-0 h-[4px] ${layer2Bg} ${state === 'pressed' ? 'hidden' : 'block'}`} />
+        <div className={`absolute inset-x-0 bottom-0 h-[4px] ${layer2Bg}`} />
 
         {/* LAYER 1: Center main face containing text */}
         <div
           className={`
             relative z-10 w-full flex items-center justify-center gap-2
-            ${state === 'pressed' ? 'mt-0 mb-0' : 'mt-0 mb-[4px]'}
+            ${state === 'pressed' ? 'mt-[4px] mb-[2px]' : 'mt-[2px] mb-[4px]'}
             ${padClasses} ${fontClasses} ${layer1Bg} ${textColor}
           `}
         >

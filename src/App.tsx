@@ -362,6 +362,7 @@ export default function App() {
 
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
                       {channelsList.slice(0, 5).map((channel, idx) => {
+                        const isVtv = channel.groupTitle?.toLowerCase().includes('vtv') || channel.name?.toUpperCase().includes('VTV') || channel.id?.toLowerCase().includes('vtv');
                         return (
                           <div
                             key={`rec-${channel.id}`}
@@ -375,13 +376,15 @@ export default function App() {
                           >
                             {/* Secondary button dark 3D bevel & top highlight overlay */}
                             <div className="absolute inset-0 pointer-events-none z-20 shadow-[inset_2px_2px_0_rgba(255,255,255,0.25),inset_-2px_-4px_0_rgba(0,0,0,0.5)]" />
-                            <div className="relative aspect-[16/10] bg-[#1a1c1e] border-b-2 border-[#141414] flex items-center justify-center p-2 overflow-hidden">
+                            <div className={`relative aspect-[16/10] bg-[#1a1c1e] border-b-2 border-[#141414] flex items-center justify-center overflow-hidden ${isVtv ? 'p-1' : 'p-2'}`}>
                               {channel.logo ? (
                                 <img
                                   src={channel.logo}
                                   alt={channel.name}
                                   referrerPolicy="no-referrer"
-                                  className="max-h-full max-w-[85%] object-contain filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] group-hover:scale-105 transition-transform duration-200"
+                                  className={`object-contain filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] group-hover:scale-105 transition-transform duration-200 ${
+                                    isVtv ? 'max-h-[96%] max-w-[96%] scale-110' : 'max-h-full max-w-[85%]'
+                                  }`}
                                   onError={(e) => {
                                     (e.target as HTMLImageElement).src = `https://via.placeholder.com/150/1c1d1f/89dc69?text=${encodeURIComponent(channel.name)}`;
                                   }}
@@ -400,7 +403,7 @@ export default function App() {
                                 {channel.name}
                               </span>
                               <span className="text-[9px] text-gray-300 truncate">
-                                {channel.groupTitle}
+                                {channel.groupTitle?.toLowerCase().includes('địa phương') ? 'Kênh ĐP' : channel.groupTitle}
                               </span>
                             </div>
                           </div>
@@ -514,6 +517,7 @@ export default function App() {
                               <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-3 lg:gap-4">
                                 {groupChannels.map((channel) => {
                                   const isSelected = selectedChannel.id === channel.id;
+                                  const isVtv = channel.groupTitle?.toLowerCase().includes('vtv') || channel.name?.toUpperCase().includes('VTV') || channel.id?.toLowerCase().includes('vtv');
                                   return (
                                     <div
                                       key={channel.id}
@@ -538,7 +542,7 @@ export default function App() {
                                         }`}
                                       />
                                       {/* TOP IMAGE AREA */}
-                                      <div className="relative aspect-[16/10] bg-[#1a1c1e] border-b-2 border-[#141414] flex items-center justify-center p-1.5 sm:p-3 overflow-hidden">
+                                      <div className={`relative aspect-[16/10] bg-[#1a1c1e] border-b-2 border-[#141414] flex items-center justify-center overflow-hidden ${isVtv ? 'p-1 sm:p-1.5' : 'p-1.5 sm:p-3'}`}>
                                         <svg
                                           className="absolute inset-0 w-full h-full opacity-35 pointer-events-none text-[#45494e]"
                                           xmlns="http://www.w3.org/2000/svg"
@@ -570,7 +574,9 @@ export default function App() {
                                             src={channel.logo}
                                             alt={channel.name}
                                             referrerPolicy="no-referrer"
-                                            className="max-h-full max-w-[85%] object-contain filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] group-hover:scale-105 transition-transform duration-200 z-10"
+                                            className={`object-contain filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] group-hover:scale-105 transition-transform duration-200 z-10 ${
+                                              isVtv ? 'max-h-[96%] max-w-[96%] scale-110' : 'max-h-full max-w-[85%]'
+                                            }`}
                                             onError={(e) => {
                                               (e.target as HTMLImageElement).src = `https://via.placeholder.com/150/1c1d1f/89dc69?text=${encodeURIComponent(channel.name)}`;
                                             }}
@@ -579,34 +585,24 @@ export default function App() {
                                           <span className="font-extrabold text-xs sm:text-sm text-[#89dc69] tracking-wider font-mono uppercase z-10">{channel.name}</span>
                                         )}
 
+                                        {/* Light red LIVE tag at top right of channel box - only for currently playing/selected channel */}
                                         {isSelected && (
-                                          <div className="absolute top-1 right-1 sm:top-2 sm:right-2 bg-[#ff7b7b] text-[#141414] px-1 sm:px-2 py-0.5 text-[8px] sm:text-[10px] font-bold border border-[#141414] font-mono shadow z-10 flex items-center gap-1 select-none">
-                                            <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-[#141414] inline-block flex-shrink-0" />
+                                          <div className="absolute top-1 right-1 sm:top-1.5 sm:right-1.5 bg-[#ff7b7b] text-[#141414] px-1 sm:px-1.5 py-0.5 text-[8px] sm:text-[10px] font-bold border border-[#141414] font-mono shadow z-25 flex items-center gap-1 select-none">
+                                            <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-[#141414] inline-block flex-shrink-0 animate-pulse" />
                                             <span>LIVE</span>
                                           </div>
                                         )}
                                       </div>
 
-                                      {/* MIDDLE CONTENT */}
-                                      <div className="p-2 sm:p-3 bg-transparent flex flex-col justify-between gap-1.5 sm:gap-2 flex-1">
-                                        <div>
-                                          <h3 className="font-bold text-xs sm:text-sm text-white truncate tracking-tight font-montserrat">
-                                            {channel.name}
-                                          </h3>
-                                          <p className="text-[9px] sm:text-[11px] text-gray-300 line-clamp-1 mt-0.5">
-                                            {channel.currentProgram || 'Đang phát sóng'}
-                                          </p>
-                                        </div>
+                                      {/* TAGS ONLY AREA */}
+                                      <div className="p-1.5 sm:p-2 bg-transparent flex flex-col items-start gap-1 sm:gap-1.5 flex-1">
+                                        <span className="bg-[#1c1d1f] text-white px-1 sm:px-2 py-0.5 text-[8px] sm:text-[11px] font-bold font-montserrat border border-[#141414] shadow-sm truncate max-w-full">
+                                          {channel.groupTitle?.toLowerCase().includes('địa phương') ? 'Kênh ĐP' : channel.groupTitle}
+                                        </span>
 
-                                        <div className="flex flex-wrap items-center gap-1 sm:gap-1.5 mt-0.5">
-                                          <span className="bg-[#1c1d1f] text-white px-1 sm:px-2 py-0.5 text-[8px] sm:text-[11px] font-bold font-montserrat border border-[#141414] shadow-sm truncate max-w-[70px] sm:max-w-none">
-                                            {channel.groupTitle}
-                                          </span>
-
-                                          <span className="bg-[#ffe866] text-[#141414] px-1 sm:px-2 py-0.5 text-[8px] sm:text-[11px] font-bold font-montserrat border border-[#141414] shadow-sm">
-                                            {String(channelsList.findIndex((c) => c.id === channel.id) + 1).padStart(3, '0')}
-                                          </span>
-                                        </div>
+                                        <span className="bg-[#ffe866] text-[#141414] px-1 sm:px-2 py-0.5 text-[8px] sm:text-[11px] font-bold font-montserrat border border-[#141414] shadow-sm font-mono">
+                                          {String(channelsList.findIndex((c) => c.id === channel.id) + 1).padStart(3, '0')}
+                                        </span>
                                       </div>
 
                                     </div>

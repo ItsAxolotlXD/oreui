@@ -25,7 +25,7 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
   };
 
   return (
-    <div className="sticky top-0 z-50 w-full bg-[#dedede] text-[#141414] border-b-4 border-[#2b2d30] px-3 py-1 flex items-center justify-between font-montserrat select-none shadow-[0_4px_12px_#5a5a5c]">
+    <div className="sticky top-0 z-50 w-full bg-[#dedede] text-[#141414] border-b-4 border-[#5a5a5c] px-3 py-1 flex items-center justify-between font-montserrat select-none">
       {/* Left controls: Chevron Left (<) */}
       <div className="flex items-center gap-0.5 sm:gap-1">
         <button

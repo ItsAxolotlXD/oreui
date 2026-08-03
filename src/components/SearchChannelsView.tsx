@@ -147,7 +147,9 @@ export const SearchChannelsView: React.FC<SearchChannelsViewProps> = ({
 
               {searchResults.length > 0 ? (
                 <div className="space-y-1.5 max-h-[400px] overflow-y-auto pr-1">
-                  {searchResults.map((ch) => (
+                  {searchResults.map((ch) => {
+                    const isVtv = ch.groupTitle?.toLowerCase().includes('vtv') || ch.name?.toUpperCase().includes('VTV') || ch.id?.toLowerCase().includes('vtv');
+                    return (
                     <VplaySecondaryButtonDark
                       key={ch.id}
                       size="compact"
@@ -160,7 +162,7 @@ export const SearchChannelsView: React.FC<SearchChannelsViewProps> = ({
                       <div className="flex items-center justify-between gap-3 w-full py-0.5">
                         <div className="flex items-center gap-3 min-w-0 text-left">
                           {/* Channel Logo Square Box */}
-                          <div className="w-9 h-9 bg-black border border-[#141414] flex-shrink-0 flex items-center justify-center p-1 overflow-hidden">
+                          <div className="w-9 h-9 bg-black border border-[#141414] flex-shrink-0 flex items-center justify-center overflow-hidden p-1">
                             {ch.logo ? (
                               <img
                                 src={ch.logo}
@@ -198,7 +200,8 @@ export const SearchChannelsView: React.FC<SearchChannelsViewProps> = ({
                         </div>
                       </div>
                     </VplaySecondaryButtonDark>
-                  ))}
+                  );
+                })}
                 </div>
               ) : (
                 <div className="p-6 text-center text-xs text-gray-400">
@@ -227,7 +230,9 @@ export const SearchChannelsView: React.FC<SearchChannelsViewProps> = ({
 
                 {isRecommendedOpen && (
                   <div className="p-2 space-y-1.5 bg-[#313336]">
-                    {recommendedChannels.map((ch) => (
+                    {recommendedChannels.map((ch) => {
+                      const isVtv = ch.groupTitle?.toLowerCase().includes('vtv') || ch.name?.toUpperCase().includes('VTV') || ch.id?.toLowerCase().includes('vtv');
+                      return (
                       <VplaySecondaryButtonDark
                         key={ch.id}
                         size="compact"
@@ -269,7 +274,8 @@ export const SearchChannelsView: React.FC<SearchChannelsViewProps> = ({
                           </div>
                         </div>
                       </VplaySecondaryButtonDark>
-                    ))}
+                    );
+                  })}
                   </div>
                 )}
               </div>
@@ -293,7 +299,9 @@ export const SearchChannelsView: React.FC<SearchChannelsViewProps> = ({
 
                 {isRecentlyWatchedOpen && (
                   <div className="p-2 space-y-1.5 bg-[#313336]">
-                    {defaultRecentlyWatched.map((ch) => (
+                    {defaultRecentlyWatched.map((ch) => {
+                      const isVtv = ch.groupTitle?.toLowerCase().includes('vtv') || ch.name?.toUpperCase().includes('VTV') || ch.id?.toLowerCase().includes('vtv');
+                      return (
                       <VplaySecondaryButtonDark
                         key={ch.id}
                         size="compact"
@@ -334,7 +342,8 @@ export const SearchChannelsView: React.FC<SearchChannelsViewProps> = ({
                           </div>
                         </div>
                       </VplaySecondaryButtonDark>
-                    ))}
+                    );
+                  })}
                   </div>
                 )}
               </div>
