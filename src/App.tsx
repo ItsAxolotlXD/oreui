@@ -514,7 +514,7 @@ export default function App() {
 
                             {/* Group Channels Grid Container - placed flush against category text header */}
                             <div className="pt-0 mt-0">
-                              <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-3 lg:gap-4">
+                              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-3 lg:gap-4">
                                 {groupChannels.map((channel) => {
                                   const isSelected = selectedChannel.id === channel.id;
                                   const isVtv = channel.groupTitle?.toLowerCase().includes('vtv') || channel.name?.toUpperCase().includes('VTV') || channel.id?.toLowerCase().includes('vtv');

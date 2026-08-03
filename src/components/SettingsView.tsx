@@ -182,32 +182,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
       <SettingsDivider />
 
-      {/* Welcome & Feedback Banner Box */}
-      <div className="p-3 sm:p-4 bg-[#424548] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-        <div>
-          <h2 className="text-[11px] text-gray-300 font-normal leading-normal mb-0.5">
-            Welcome to design preview!
-          </h2>
-          <p className="text-[11px] text-gray-300 font-normal leading-normal">
-            We would love to hear what you think of this new design. Keep in mind that it's still work in progress and some functionality might be missing
-          </p>
-        </div>
-        <VplaySecondaryButton
-          size="sm"
-          fullWidth={false}
-          onClick={() => {
-            playPopSound();
-            if (onOpenFeedback) onOpenFeedback();
-            else alert('Cảm ơn bạn đã đóng góp ý kiến về giao diện Vplay!');
-          }}
-          className="flex-shrink-0"
-        >
-          <ExternalLink className="w-3.5 h-3.5" />
-          Give feedback
-        </VplaySecondaryButton>
-      </div>
 
-      <SettingsDivider />
 
       {/* SUBHEADING 1: GIAO DIỆN VÀ TÙY BIẾN */}
       {(matchesSearch('Disable panorama') ||

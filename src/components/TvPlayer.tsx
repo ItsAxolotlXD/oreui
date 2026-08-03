@@ -3,7 +3,7 @@ import { TvChannel, UserSettings } from '../types';
 import { VplayHeroButton } from './ui/VplayHeroButton';
 import { VplaySecondaryButton } from './ui/VplaySecondaryButton';
 import { VplaySlider } from './ui/VplaySlider';
-import { Volume2, VolumeX, Maximize2, Heart, PlusCircle } from 'lucide-react';
+import { Volume2, VolumeX, Maximize2, Heart, PlusCircle, ExternalLink } from 'lucide-react';
 import { playPopSound } from '../utils/sound';
 import Hls from 'hls.js';
 
@@ -230,6 +230,25 @@ export const TvPlayer: React.FC<TvPlayerProps> = ({
                 <Maximize2 className="w-4 h-4 sm:w-5 sm:h-5 text-[#1c1d1f] flex-shrink-0" />
                 <span className="font-bold text-xs uppercase tracking-wider text-[#1c1d1f]">
                   {isFullscreen ? 'THOÁT TOÀN MÀN HÌNH' : 'PHÓNG TO MÀN HÌNH'}
+                </span>
+              </VplaySecondaryButton>
+            </div>
+
+            {/* 3.5. MỞ LUỒNG GỐC */}
+            <div className="w-full">
+              <VplaySecondaryButton
+                onClick={() => {
+                  playPopSound();
+                  if (channel.streamUrl) {
+                    window.open(channel.streamUrl, '_blank', 'noopener,noreferrer');
+                  }
+                }}
+                fullWidth
+                className="w-full justify-center"
+              >
+                <ExternalLink className="w-4 h-4 sm:w-5 sm:h-5 text-[#1c1d1f] flex-shrink-0" />
+                <span className="font-bold text-xs uppercase tracking-wider text-[#1c1d1f]">
+                  MỞ LUỒNG GỐC
                 </span>
               </VplaySecondaryButton>
             </div>
