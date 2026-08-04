@@ -51,9 +51,9 @@ export const VplaySecondaryButtonDark: React.FC<VplaySecondaryButtonDarkProps> =
         textColor = 'text-white';
         break;
       case 'pressed':
-        layer1Bg = active ? 'bg-[#383d41]' : 'bg-[#313437]';
-        layer2Bg = 'bg-[#5a5a5c]';
-        layer3Bg = active ? 'bg-[#6bc34b]' : 'bg-[#52565a]';
+        layer1Bg = active ? 'bg-[#1c2022]' : 'bg-[#181a1c]';
+        layer2Bg = 'bg-[#1a1b1d]';
+        layer3Bg = active ? 'bg-[#2d581c]' : 'bg-[#2a2c2e]';
         textColor = 'text-white';
         break;
       case 'disabled':
@@ -84,6 +84,17 @@ export const VplaySecondaryButtonDark: React.FC<VplaySecondaryButtonDarkProps> =
     onClick?.(e);
   };
 
+  const handleTouchStart = () => {
+    if (!effectiveDisabled) {
+      setIsPressed(true);
+      playPopSound();
+    }
+  };
+
+  const handleTouchEnd = () => {
+    setTimeout(() => setIsPressed(false), 120);
+  };
+
   const isSmall = size === 'sm' || size === 'compact';
   const fontClasses = isSmall
     ? 'text-xs font-bold'
@@ -97,6 +108,9 @@ export const VplaySecondaryButtonDark: React.FC<VplaySecondaryButtonDarkProps> =
       onMouseLeave={() => { setIsHovered(false); setIsPressed(false); }}
       onMouseDown={handleMouseDown}
       onMouseUp={() => setIsPressed(false)}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      onTouchCancel={() => setIsPressed(false)}
       onClick={handleClick}
       /* LAYER 4: Outer 2px dark border frame */
       className={`
@@ -109,7 +123,7 @@ export const VplaySecondaryButtonDark: React.FC<VplaySecondaryButtonDarkProps> =
       {...props}
     >
       {/* LAYER 3: Top & Side highlight frame */}
-      <div className={`relative w-full h-full flex flex-col px-[2px] ${layer3Bg}`}>
+      <div className={`relative w-full h-full flex flex-col px-[2px] ${state === 'pressed' ? 'translate-y-[4px]' : ''} ${layer3Bg}`}>
         {/* LAYER 2: Bottom dark bevel bar */}
         <div className={`absolute inset-x-0 bottom-0 h-[4px] ${layer2Bg}`} />
 
@@ -117,7 +131,7 @@ export const VplaySecondaryButtonDark: React.FC<VplaySecondaryButtonDarkProps> =
         <div
           className={`
             relative z-10 w-full flex items-center justify-center gap-2
-            ${state === 'pressed' ? 'mt-[4px] mb-[2px]' : 'mt-[2px] mb-[4px]'}
+            mt-[2px] mb-[4px]
             ${padClasses} ${fontClasses} ${layer1Bg} ${textColor}
           `}
         >

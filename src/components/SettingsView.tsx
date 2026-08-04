@@ -6,6 +6,7 @@ import { VplayToggleSwitch } from './ui/VplayToggleSwitch';
 import { VplayPrimaryButton } from './ui/VplayPrimaryButton';
 import { VplaySecondaryButton } from './ui/VplaySecondaryButton';
 import { VplaySlider } from './ui/VplaySlider';
+import { PerformanceTestModal } from './PerformanceTestModal';
 
 interface SettingsViewProps {
   settings: UserSettings;
@@ -54,6 +55,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   const [settingSearch, setSettingSearch] = useState('');
   const [showComingSoonModal, setShowComingSoonModal] = useState(false);
   const [showDevKeyModal, setShowDevKeyModal] = useState(false);
+  const [showPerfTestModal, setShowPerfTestModal] = useState(false);
   const [devKeyInput, setDevKeyInput] = useState('');
   const [devKeyStatus, setDevKeyStatus] = useState<string | null>(null);
   const [exported, setExported] = useState(false);
@@ -371,7 +373,8 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
       )}
 
       {/* SUBHEADING 5: TÙY CHỌN NHÀ PHÁT TRIỂN */}
-      {(matchesSearch('Ore UI design components') ||
+      {(matchesSearch('Performance test') ||
+        matchesSearch('Ore UI design components') ||
         matchesSearch('Design components') ||
         matchesSearch('Unlock restricted features') ||
         matchesSearch('Enter password') ||
@@ -421,6 +424,35 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                       Enter password
                     </VplaySecondaryButton>
                   )}
+                </div>
+              </div>
+              <SettingsDivider />
+            </>
+          )}
+
+          {/* Item 2: Performance test */}
+          {(matchesSearch('Performance test', 'Kiểm tra hiệu năng GPU/CPU, FPS, độ trễ khung hình & bộ nhớ với stress test toàn màn hình.') ||
+            matchesSearch('Performance') ||
+            matchesSearch('Stress test') ||
+            matchesSearch('Test')) && (
+            <>
+              <div className="px-3 sm:px-4 py-2.5 hover:bg-[#525559] transition-colors flex items-center justify-between gap-3">
+                <div>
+                  <div className="font-bold text-xs text-white">Performance test</div>
+                  <div className="text-[10px] text-gray-300 font-normal">
+                    Kiểm tra hiệu năng GPU/CPU, FPS, độ trễ khung hình & bộ nhớ với stress test toàn màn hình.
+                  </div>
+                </div>
+                <div className="w-24 flex-shrink-0">
+                  <VplaySecondaryButton
+                    size="sm"
+                    onClick={() => {
+                      playPopSound();
+                      setShowPerfTestModal(true);
+                    }}
+                  >
+                    Test
+                  </VplaySecondaryButton>
                 </div>
               </div>
               <SettingsDivider />
@@ -518,24 +550,24 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
       {/* COMING SOON MODAL */}
       {showComingSoonModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 animate-fade-in overflow-y-auto">
-          <div className="bg-[#383b3e] border-2 border-[#787b7f] w-full max-w-sm shadow-2xl text-white font-montserrat select-none flex flex-col max-h-[85vh] my-auto overflow-hidden">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 animate-fade-in overflow-y-auto">
+          <div className="bg-[#484a4c] border-2 border-[#6c6e70] w-full max-w-sm sm:max-w-md shadow-2xl text-white font-montserrat select-none flex flex-col h-[65vh] max-h-[380px] my-auto overflow-hidden">
             
-            {/* Header Bar */}
-            <div className="bg-[#2d3033] border-b-2 border-[#787b7f] px-4 py-2.5 flex items-center justify-between flex-shrink-0">
+            {/* PHẦN 1: HEADER (Title not uppercase, enlarged pixel buttons) */}
+            <div className="bg-[#484a4c] border-b-2 border-[#1c1d1f] px-3.5 py-2.5 flex items-center justify-between flex-shrink-0">
               <button
                 onMouseDown={() => playPopSound()}
                 onClick={() => {
                   playPopSound();
                   setShowComingSoonModal(false);
                 }}
-                className="text-gray-300 hover:text-white font-bold text-sm px-1.5 py-0.5 cursor-pointer"
+                className="w-8 h-8 flex items-center justify-center text-gray-200 hover:text-white font-mono font-bold text-2xl cursor-pointer hover:bg-[#383b3e] active:bg-[#1f2022] border-2 border-transparent hover:border-[#141414] transition-all"
                 title="Back"
               >
                 ‹
               </button>
 
-              <h2 className="text-xs sm:text-sm font-bold text-white uppercase tracking-wider font-jura">
+              <h2 className="text-sm sm:text-base font-bold text-white font-montserrat text-center flex-1 tracking-tight">
                 Coming soon
               </h2>
 
@@ -545,30 +577,34 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                   playPopSound();
                   setShowComingSoonModal(false);
                 }}
-                className="text-gray-300 hover:text-white font-bold text-xs px-1.5 py-0.5 cursor-pointer"
+                className="w-8 h-8 flex items-center justify-center text-gray-200 hover:text-white font-mono font-bold text-lg sm:text-xl cursor-pointer hover:bg-[#383b3e] active:bg-[#1f2022] border-2 border-transparent hover:border-[#141414] transition-all"
                 title="Close"
               >
                 ✕
               </button>
             </div>
 
-            {/* Body / Description */}
-            <div className="p-6 bg-[#383b3e] flex-1 flex flex-col items-center justify-center text-center">
+            {/* PHẦN 2: PHẦN CHÍNH (Nền tối hơn #222426, luôn scrollable) */}
+            <div className="p-6 bg-[#222426] flex-1 overflow-y-scroll custom-scrollbar flex flex-col items-center justify-center text-center">
               <p className="text-xs sm:text-sm text-gray-200 leading-relaxed font-normal">
-                This feature is under major construction.
+                Tính năng này đang trong quá trình phát triển & thử nghiệm. Vui lòng quay lại sau!
               </p>
             </div>
 
-            {/* Footer / Action Button */}
-            <div className="p-4 pt-3 bg-[#383b3e] border-t-2 border-[#2d3033] flex-shrink-0">
+            {/* Divider */}
+            <SettingsDivider />
+
+            {/* PHẦN 3: PHẦN NÚT */}
+            <div className="p-3.5 sm:p-4 bg-[#424446] flex flex-col gap-2.5 w-full flex-shrink-0">
               <VplaySecondaryButton
-                size="sm"
+                size="normal"
+                fullWidth={true}
                 onClick={() => {
                   playPopSound();
                   setShowComingSoonModal(false);
                 }}
               >
-                Understood
+                Đã hiểu
               </VplaySecondaryButton>
             </div>
 
@@ -578,11 +614,11 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
       {/* DEVELOPER KEY REQUIRED MODAL */}
       {showDevKeyModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 animate-fade-in overflow-y-auto">
-          <div className="bg-[#383b3e] border-2 border-[#787b7f] w-full max-w-md shadow-2xl text-white font-montserrat select-none flex flex-col max-h-[85vh] my-auto overflow-hidden">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 animate-fade-in overflow-y-auto">
+          <div className="bg-[#484a4c] border-2 border-[#6c6e70] w-full max-w-md shadow-2xl text-white font-montserrat select-none flex flex-col h-[75vh] max-h-[480px] my-auto overflow-hidden">
             
-            {/* Header Bar */}
-            <div className="bg-[#2d3033] border-b-2 border-[#787b7f] px-4 py-2.5 flex items-center justify-between flex-shrink-0">
+            {/* PHẦN 1: HEADER (Title not uppercase, enlarged pixel buttons) */}
+            <div className="bg-[#484a4c] border-b-2 border-[#1c1d1f] px-3.5 py-2.5 flex items-center justify-between flex-shrink-0">
               <button
                 onMouseDown={() => playPopSound()}
                 onClick={() => {
@@ -591,13 +627,13 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                   setDevKeyInput('');
                   setDevKeyStatus(null);
                 }}
-                className="text-gray-300 hover:text-white font-bold text-sm px-1.5 py-0.5 cursor-pointer"
+                className="w-8 h-8 flex items-center justify-center text-gray-200 hover:text-white font-mono font-bold text-2xl cursor-pointer hover:bg-[#383b3e] active:bg-[#1f2022] border-2 border-transparent hover:border-[#141414] transition-all"
                 title="Back"
               >
                 ‹
               </button>
 
-              <h2 className="text-xs sm:text-sm font-bold text-white uppercase tracking-wider font-jura">
+              <h2 className="text-sm sm:text-base font-bold text-white font-montserrat text-center flex-1 tracking-tight">
                 A developer key is required
               </h2>
 
@@ -609,23 +645,23 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                   setDevKeyInput('');
                   setDevKeyStatus(null);
                 }}
-                className="text-gray-300 hover:text-white font-bold text-xs px-1.5 py-0.5 cursor-pointer"
+                className="w-8 h-8 flex items-center justify-center text-gray-200 hover:text-white font-mono font-bold text-lg sm:text-xl cursor-pointer hover:bg-[#383b3e] active:bg-[#1f2022] border-2 border-transparent hover:border-[#141414] transition-all"
                 title="Close"
               >
                 ✕
               </button>
             </div>
 
-            {/* Subtitle / Description Section */}
-            <div className="p-4 bg-[#383b3e] border-b border-[#2d3033] flex-shrink-0">
+            {/* PHẦN 2: PHẦN CHÍNH (Nền tối hơn #222426, luôn scrollable) */}
+            <div className="p-4 space-y-4 bg-[#222426] flex-1 overflow-y-scroll custom-scrollbar text-xs">
               <p className="text-xs text-gray-200 leading-relaxed font-normal">
                 This feature is locked behind a developer access key. Please enter a 6-digits key if you are the developer.
               </p>
-            </div>
 
-            {/* Form Body - Input box */}
-            <div className="p-4 space-y-3 bg-[#383b3e] flex-1 overflow-y-auto custom-scrollbar">
-              <div className="space-y-1.5">
+              <div className="space-y-2 bg-[#2b2d30] p-3.5 border border-[#141414]">
+                <label className="block text-xs font-bold text-white uppercase tracking-wider">
+                  Mã Developer Key (6 chữ số)
+                </label>
                 <input
                   type="text"
                   maxLength={6}
@@ -635,8 +671,8 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                     setDevKeyInput(val);
                     if (devKeyStatus) setDevKeyStatus(null);
                   }}
-                  placeholder="Enter 6-digits key"
-                  className="w-full h-10 bg-[#222426] text-white px-3 text-xs sm:text-sm font-normal font-montserrat border-2 border-[#141414] focus:outline-none focus:border-white shadow-[inset_0_2px_0_rgba(0,0,0,0.4)] placeholder:text-gray-400 cursor-pointer tracking-widest text-center"
+                  placeholder="Nhập 6 chữ số..."
+                  className="w-full h-10 bg-[#18191a] text-white px-3 text-xs sm:text-sm font-normal font-montserrat border-2 border-[#101112] focus:outline-none focus:border-white shadow-[inset_0_2px_0_rgba(0,0,0,0.5)] placeholder:text-gray-400 cursor-pointer tracking-widest text-center"
                 />
                 {devKeyStatus && (
                   <p className={`text-[11px] font-medium text-center ${devKeyStatus.includes('successfully') || devKeyStatus.includes('Unlocked') ? 'text-green-400' : 'text-red-400'}`}>
@@ -646,9 +682,14 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
               </div>
             </div>
 
-            {/* Action Buttons */}
-            <div className="p-4 pt-3 bg-[#383b3e] border-t-2 border-[#2d3033] flex-shrink-0 space-y-2.5">
+            {/* Divider */}
+            <SettingsDivider />
+
+            {/* PHẦN 3: PHẦN NÚT (Mỗi nút 1 dòng) */}
+            <div className="p-3.5 sm:p-4 bg-[#424446] flex flex-col gap-2.5 w-full flex-shrink-0">
               <VplayPrimaryButton
+                size="normal"
+                fullWidth={true}
                 onClick={() => {
                   playPopSound();
                   if (devKeyInput.trim() === '366761') {
@@ -664,10 +705,12 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                   }
                 }}
               >
-                Unlock restricted features
+                Mở khóa tính năng
               </VplayPrimaryButton>
 
               <VplaySecondaryButton
+                size="normal"
+                fullWidth={true}
                 onClick={() => {
                   playPopSound();
                   setShowDevKeyModal(false);
@@ -675,13 +718,19 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                   setDevKeyStatus(null);
                 }}
               >
-                Close
+                Đóng
               </VplaySecondaryButton>
             </div>
 
           </div>
         </div>
       )}
+
+      {/* PERFORMANCE STRESS TEST MODAL */}
+      <PerformanceTestModal
+        isOpen={showPerfTestModal}
+        onClose={() => setShowPerfTestModal(false)}
+      />
 
     </div>
   );

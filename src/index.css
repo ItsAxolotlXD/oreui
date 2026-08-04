@@ -134,3 +134,26 @@
   scrollbar-width: none;
 }
 
+/* Tab White Border Running Animation (1 Lap around border ending at top-right) */
+@keyframes tab-border-run {
+  0% {
+    stroke-dasharray: 25 75;
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  75% {
+    stroke-dasharray: 25 75;
+    stroke-dashoffset: -100;
+    opacity: 1;
+  }
+  100% {
+    stroke-dasharray: 0 100;
+    stroke-dashoffset: -125;
+    opacity: 1;
+  }
+}
+
+.animate-tab-border-run {
+  animation: tab-border-run 1.15s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+

@@ -54,8 +54,9 @@ export const VplayDropdown: React.FC<VplayDropdownProps> = ({
       shadowClass = 'shadow-[inset_0_2px_0_#ffffff,inset_0_-2px_0_#b5b9bd]';
       break;
     case 'pressed':
-      btnBg = 'bg-[#cdd1d4] text-[#1c1d1f]';
-      shadowClass = 'shadow-[inset_0_3px_0_#5a5a5c,inset_0_-1px_0_#f4f6f8]';
+      btnBg = 'bg-[#73797f] text-white';
+      shadowClass = 'shadow-[inset_0_3px_0_#1e2022,inset_0_-1px_0_#8c9298]';
+      transformClass = 'translate-y-[4px] transition-none';
       break;
     case 'disabled':
       btnBg = 'bg-[#bdc1c5] text-[#7c8084] cursor-not-allowed';
@@ -88,14 +89,17 @@ export const VplayDropdown: React.FC<VplayDropdownProps> = ({
         onMouseLeave={() => { setIsHovered(false); setIsPressed(false); }}
         onMouseDown={() => { if (!effectiveDisabled) { setIsPressed(true); playPopSound(); } }}
         onMouseUp={() => setIsPressed(false)}
+        onTouchStart={() => { if (!effectiveDisabled) { setIsPressed(true); playPopSound(); } }}
+        onTouchEnd={() => { setTimeout(() => setIsPressed(false), 120); }}
+        onTouchCancel={() => setIsPressed(false)}
         className={`
           relative w-full h-10 px-4 flex items-center justify-between font-montserrat text-xs sm:text-sm font-semibold select-none
           border-2 border-[#141414] rounded-none transition-colors duration-75 btn-press-effect cursor-pointer
           ${btnBg} ${shadowClass} ${transformClass}
         `}
       >
-        <span className={state === 'pressed' ? 'translate-y-[2px]' : ''}>{selectedOption?.label || 'Select'}</span>
-        <span className={`text-xs font-bold ${state === 'pressed' ? 'translate-y-[2px]' : ''}`}>▼</span>
+        <span>{selectedOption?.label || 'Select'}</span>
+        <span className="text-xs font-bold">▼</span>
       </button>
 
       {isOpen && !effectiveDisabled && (

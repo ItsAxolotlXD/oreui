@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { ComponentState } from '../../types';
 import { playPopSound } from '../../utils/sound';
 
@@ -23,9 +23,25 @@ export const VplayTab: React.FC<VplayTabProps> = ({
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isPressed, setIsPressed] = useState(false);
+  const [animKey, setAnimKey] = useState<number>(0);
+  const [isAnimating, setIsAnimating] = useState<boolean>(false);
 
   const isActive = forcedActive !== undefined ? forcedActive : active;
   const effectiveDisabled = forcedState ? forcedState === 'disabled' : disabled;
+
+  // Trigger white border animation 1 lap
+  const triggerBorderAnim = () => {
+    setAnimKey((prev) => prev + 1);
+    setIsAnimating(true);
+  };
+
+  const prevActiveRef = useRef(isActive);
+  useEffect(() => {
+    if (isActive && !prevActiveRef.current) {
+      triggerBorderAnim();
+    }
+    prevActiveRef.current = isActive;
+  }, [isActive]);
 
   const state: ComponentState = forcedState || (
     effectiveDisabled ? 'disabled' : (
@@ -48,7 +64,10 @@ export const VplayTab: React.FC<VplayTabProps> = ({
         : 'bg-[#484c50] text-white shadow-[inset_2px_2px_0_rgba(255,255,255,0.25),inset_-2px_-2px_0_rgba(0,0,0,0.4)]';
       break;
     case 'pressed':
-      tabBg = 'bg-[#222426] text-white shadow-[inset_2px_2px_0_rgba(0,0,0,0.75)]';
+      tabBg = isActive
+        ? 'bg-[#121314] text-white shadow-[inset_2px_2px_0_rgba(0,0,0,0.95)]'
+        : 'bg-[#1c1d1f] text-white shadow-[inset_2px_2px_0_rgba(0,0,0,0.85)]';
+      transformClass = 'translate-y-[4px] transition-none';
       break;
     case 'disabled':
       tabBg = 'bg-[#313336] text-[#7a7e82] cursor-not-allowed shadow-none';
@@ -61,7 +80,19 @@ export const VplayTab: React.FC<VplayTabProps> = ({
 
   const handleClick = () => {
     if (effectiveDisabled) return;
+    triggerBorderAnim();
     onClick?.();
+  };
+
+  const handleTouchStart = () => {
+    if (!effectiveDisabled) {
+      setIsPressed(true);
+      playPopSound();
+    }
+  };
+
+  const handleTouchEnd = () => {
+    setTimeout(() => setIsPressed(false), 120);
   };
 
   return (
@@ -71,14 +102,38 @@ export const VplayTab: React.FC<VplayTabProps> = ({
       onMouseLeave={() => { setIsHovered(false); setIsPressed(false); }}
       onMouseDown={() => { if (!effectiveDisabled) { setIsPressed(true); playPopSound(); } }}
       onMouseUp={() => setIsPressed(false)}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      onTouchCancel={() => setIsPressed(false)}
       className={`
         relative px-4 py-2 min-w-[90px] sm:min-w-[120px] flex items-center justify-center text-center font-montserrat font-bold text-xs sm:text-sm select-none
         border-2 border-[#141414] rounded-none outline-none cursor-pointer btn-press-effect transition-colors duration-75
         ${tabBg} ${transformClass} ${className}
       `}
     >
-      <div className="relative inline-flex flex-col items-center max-w-full">
-        <span className={`truncate transition-transform ${state === 'pressed' ? 'translate-y-[1px]' : (!isActive ? '-translate-y-[1px]' : '')}`}>
+      {/* Running White Border Animation Overlay (1 Lap) */}
+      {isAnimating && (
+        <svg
+          key={animKey}
+          onAnimationEnd={() => setIsAnimating(false)}
+          className="absolute inset-0 w-full h-full pointer-events-none z-30 overflow-visible"
+        >
+          <rect
+            x="0"
+            y="0"
+            style={{ width: '100%', height: '100%' }}
+            pathLength={100}
+            fill="none"
+            stroke="#ffffff"
+            strokeWidth="3"
+            strokeLinejoin="miter"
+            className="animate-tab-border-run"
+          />
+        </svg>
+      )}
+
+      <div className="relative inline-flex flex-col items-center max-w-full z-10">
+        <span className={`truncate transition-transform ${!isActive ? '-translate-y-[1px]' : ''}`}>
           {children}
         </span>
 
@@ -92,3 +147,4 @@ export const VplayTab: React.FC<VplayTabProps> = ({
     </div>
   );
 };
+

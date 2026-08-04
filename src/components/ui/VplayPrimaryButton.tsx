@@ -43,9 +43,9 @@ export const VplayPrimaryButton: React.FC<VplayPrimaryButtonProps> = ({
       textColor = 'text-white';
       break;
     case 'pressed':
-      layer1Bg = 'bg-[#418a28]';
-      layer2Bg = 'bg-[#1e4511]';
-      layer3Bg = 'bg-[#6bc34b]';
+      layer1Bg = 'bg-[#214a13]';
+      layer2Bg = 'bg-[#0b1a05]';
+      layer3Bg = 'bg-[#2a5d19]';
       textColor = 'text-white';
       break;
     case 'disabled':
@@ -75,6 +75,17 @@ export const VplayPrimaryButton: React.FC<VplayPrimaryButtonProps> = ({
     onClick?.(e);
   };
 
+  const handleTouchStart = () => {
+    if (!effectiveDisabled) {
+      setIsPressed(true);
+      playPopSound();
+    }
+  };
+
+  const handleTouchEnd = () => {
+    setTimeout(() => setIsPressed(false), 120);
+  };
+
   const isSmall = size === 'sm' || size === 'compact';
   const fontClasses = isSmall
     ? 'text-xs font-bold'
@@ -88,6 +99,9 @@ export const VplayPrimaryButton: React.FC<VplayPrimaryButtonProps> = ({
       onMouseLeave={() => { setIsHovered(false); setIsPressed(false); }}
       onMouseDown={handleMouseDown}
       onMouseUp={() => setIsPressed(false)}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      onTouchCancel={() => setIsPressed(false)}
       onClick={handleClick}
       /* LAYER 4: Outer 2px dark border frame */
       className={`
@@ -100,7 +114,7 @@ export const VplayPrimaryButton: React.FC<VplayPrimaryButtonProps> = ({
       {...props}
     >
       {/* LAYER 3: Top & Side highlight frame */}
-      <div className={`relative w-full h-full flex flex-col px-[2px] ${layer3Bg}`}>
+      <div className={`relative w-full h-full flex flex-col px-[2px] ${state === 'pressed' ? 'translate-y-[4px]' : ''} ${layer3Bg}`}>
         {/* LAYER 2: Bottom dark bevel bar */}
         <div className={`absolute inset-x-0 bottom-0 h-[4px] ${layer2Bg}`} />
 
@@ -108,7 +122,7 @@ export const VplayPrimaryButton: React.FC<VplayPrimaryButtonProps> = ({
         <div
           className={`
             relative z-10 w-full flex items-center justify-center gap-2
-            ${state === 'pressed' ? 'mt-[4px] mb-[2px]' : 'mt-[2px] mb-[4px]'}
+            mt-[2px] mb-[4px]
             ${padClasses} ${fontClasses} ${layer1Bg} ${textColor}
           `}
         >
