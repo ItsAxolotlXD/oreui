@@ -1,54 +1,33 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Realm, TvChannel, UserSettings } from './types';
-import { TV_CHANNELS } from './data/mockTvData';
+import { UserSettings } from './types';
 import { DesignSystemViewer } from './components/DesignSystemViewer';
-import { TvPlayer } from './components/TvPlayer';
 import { SettingsView } from './components/SettingsView';
-import { SearchChannelsView } from './components/SearchChannelsView';
-import { YourRealmView } from './components/YourRealmView';
+import { PlayCraftmineView, CRAFTMINE_EDITIONS } from './components/PlayCraftmineView';
+import { FaqSection } from './components/FaqSection';
 import { Sidebar, SidebarMenuItem } from './components/Sidebar';
 import { HeaderBar } from './components/HeaderBar';
 import { MinecraftPanorama } from './components/MinecraftPanorama';
 import { HomeBannerSlider } from './components/HomeBannerSlider';
 import { FeedbackModal } from './components/FeedbackModal';
-import { CreateChannelModal } from './components/CreateChannelModal';
 import { playPopSound } from './utils/sound';
 
 import { VplayHeroButton } from './components/ui/VplayHeroButton';
-import { VplayPrimaryButton } from './components/ui/VplayPrimaryButton';
 import { VplaySecondaryButton } from './components/ui/VplaySecondaryButton';
-import { VplayInputBox } from './components/ui/VplayInputBox';
-import { VplayTab } from './components/ui/VplayTab';
-
-import { Settings, Trophy, Flame, Menu, X, Radio, Pencil } from 'lucide-react';
+import { Play, Sparkles, Monitor, Cpu, Layers, ExternalLink } from 'lucide-react';
 
 export default function App() {
   const [sidebarItem, setSidebarItem] = useState<SidebarMenuItem>('home');
-  const [channelsList, setChannelsList] = useState<TvChannel[]>(TV_CHANNELS);
-  const [selectedChannel, setSelectedChannel] = useState<TvChannel>(TV_CHANNELS[0]);
-  const [recentlyWatched, setRecentlyWatched] = useState<TvChannel[]>([TV_CHANNELS[0], TV_CHANNELS[1], TV_CHANNELS[2]]);
-  const [selectedGroup, setSelectedCategory] = useState<string>('all');
-  const [searchQuery, setSearchQuery] = useState<string>('');
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
-  const [isCreateChannelOpen, setIsCreateChannelOpen] = useState(false);
-  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [isTabLoading, setIsTabLoading] = useState(false);
   const [isDeveloperUnlocked, setIsDeveloperUnlocked] = useState<boolean>(false);
-  const [realms, setRealms] = useState<Realm[]>([
-    {
-      id: 'realm-1',
-      name: 'Realm #1',
-      channels: [],
-    },
-  ]);
 
   const triggerTabLoading = () => {
     setIsTabLoading(true);
     setTimeout(() => {
       setIsTabLoading(false);
-    }, 2000);
+    }, 1000);
   };
 
   const [settings, setSettings] = useState<UserSettings>({
@@ -60,48 +39,11 @@ export default function App() {
     preferredCategory: 'all',
     themeMode: 'dark',
     notifications: true,
-    searchQuery: '',
+    searchQuery: 'Craftmine Player',
     disablePanorama: false,
     lockPanoramaScroll: false,
     panoramaScrollSpeed: 5,
     reduceMotion: false,
-  });
-
-  const handleSelectChannel = (channel: TvChannel) => {
-    setSelectedChannel(channel);
-    setRecentlyWatched((prev) => [channel, ...prev.filter((c) => c.id !== channel.id)].slice(0, 10));
-  };
-
-  const handleAddChannel = (newChannel: TvChannel) => {
-    setChannelsList((prev) => [newChannel, ...prev]);
-    setRealms((prev) => {
-      if (prev.length === 0) return prev;
-      return prev.map((r, idx) =>
-        idx === 0 ? { ...r, channels: [newChannel, ...r.channels] } : r
-      );
-    });
-    setSelectedChannel(newChannel);
-    triggerTabLoading();
-  };
-
-  // Extract unique group titles from parsed channels
-  const groupsList = ['all', ...Array.from(new Set(channelsList.map((c) => c.groupTitle)))];
-
-  // Filter channels based on search and selected group
-  const filteredChannels = channelsList.filter((ch) => {
-    const idx = channelsList.findIndex((c) => c.id === ch.id);
-    const channelNumStr = String(idx >= 0 ? idx + 1 : 1).padStart(3, '0');
-    const rawNumStr = String(idx >= 0 ? idx + 1 : 1);
-    const q = searchQuery.trim().toLowerCase();
-
-    const matchGroup = selectedGroup === 'all' || ch.groupTitle === selectedGroup;
-    const matchSearch = !q ||
-                        ch.name.toLowerCase().includes(q) ||
-                        ch.groupTitle.toLowerCase().includes(q) ||
-                        ch.currentProgram.toLowerCase().includes(q) ||
-                        channelNumStr.includes(q) ||
-                        rawNumStr === q;
-    return matchGroup && matchSearch;
   });
 
   const handleSidebarSelect = (item: SidebarMenuItem) => {
@@ -116,16 +58,13 @@ export default function App() {
       setIsSettingsOpen(false);
       setSidebarItem(item);
     }
-    setIsMobileSidebarOpen(false);
   };
 
   const getHeaderTitle = () => {
     if (isSettingsOpen) return 'CÀI ĐẶT';
     switch (sidebarItem) {
       case 'home': return 'TRANG CHỦ';
-      case 'live_tv': return 'TRUYỀN HÌNH';
-      case 'your_realm': return 'YOUR REALM';
-      case 'search': return 'SEARCH FOR CHANNELS';
+      case 'play_craftmine': return 'PLAY CRAFTMINE';
       case 'settings': return 'CÀI ĐẶT';
       case 'design_system': return 'ORE UI';
       default: return 'CÀI ĐẶT';
@@ -153,32 +92,20 @@ export default function App() {
         panoramaScrollSpeed={settings.panoramaScrollSpeed}
       />
       
-      {/* STICKY TOP HEADER BAR */}
+      {/* STICKY TOP HEADER BAR WITH CRAFTMINE LOGO */}
       <HeaderBar
         title={getHeaderTitle()}
         onBack={handleHeaderBack}
         onSearchClick={() => {
-          if (sidebarItem !== 'search' || isSettingsOpen) triggerTabLoading();
-          setIsSettingsOpen(false);
-          setSidebarItem('search');
-        }}
-        searchValue={searchQuery}
-        onSearchChange={(q) => {
-          setSearchQuery(q);
-          setIsSettingsOpen(false);
-          if (sidebarItem !== 'search') {
-            triggerTabLoading();
-            setSidebarItem('search');
-          }
+          setIsFeedbackOpen(true);
         }}
       />
 
-      {/* HORIZONTAL TAB BAR (WITHOUT DARK BACKGROUND BEHIND TABS) */}
+      {/* HORIZONTAL TAB BAR */}
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 relative z-40">
         <Sidebar
           activeItem={sidebarItem}
           onSelectItem={handleSidebarSelect}
-          channelCount={channelsList.length}
         />
       </div>
 
@@ -194,14 +121,20 @@ export default function App() {
                 exit={settings.reduceMotion ? { opacity: 1, x: 0 } : { opacity: 1, transition: { duration: 0 } }}
                 transition={settings.reduceMotion ? { duration: 0 } : { duration: 0.22, ease: 'easeInOut' }}
               >
-                <div className="w-full min-h-[380px] bg-black/50 border-2 border-[#141414] shadow-2xl flex items-center justify-center p-8 text-center select-none my-2 rounded-none">
+                <div className="w-full min-h-[380px] bg-black/60 border-2 border-[#141414] shadow-2xl flex flex-col items-center justify-center p-8 text-center select-none my-2 space-y-3">
                   <img
-                    src="https://i.ibb.co/YF4Q2tmz/animation-074ed0ba8c16bb30e36c.gif"
-                    alt="Loading..."
+                    src="https://static.wikia.nocookie.net/ep-deo/images/7/7a/Craftmine.png/revision/latest/scale-to-width-down/1000?cb=20261004160440"
+                    alt="Loading The Craftmine..."
                     referrerPolicy="no-referrer"
-                    className="w-7 h-7 object-contain [image-rendering:pixelated]"
+                    className="h-10 sm:h-12 object-contain [image-rendering:pixelated] animate-pulse"
                     style={{ imageRendering: 'pixelated' }}
                   />
+                  <div className="w-48 bg-[#1b1c1e] h-3 border border-[#141414] p-0.5 mt-2">
+                    <div className="bg-[#418a28] h-full w-2/3 animate-pulse" />
+                  </div>
+                  <span className="text-xs text-gray-400 font-mono tracking-wider">
+                    Đang nạp engine The Craftmine...
+                  </span>
                 </div>
               </motion.div>
             ) : (
@@ -214,8 +147,8 @@ export default function App() {
                   settings.reduceMotion
                     ? { duration: 0 }
                     : {
-                        opacity: { duration: 0.5, ease: 'easeInOut' },
-                        x: { duration: 0.22, ease: 'easeInOut' },
+                        opacity: { duration: 0.35, ease: 'easeInOut' },
+                        x: { duration: 0.2, ease: 'easeInOut' },
                       }
                 }
               >
@@ -227,12 +160,12 @@ export default function App() {
                       setSettings(newSet);
                       setIsSettingsOpen(false);
                       triggerTabLoading();
-                      setSidebarItem('live_tv');
+                      setSidebarItem('home');
                     }}
                     onCancel={() => {
                       setIsSettingsOpen(false);
                       triggerTabLoading();
-                      setSidebarItem('live_tv');
+                      setSidebarItem('home');
                     }}
                     onOpenDesignSystem={() => {
                       setIsSettingsOpen(false);
@@ -242,87 +175,18 @@ export default function App() {
                     onOpenFeedback={() => setIsFeedbackOpen(true)}
                     isDeveloperUnlocked={isDeveloperUnlocked}
                     onToggleDeveloperUnlocked={setIsDeveloperUnlocked}
-                    channels={channelsList}
                   />
-              ) : sidebarItem === 'design_system' ? (
+                ) : sidebarItem === 'design_system' ? (
                   <DesignSystemViewer onOpenFeedback={() => setIsFeedbackOpen(true)} />
-                ) : sidebarItem === 'your_realm' ? (
-                  isDeveloperUnlocked ? (
-                    <YourRealmView
-                      realms={realms}
-                      onUpdateRealms={setRealms}
-                      settings={settings}
-                      onUpdateSettings={setSettings}
-                      onOpenCreateChannelModal={() => setIsCreateChannelOpen(true)}
-                    />
-                  ) : (
-                    /* YOUR REALM UNDER CONSTRUCTION VIEW */
-                    <div className="w-full bg-[#383a3d] border-2 border-[#141414] shadow-2xl p-6 sm:p-10 text-center select-none my-2 space-y-6">
-                      <div className="font-montserrat font-extrabold text-base sm:text-xl text-white tracking-wide">
-                        This tab is under construction
-                      </div>
-
-                      <div className="flex justify-center my-4">
-                        <img
-                          src="https://static.wikia.nocookie.net/ep-deo/images/3/37/Load_not_done.png/revision/latest?cb=20260724133427"
-                          alt="Under construction"
-                          referrerPolicy="no-referrer"
-                          className="max-w-[300px] sm:max-w-[420px] w-full h-auto object-contain [image-rendering:pixelated]"
-                          style={{ imageRendering: 'pixelated' }}
-                        />
-                      </div>
-
-                      <div className="font-montserrat font-medium text-xs sm:text-sm text-gray-300 max-w-md mx-auto">
-                        We are working incredibly hard on this feature. Check back soon for more updates.
-                      </div>
-
-                      <div className="flex items-center justify-center gap-3 pt-2 max-w-sm mx-auto">
-                        <div className="w-1/2">
-                          <VplaySecondaryButton onClick={() => setIsFeedbackOpen(true)}>
-                            Give Feedback
-                          </VplaySecondaryButton>
-                        </div>
-                        <div className="w-1/2">
-                          <VplayHeroButton
-                            onClick={() => {
-                              triggerTabLoading();
-                              setSidebarItem('home');
-                            }}
-                          >
-                            Go Back
-                          </VplayHeroButton>
-                        </div>
-                      </div>
-                    </div>
-                  )
-                ) : sidebarItem === 'search' ? (
-                  <SearchChannelsView
-                    channels={channelsList}
-                    searchQuery={searchQuery}
-                    onSearchChange={setSearchQuery}
-                    onSelectChannel={(ch) => {
-                      handleSelectChannel(ch);
-                      triggerTabLoading();
-                      setSidebarItem('live_tv');
-                    }}
-                    recentlyWatched={recentlyWatched}
-                  />
-                ) : sidebarItem === 'home' ? (
+                ) : sidebarItem === 'play_craftmine' ? (
+                  <PlayCraftmineView />
+                ) : (
                   /* HOME DASHBOARD VIEW */
-                  <div className="space-y-3">
+                  <div className="space-y-4">
                     {/* YELLOW TIP PANEL BANNER */}
-                    <div className="relative w-full bg-[#ffe866] overflow-hidden select-none">
-                      <div className="relative z-10 py-1 px-3 text-center text-[#141414] font-jura font-bold text-[11px] sm:text-xs">
-                        You are previewing a test version of Vplay.{' '}
-                        <a
-                          href="https://vplay-refresh.vercel.app"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="underline font-black hover:text-black/80"
-                        >
-                          Click here
-                        </a>{' '}
-                        to go to official version.
+                    <div className="relative w-full bg-[#ffe866] overflow-hidden select-none border-2 border-[#141414] shadow-md">
+                      <div className="relative z-10 py-1.5 px-3 text-center text-[#141414] font-montserrat font-bold text-[11px] sm:text-xs">
+                        ⭐ The Craftmine — An unofficial Minecraft project with Ore UI Design System. The Craftmine is coming soon. Stay tuned!
                       </div>
                     </div>
 
@@ -333,298 +197,103 @@ export default function App() {
                         triggerTabLoading();
                         setSidebarItem('design_system');
                       }}
-                      onWatchNow={() => {
+                      onPlayCraftmine={() => {
                         triggerTabLoading();
-                        setSidebarItem('live_tv');
+                        setSidebarItem('play_craftmine');
                       }}
                       onOpenFeedback={() => setIsFeedbackOpen(true)}
                     />
 
-                  {/* RECOMMENDED CHANNELS SECTION */}
-                  <div className="bg-[#35383b] border-2 border-[#141414] p-4 sm:p-5 shadow-xl space-y-4">
-                    <div className="flex items-center justify-between border-b border-[#2d3033] pb-3">
-                      <div className="flex items-center gap-2">
-                        <span className="w-2.5 h-2.5 bg-[#89dc69] rounded-full animate-pulse" />
-                        <h2 className="text-sm sm:text-base font-black text-white uppercase tracking-wider font-jura">
-                          RECOMMENDED CHANNELS (KÊNH ĐỀ XUẤT)
-                        </h2>
+                    {/* 3 CRAFTMINE EDITIONS SHOWCASE */}
+                    <div className="bg-[#35383b] border-2 border-[#141414] p-4 sm:p-5 shadow-xl space-y-4">
+                      <div className="flex items-center justify-between border-b border-[#2d3033] pb-3">
+                        <div className="flex items-center gap-2">
+                          <span className="w-2.5 h-2.5 bg-[#89dc69] rounded-none animate-pulse" />
+                          <h2 className="text-sm sm:text-base font-black text-white uppercase tracking-wider font-jura">
+                            3 PHIÊN BẢN THE CRAFTMINE (3 GAME ENGINES)
+                          </h2>
+                        </div>
+                        <button
+                          onClick={() => {
+                            triggerTabLoading();
+                            setSidebarItem('play_craftmine');
+                          }}
+                          className="text-xs text-[#89dc69] font-bold hover:underline cursor-pointer"
+                        >
+                          [Vào chơi ngay]
+                        </button>
                       </div>
-                      <button
-                        onClick={() => {
-                          triggerTabLoading();
-                          setSidebarItem('live_tv');
-                        }}
-                        className="text-xs text-[#89dc69] font-bold hover:underline cursor-pointer"
-                      >
-                        [Xem tất cả kênh]
-                      </button>
-                    </div>
 
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
-                      {channelsList.slice(0, 5).map((channel, idx) => {
-                        const isVtv = channel.groupTitle?.toLowerCase().includes('vtv') || channel.name?.toUpperCase().includes('VTV') || channel.id?.toLowerCase().includes('vtv');
-                        return (
+                      {/* 3 EDITIONS CARDS */}
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        {CRAFTMINE_EDITIONS.map((edition, idx) => (
                           <div
-                            key={`rec-${channel.id}`}
+                            key={edition.id}
                             onClick={() => {
                               playPopSound();
-                              handleSelectChannel(channel);
                               triggerTabLoading();
-                              setSidebarItem('live_tv');
+                              setSidebarItem('play_craftmine');
                             }}
-                            className="group relative bg-[#3f4246] hover:bg-[#484c50] border-2 border-[#141414] hover:border-[#89dc69] cursor-pointer transition-all duration-150 flex flex-col justify-between overflow-hidden shadow-md select-none btn-press-effect"
+                            className="group relative bg-[#3f4246] hover:bg-[#484c50] border-2 border-[#141414] hover:border-[#89dc69] cursor-pointer transition-all duration-150 flex flex-col justify-between overflow-hidden shadow-md select-none btn-press-effect p-3.5 space-y-3"
                           >
-                            {/* Secondary button dark 3D bevel & top highlight overlay */}
                             <div className="absolute inset-0 pointer-events-none z-20 shadow-[inset_2px_2px_0_rgba(255,255,255,0.25),inset_-2px_-4px_0_rgba(0,0,0,0.5)]" />
-                            <div className={`relative aspect-[16/10] bg-[#1a1c1e] border-b-2 border-[#141414] flex items-center justify-center overflow-hidden ${isVtv ? 'p-1' : 'p-2'}`}>
-                              {channel.logo ? (
-                                <img
-                                  src={channel.logo}
-                                  alt={channel.name}
-                                  referrerPolicy="no-referrer"
-                                  className={`object-contain filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] group-hover:scale-105 transition-transform duration-200 ${
-                                    isVtv ? 'max-h-[96%] max-w-[96%] scale-110' : 'max-h-full max-w-[85%]'
-                                  }`}
-                                  onError={(e) => {
-                                    (e.target as HTMLImageElement).src = `https://via.placeholder.com/150/1c1d1f/89dc69?text=${encodeURIComponent(channel.name)}`;
-                                  }}
-                                />
-                              ) : (
-                                <span className="font-bold text-sm text-[#89dc69] font-mono">
-                                  {channel.name}
+
+                            <div className="space-y-2">
+                              <div className="flex items-center justify-between">
+                                <span
+                                  className="text-[10px] font-bold font-mono px-2 py-0.5 border border-[#141414]"
+                                  style={{ backgroundColor: edition.accentColor, color: '#141414' }}
+                                >
+                                  ENGINE #{idx + 1}
                                 </span>
-                              )}
-                              <span className="absolute top-1 left-1 bg-[#141414]/90 text-[#89dc69] text-[9px] font-bold px-1.5 py-0.5 border border-[#418a28]">
-                                CH 0{idx + 1}
-                              </span>
+                                <span className="text-[10px] text-gray-300 font-mono flex items-center gap-1">
+                                  <span className="w-1.5 h-1.5 bg-[#89dc69] rounded-full" />
+                                  READY
+                                </span>
+                              </div>
+
+                              <h3 className="font-bold text-sm sm:text-base text-white group-hover:text-[#89dc69] font-montserrat flex items-center gap-1.5">
+                                {idx === 0 && <Sparkles className="w-4 h-4 text-[#89dc69]" />}
+                                {idx === 1 && <Cpu className="w-4 h-4 text-sky-400" />}
+                                {idx === 2 && <Layers className="w-4 h-4 text-amber-400" />}
+                                {edition.name}
+                              </h3>
+
+                              <div className="text-[11px] text-gray-400 font-mono">
+                                {edition.engineName}
+                              </div>
+
+                              <p className="text-xs text-gray-300 font-montserrat leading-relaxed line-clamp-3">
+                                {edition.description}
+                              </p>
                             </div>
-                            <div className="p-2 bg-transparent flex flex-col justify-center">
-                              <span className="text-[11px] font-bold text-white truncate group-hover:text-[#89dc69]">
-                                {channel.name}
+
+                            <div className="pt-3 border-t border-[#4e5257] flex items-center justify-between text-[11px]">
+                              <span className="text-gray-300 font-mono truncate max-w-[140px]">
+                                {edition.engineType}
                               </span>
-                              <span className="text-[9px] text-gray-300 truncate">
-                                {channel.groupTitle?.toLowerCase().includes('địa phương') ? 'Kênh ĐP' : channel.groupTitle}
+                              <span className="text-[#89dc69] font-bold group-hover:underline flex items-center gap-1">
+                                <span>CHƠI NGAY</span>
+                                <Play className="w-3 h-3 fill-current" />
                               </span>
                             </div>
                           </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                /* LIVE TV FULL VIEW */
-                <div className="space-y-6">
-                  
-                  {/* LIVE TV PLAYER */}
-                  <section className="space-y-3">
-                    <TvPlayer
-                      channel={selectedChannel}
-                      onSelectChannel={handleSelectChannel}
-                      channels={channelsList}
-                      settings={settings}
-                      onUpdateSettings={setSettings}
-                      onCreateCustomChannel={() => setIsCreateChannelOpen(true)}
-                    />
-                  </section>
-
-              {/* GROUP FILTER TABS, ACTION BAR & CHANNELS GRID */}
-              <section className="space-y-4 pt-2">
-                {/* SEARCH BAR IN LIVE TV */}
-                <div className="bg-[#3c3f42] border-2 border-[#141414] p-3 shadow-md">
-                  <div className="relative flex items-center w-full">
-                    <img
-                      src="https://static.wikia.nocookie.net/ep-deo/images/c/c8/MagnifyingGlass-52f96e5f47f42e682a00.png/revision/latest?cb=20260723030208"
-                      alt="Search"
-                      referrerPolicy="no-referrer"
-                      className="absolute left-3 w-5 h-5 object-contain pointer-events-none z-10"
-                    />
-                    <input
-                      type="text"
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="Search for channels"
-                      className="w-full h-9.5 bg-[#222426] text-white pl-10 pr-8 text-xs font-medium font-montserrat border-2 border-[#141414] focus:outline-none focus:border-white placeholder:text-gray-400 shadow-[inset_0_2px_0_rgba(0,0,0,0.5)] cursor-pointer"
-                    />
-                    {searchQuery && (
-                      <button
-                        onClick={() => setSearchQuery('')}
-                        className="absolute right-2.5 text-gray-400 hover:text-white font-bold text-xs p-1 cursor-pointer"
-                      >
-                        ✕
-                      </button>
-                    )}
-                  </div>
-                </div>
-
-                {/* Horizontal Scrollable Category Filter Tabs */}
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2 overflow-x-auto pb-2 border-b border-[#2d3033]">
-                    {groupsList.map((grp) => (
-                      <VplayTab
-                        key={grp}
-                        active={selectedGroup === grp}
-                        onClick={() => setSelectedCategory(grp)}
-                      >
-                        {grp === 'all' ? `Tất cả (${channelsList.length})` : grp}
-                      </VplayTab>
-                    ))}
-                  </div>
-                </div>
-
-                {/* CHANNELS GROUPED BY CATEGORY WITH ORE UI FOLDER TABS */}
-                {(() => {
-                  const categoryGroupsToDisplay = selectedGroup === 'all'
-                    ? Array.from(new Set(filteredChannels.map((c) => c.groupTitle)))
-                    : [selectedGroup];
-
-                  if (filteredChannels.length === 0) {
-                    return (
-                      <div className="bg-[#292a2c] p-8 text-center border-2 border-[#141414] space-y-3">
-                        <p className="text-sm font-bold text-yellow-400">KHÔNG TÌM THẤY KÊNH NÀO MATCH TỪ KHÓA</p>
-                        <p className="text-xs text-gray-300">Thử tìm từ khóa khác hoặc bấm nút bên dưới để chọn lại toàn bộ kênh.</p>
-                        <div className="w-48 mx-auto pt-2">
-                          <VplaySecondaryButton onClick={() => { setSearchQuery(''); setSelectedCategory('all'); }}>
-                            XÓA TÌM KIẾM
-                          </VplaySecondaryButton>
-                        </div>
+                        ))}
                       </div>
-                    );
-                  }
-
-                  return (
-                    <div className="space-y-8">
-                      {categoryGroupsToDisplay.map((groupName) => {
-                        const groupChannels = filteredChannels.filter((c) => c.groupTitle === groupName);
-                        if (groupChannels.length === 0) return null;
-
-                        return (
-                          <div key={groupName} className="space-y-0">
-                            {/* Folder Tab Header */}
-                            <div className="flex flex-col select-none">
-                              {/* Green Folder Tab Box */}
-                              <div className="flex items-end">
-                                <div className="bg-[#89dc69] text-[#141414] font-bold font-montserrat text-xs sm:text-sm px-3.5 py-1.5 flex items-center gap-2">
-                                  <span>{groupName} ({groupChannels.length})</span>
-                                </div>
-                              </div>
-                              {/* Green Underline Bar spanning across without black border */}
-                              <div className="h-1 bg-[#89dc69] w-full" />
-                            </div>
-
-                            {/* Group Channels Grid Container - placed flush against category text header */}
-                            <div className="pt-0 mt-0">
-                              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-3 lg:gap-4">
-                                {groupChannels.map((channel) => {
-                                  const isSelected = selectedChannel.id === channel.id;
-                                  const isVtv = channel.groupTitle?.toLowerCase().includes('vtv') || channel.name?.toUpperCase().includes('VTV') || channel.id?.toLowerCase().includes('vtv');
-                                  return (
-                                    <div
-                                      key={channel.id}
-                                      onClick={() => {
-                                        playPopSound();
-                                        handleSelectChannel(channel);
-                                      }}
-                                      className={`
-                                        group relative border-2 cursor-pointer transition-all duration-150 flex flex-col justify-between overflow-hidden shadow-xl select-none btn-press-effect rounded-none
-                                        ${isSelected
-                                          ? 'bg-[#2d2f31] border-[#418a28]'
-                                          : 'bg-[#3f4246] hover:bg-[#484c50] border-[#141414] hover:border-[#89dc69]'
-                                        }
-                                      `}
-                                    >
-                                      {/* Secondary button dark 3D bevel & top highlight overlay */}
-                                      <div
-                                        className={`absolute inset-0 pointer-events-none z-20 ${
-                                          isSelected
-                                            ? 'shadow-[inset_2px_2px_0_rgba(0,0,0,0.65)]'
-                                            : 'shadow-[inset_2px_2px_0_rgba(255,255,255,0.25),inset_-2px_-4px_0_rgba(0,0,0,0.5)]'
-                                        }`}
-                                      />
-                                      {/* TOP IMAGE AREA */}
-                                      <div className={`relative aspect-[16/10] bg-[#1a1c1e] border-b-2 border-[#141414] flex items-center justify-center overflow-hidden ${isVtv ? 'p-1 sm:p-1.5' : 'p-1.5 sm:p-3'}`}>
-                                        <svg
-                                          className="absolute inset-0 w-full h-full opacity-35 pointer-events-none text-[#45494e]"
-                                          xmlns="http://www.w3.org/2000/svg"
-                                          width="100%"
-                                          height="100%"
-                                        >
-                                          <defs>
-                                            <pattern
-                                              id={`wavy-pattern-${channel.id}`}
-                                              x="0"
-                                              y="0"
-                                              width="32"
-                                              height="12"
-                                              patternUnits="userSpaceOnUse"
-                                            >
-                                              <path
-                                                d="M 0 6 Q 8 0, 16 6 T 32 6"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                strokeWidth="1.5"
-                                              />
-                                            </pattern>
-                                          </defs>
-                                          <rect width="100%" height="100%" fill={`url(#wavy-pattern-${channel.id})`} />
-                                        </svg>
-
-                                        {channel.logo ? (
-                                          <img
-                                            src={channel.logo}
-                                            alt={channel.name}
-                                            referrerPolicy="no-referrer"
-                                            className={`object-contain filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] group-hover:scale-105 transition-transform duration-200 z-10 ${
-                                              isVtv ? 'max-h-[96%] max-w-[96%] scale-110' : 'max-h-full max-w-[85%]'
-                                            }`}
-                                            onError={(e) => {
-                                              (e.target as HTMLImageElement).src = `https://via.placeholder.com/150/1c1d1f/89dc69?text=${encodeURIComponent(channel.name)}`;
-                                            }}
-                                          />
-                                        ) : (
-                                          <span className="font-extrabold text-xs sm:text-sm text-[#89dc69] tracking-wider font-mono uppercase z-10">{channel.name}</span>
-                                        )}
-
-                                        {/* Light red LIVE tag at top right of channel box - only for currently playing/selected channel */}
-                                        {isSelected && (
-                                          <div className="absolute top-1 right-1 sm:top-1.5 sm:right-1.5 bg-[#ff7b7b] text-[#141414] px-1 sm:px-1.5 py-0.5 text-[8px] sm:text-[10px] font-bold border border-[#141414] font-mono shadow z-25 flex items-center gap-1 select-none">
-                                            <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-[#141414] inline-block flex-shrink-0 animate-pulse" />
-                                            <span>LIVE</span>
-                                          </div>
-                                        )}
-                                      </div>
-
-                                      {/* TAGS ONLY AREA */}
-                                      <div className="p-1.5 sm:p-2 bg-transparent flex flex-col items-start gap-1 sm:gap-1.5 flex-1">
-                                        <span className="bg-[#1c1d1f] text-white px-1 sm:px-2 py-0.5 text-[8px] sm:text-[11px] font-bold font-montserrat border border-[#141414] shadow-sm truncate max-w-full">
-                                          {channel.groupTitle?.toLowerCase().includes('địa phương') ? 'Kênh ĐP' : channel.groupTitle}
-                                        </span>
-
-                                        <span className="bg-[#ffe866] text-[#141414] px-1 sm:px-2 py-0.5 text-[8px] sm:text-[11px] font-bold font-montserrat border border-[#141414] shadow-sm font-mono">
-                                          {String(channelsList.findIndex((c) => c.id === channel.id) + 1).padStart(3, '0')}
-                                        </span>
-                                      </div>
-
-                                    </div>
-                                  );
-                                })}
-                              </div>
-                            </div>
-                          </div>
-                        );
-                      })}
                     </div>
-                  );
-                })()}
 
-              </section>
-
-            </div>
-          )}
+                    {/* FREQUENTLY ASKED QUESTIONS SECTION */}
+                    <FaqSection
+                      onGoToPlayCraftmine={() => {
+                        triggerTabLoading();
+                        setSidebarItem('play_craftmine');
+                      }}
+                    />
+                  </div>
+                )}
               </motion.div>
             )}
           </AnimatePresence>
-
         </main>
       </div>
 
@@ -633,15 +302,6 @@ export default function App() {
         isOpen={isFeedbackOpen}
         onClose={() => setIsFeedbackOpen(false)}
       />
-
-      {/* CREATE CUSTOM CHANNEL MODAL */}
-      <CreateChannelModal
-        isOpen={isCreateChannelOpen}
-        onClose={() => setIsCreateChannelOpen(false)}
-        onAddChannel={handleAddChannel}
-        categories={Array.from(new Set(channelsList.map((c) => c.groupTitle)))}
-      />
-
     </div>
   );
 }

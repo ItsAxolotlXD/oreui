@@ -1,31 +1,32 @@
 export type ComponentState = 'normal' | 'hovered' | 'pressed' | 'disabled';
 
-export interface TvChannel {
+export type GameMode = 'survival' | 'creative' | 'adventure' | 'hardcore';
+export type Difficulty = 'peaceful' | 'easy' | 'normal' | 'hard';
+
+export interface CraftmineWorld {
   id: string;
   name: string;
-  groupTitle: string; // 'Kênh VTV' | 'Kênh VTVcab' | 'Kênh HTV' | 'Kênh SCTV' | 'Kênh thiết yếu' | 'Kênh địa phương' | 'Kênh quốc tế' | 'Kênh phát thanh'
-  logo: string;
-  streamUrl?: string;
-  badge?: string;
-  currentProgram: string;
-  nextProgram: string;
-  viewers: string;
-  rating: string;
-  videoBg: string;
-  isLive: boolean;
-  resolution: string;
-  language: string;
-  summary: string;
+  mode: GameMode;
+  difficulty: Difficulty;
+  seed: string;
+  daysActive: number;
+  lastPlayed: string;
+  sizeMb: number;
+  playersOnline?: number;
+  isFavorite?: boolean;
+  thumbnail?: string;
+  description?: string;
 }
 
-export interface ProgramSchedule {
+export interface Realm {
   id: string;
-  time: string;
-  title: string;
-  channelId: string;
-  isCurrent: boolean;
-  category: string;
-  duration: string;
+  name: string;
+  description?: string;
+  gameMode?: GameMode;
+  maxPlayers?: number;
+  onlineCount?: number;
+  worlds?: CraftmineWorld[];
+  icon?: string;
 }
 
 export interface UserSettings {
@@ -42,10 +43,4 @@ export interface UserSettings {
   lockPanoramaScroll?: boolean;
   panoramaScrollSpeed?: number;
   reduceMotion?: boolean;
-}
-
-export interface Realm {
-  id: string;
-  name: string;
-  channels: TvChannel[];
 }

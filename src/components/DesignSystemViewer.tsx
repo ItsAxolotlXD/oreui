@@ -37,17 +37,17 @@ export const DesignSystemViewer: React.FC<DesignSystemViewerProps> = ({ onOpenFe
         <div>
           <h2 className="font-extrabold text-sm sm:text-base text-white uppercase tracking-wider mb-1 flex items-center gap-2">
             <span className="w-2.5 h-2.5 bg-[#55b331] inline-block border border-[#141414]" />
-            WELCOME TO A DESIGN PREVIEW
+            Unleash possible creativity
           </h2>
           <p className="text-xs text-gray-300 max-w-2xl font-normal leading-relaxed">
-            Bạn đang được trải nghiệm hệ thống giao diện mới của Vplay, lấy cảm hứng từ Minecraft Ore UI. Chúng tôi rất muốn nghe ý kiến của bạn. Hãy nhớ rằng là web nói chung và giao diện nói riêng vẫn đang trong quá trình phát triển, vì vậy một số tính năng có thể bị thiếu hoặc bạn sẽ gặp phải khá nhiều lỗi.
+            The Craftmine is coming soon. Stay tuned!
           </p>
         </div>
         <button
           onClick={() => {
             playPopSound();
             if (onOpenFeedback) onOpenFeedback();
-            else alert('Cảm ơn bạn đã đóng góp ý kiến về giao diện Vplay Ore UI!');
+            else alert('Cảm ơn bạn đã đóng góp ý kiến về The Craftmine!');
           }}
           className="flex items-center gap-2 bg-[#dcdfe2] hover:bg-white text-[#141414] font-extrabold text-xs sm:text-sm px-4 py-2 border-2 border-[#141414] cursor-pointer active:translate-y-[1px] btn-press-effect flex-shrink-0 shadow-[inset_0_1px_0_#ffffff]"
         >
@@ -62,11 +62,11 @@ export const DesignSystemViewer: React.FC<DesignSystemViewerProps> = ({ onOpenFe
           <div className="flex items-center gap-3">
             <div className="w-4 h-4 bg-[#418a28] animate-pulse border border-[#141414]" />
             <h1 className="text-xl sm:text-2xl font-extrabold text-[#51a233] tracking-tight">
-              VPLAY ORE UI
+              THE CRAFTMINE ORE UI
             </h1>
           </div>
           <p className="text-gray-400 text-xs sm:text-sm mt-2 font-montserrat">
-            Pixel-perfect TV Component Library & State Matrix (Normal, Hovered, Pressed, Disabled)
+            Pixel-perfect Minecraft Component Library & State Matrix (Normal, Hovered, Pressed, Disabled)
           </p>
         </div>
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { UserSettings, TvChannel } from '../types';
+import { UserSettings } from '../types';
 import { ExternalLink, Search } from 'lucide-react';
 import { playPopSound } from '../utils/sound';
 import { VplayToggleSwitch } from './ui/VplayToggleSwitch';
@@ -17,7 +17,6 @@ interface SettingsViewProps {
   onOpenDesignSystem?: () => void;
   isDeveloperUnlocked?: boolean;
   onToggleDeveloperUnlocked?: (unlocked: boolean) => void;
-  channels?: TvChannel[];
 }
 
 const SettingsDivider = () => (
@@ -36,7 +35,6 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   onOpenDesignSystem,
   isDeveloperUnlocked = false,
   onToggleDeveloperUnlocked,
-  channels = [],
 }) => {
   const [initialSettings] = useState<UserSettings>(settings);
   const [temp, setTemp] = useState<UserSettings>({
@@ -60,19 +58,14 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   const [devKeyStatus, setDevKeyStatus] = useState<string | null>(null);
   const [exported, setExported] = useState(false);
 
-  const handleExportChannels = () => {
+  const handleExportData = () => {
     playPopSound();
-    let m3u8Content = '#EXTM3U\n';
-    channels.forEach((ch) => {
-      const stream = ch.streamUrl || 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8';
-      m3u8Content += `#EXTINF:-1 tvg-id="${ch.id}" tvg-name="${ch.name}" tvg-logo="${ch.logo}" group-title="${ch.groupTitle}",${ch.name}\n${stream}\n\n`;
-    });
-
-    const blob = new Blob([m3u8Content], { type: 'audio/x-mpegurl;charset=utf-8;' });
+    const configData = JSON.stringify(temp, null, 2);
+    const blob = new Blob([configData], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.setAttribute('download', 'Vplay_channels.m3u8');
+    a.setAttribute('download', 'craftmine_settings.json');
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -316,16 +309,16 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
           <SettingsDivider />
 
-          {/* Sign in with Vplay account */}
-          {matchesSearch('Sign in with Vplay account', 'Experience all the best things of Vplay with an official account.') && (
+          {/* Sign in with Craftmine account */}
+          {matchesSearch('Sign in with Craftmine account', 'Experience all the best things of The Craftmine with an official account.') && (
             <>
               <div className="px-3 sm:px-4 py-2.5 hover:bg-[#525559] transition-colors flex items-center justify-between gap-3">
                 <div>
                   <div className="font-bold text-xs text-white">
-                    Sign in with Vplay account
+                    Sign in with Craftmine account
                   </div>
                   <div className="text-[10px] text-gray-300 font-normal">
-                    Experience all the best things of Vplay with an official account.
+                    Experience all the best things of The Craftmine with an official account.
                   </div>
                 </div>
                 <div className="w-24 flex-shrink-0">
@@ -460,14 +453,14 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           )}
 
           {/* Item 2: Ore UI design components */}
-          {(matchesSearch('Ore UI design components', 'Hệ thống ngôn ngữ thiết kế giao diện của Vplay.') ||
+          {(matchesSearch('Ore UI design components', 'Hệ thống ngôn ngữ thiết kế giao diện Ore UI của The Craftmine.') ||
             matchesSearch('Design components')) && (
             <>
               <div className="px-3 sm:px-4 py-2.5 hover:bg-[#525559] transition-colors flex items-center justify-between gap-3">
                 <div>
                   <div className="font-bold text-xs text-white">Ore UI design components</div>
                   <div className="text-[10px] text-gray-300 font-normal">
-                    Hệ thống ngôn ngữ thiết kế giao diện Ore UI của Vplay.
+                    Hệ thống ngôn ngữ thiết kế giao diện Ore UI của The Craftmine.
                   </div>
                 </div>
                 <div className="w-24 flex-shrink-0">
@@ -486,22 +479,22 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             </>
           )}
 
-          {/* Item 3: Export channels (.m3u8) */}
-          {(matchesSearch('Export channels (.m3u8)', 'Tải file m3u8 danh sách các kênh.') ||
-            matchesSearch('Export channels') ||
-            matchesSearch('m3u8')) && (
+          {/* Item 3: Export configuration (.json) */}
+          {(matchesSearch('Export settings (.json)', 'Xuất file cấu hình cài đặt của The Craftmine.') ||
+            matchesSearch('Export settings') ||
+            matchesSearch('json')) && (
             <>
               <div className="px-3 sm:px-4 py-2.5 hover:bg-[#525559] transition-colors flex items-center justify-between gap-3">
                 <div>
-                  <div className="font-bold text-xs text-white">Export channels (.m3u8)</div>
+                  <div className="font-bold text-xs text-white">Export settings (.json)</div>
                   <div className="text-[10px] text-gray-300 font-normal">
-                    Tải file danh sách toàn bộ {channels.length} kênh Vplay dưới dạng .m3u8.
+                    Tải file sao lưu cấu hình cài đặt The Craftmine dưới dạng .json.
                   </div>
                 </div>
                 <div className="w-24 flex-shrink-0">
                   <VplaySecondaryButton
                     size="sm"
-                    onClick={handleExportChannels}
+                    onClick={handleExportData}
                   >
                     {exported ? 'Exported!' : 'Export'}
                   </VplaySecondaryButton>

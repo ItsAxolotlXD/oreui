@@ -7,14 +7,14 @@ import { playPopSound } from '../utils/sound';
 
 interface HomeBannerSliderProps {
   onExploreDesignSystem: () => void;
-  onWatchNow: () => void;
+  onPlayCraftmine: () => void;
   onOpenFeedback?: () => void;
   reduceMotion?: boolean;
 }
 
 export const HomeBannerSlider: React.FC<HomeBannerSliderProps> = ({
   onExploreDesignSystem,
-  onWatchNow,
+  onPlayCraftmine,
   onOpenFeedback,
   reduceMotion = false,
 }) => {
@@ -59,15 +59,15 @@ export const HomeBannerSlider: React.FC<HomeBannerSliderProps> = ({
               {/* TITLE & SUBTITLE WITH IMAGE BELOW SUBTITLE */}
               <div className="space-y-2 text-left max-w-3xl mx-auto">
                 <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-white uppercase tracking-wide font-jura text-center sm:text-left drop-shadow-md">
-                  WELCOME TO A DESIGN PREVIEW
+                  Unleash possible creativity
                 </h1>
                 <p className="text-xs sm:text-sm text-gray-200 leading-relaxed text-center sm:text-left drop-shadow">
-                  Bạn đang được trải nghiệm hệ thống giao diện mới của Vplay, lấy cảm hứng từ Minecraft Ore UI, chúng tôi rất muốn nghe ý kiến của bạn. Hãy nhớ rằng là web nói chung và giao diện nói riêng vẫn đang trong quá trình phát triển, vì vậy một số tính năng có thể bị thiếu hoặc bạn sẽ gặp phải khá nhiều lỗi. Ore UI hứa hẹn sẽ đem đến cho bạn một trải nghiệm Vplay đẹp mắt, trực quan và mượt mà nhất.
+                  The Craftmine is coming soon. Stay tuned!
                 </p>
                 <div className="pt-2 flex justify-center">
                   <img
                     src="https://static.wikia.nocookie.net/ep-deo/images/b/b4/New_ui_introduction-f34cf248120a1da988fc.png/revision/latest?cb=20260801154934"
-                    alt="New UI Introduction"
+                    alt="The Craftmine Ore UI"
                     referrerPolicy="no-referrer"
                     className="w-full max-w-2xl md:max-w-3xl h-auto object-contain shadow-lg [image-rendering:pixelated] [image-rendering:-webkit-optimize-contrast]"
                   />
@@ -99,7 +99,7 @@ export const HomeBannerSlider: React.FC<HomeBannerSliderProps> = ({
                     onClick={() => {
                       playPopSound();
                       if (onOpenFeedback) onOpenFeedback();
-                      else alert("Thank you for your feedback!");
+                      else alert('Thank you for your feedback on The Craftmine!');
                     }}
                   >
                     <span className="flex items-center justify-center gap-2">
@@ -133,21 +133,28 @@ export const HomeBannerSlider: React.FC<HomeBannerSliderProps> = ({
               {...slideMotionProps}
               className="space-y-4 w-full"
             >
-              {/* TITLE & SUBTITLE WITH IMAGE BELOW SUBTITLE */}
+              {/* TITLE & SUBTITLE WITH IMAGE */}
               <div className="space-y-2 text-left max-w-3xl mx-auto">
                 <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-white uppercase tracking-wide font-jura text-center sm:text-left drop-shadow-md">
-                  Vì một Việt Nam khỏe mạnh
+                  CHƠI 3 PHIÊN BẢN THE CRAFTMINE
                 </h1>
                 <p className="text-xs sm:text-sm text-gray-200 leading-relaxed text-center sm:text-left drop-shadow">
-                  VTV6 là kênh truyền hình chuyên biệt về thể thao của Đài Truyền hình Việt Nam. Nội dung chính của kênh bao gồm các bản tin, chuyên mục và chương trình tường thuật về thể thao trong nước và quốc tế do Trung tâm Truyền hình Thể thao sản xuất chính, với mục tiêu thúc đẩy phong trào thể thao quần chúng, thể thao học đường, thể thao chuyên nghiệp phát triển tại Việt Nam cũng như hướng đến rèn luyện, nâng cao sức khỏe cộng đồng và xây dựng con người phát triển toàn diện.
+                  Trải nghiệm 3 phiên bản được dựng bởi 3 engine khác nhau: Lovable Edition (WebGL 3D), Base 64 Edition (High-Speed Sandbox) và Studio Edition (Full Voxel Suite).
                 </p>
                 <div className="pt-2 flex justify-center">
-                  <img
-                    src="https://static.wikia.nocookie.net/logos/images/b/b0/VTV6_ident_29.05-07.06.2026_b%E1%BA%A3n_3.png/revision/latest/scale-to-width-down/1000?cb=20260603150528&path-prefix=vi"
-                    alt="Vì một Việt Nam khỏe mạnh"
-                    referrerPolicy="no-referrer"
-                    className="w-full max-w-2xl md:max-w-3xl h-auto object-contain shadow-lg [image-rendering:pixelated] [image-rendering:-webkit-optimize-contrast]"
-                  />
+                  <div className="w-full max-w-2xl md:max-w-3xl bg-[#1c1e20] border-2 border-[#141414] p-4 text-center shadow-lg relative overflow-hidden">
+                    <img
+                      src="https://static.wikia.nocookie.net/ep-deo/images/7/7a/Craftmine.png/revision/latest/scale-to-width-down/1000?cb=20261004160440"
+                      alt="The Craftmine"
+                      referrerPolicy="no-referrer"
+                      className="mx-auto h-16 sm:h-24 object-contain [image-rendering:pixelated] drop-shadow-lg"
+                    />
+                    <div className="mt-3 flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-xs text-[#89dc69] font-mono">
+                      <span>• LOVABLE EDITION</span>
+                      <span>• BASE 64 EDITION</span>
+                      <span>• STUDIO EDITION</span>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -166,8 +173,8 @@ export const HomeBannerSlider: React.FC<HomeBannerSliderProps> = ({
                 </VplaySecondaryButton>
 
                 <div className="w-48 sm:w-56">
-                  <VplayHeroButton fullWidth onClick={onWatchNow}>
-                    Watch now
+                  <VplayHeroButton fullWidth onClick={onPlayCraftmine}>
+                    CHƠI CRAFTMINE NGAY
                   </VplayHeroButton>
                 </div>
                 <div className="w-48 sm:w-56">
@@ -175,10 +182,11 @@ export const HomeBannerSlider: React.FC<HomeBannerSliderProps> = ({
                     fullWidth
                     onClick={() => {
                       playPopSound();
-                      window.open('https://vi.wikipedia.org/wiki/VTV6', '_blank');
+                      if (onOpenFeedback) onOpenFeedback();
+                      else alert('Thank you for checking out The Craftmine!');
                     }}
                   >
-                    Learn more
+                    <span>Give Feedback</span>
                   </VplaySecondaryButton>
                 </div>
 

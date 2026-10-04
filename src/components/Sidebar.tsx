@@ -2,26 +2,25 @@ import React from 'react';
 import { playPopSound } from '../utils/sound';
 import { VplayTab } from './ui/VplayTab';
 
-export type SidebarMenuItem = 'home' | 'live_tv' | 'your_realm' | 'search' | 'settings' | 'design_system';
+export type SidebarMenuItem = 'home' | 'play_craftmine' | 'design_system' | 'settings';
 
 interface SidebarProps {
   activeItem: SidebarMenuItem;
   onSelectItem: (item: SidebarMenuItem) => void;
   onOpenFeedback?: () => void;
   className?: string;
-  channelCount?: number;
+  worldCount?: number;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
   activeItem,
   onSelectItem,
   className = '',
-  channelCount = 98,
 }) => {
   const menuItems: { id: SidebarMenuItem; label: string; badge?: string }[] = [
     { id: 'home', label: 'Home' },
-    { id: 'live_tv', label: 'Live TV', badge: `(${channelCount})` },
-    { id: 'your_realm', label: 'Your Realm' },
+    { id: 'play_craftmine', label: 'Play Craftmine', badge: '(3)' },
+    { id: 'design_system', label: 'Ore UI' },
     { id: 'settings', label: 'Settings' },
   ];
 
@@ -64,7 +63,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 key={item.id}
                 active={isSelected}
                 onClick={() => onSelectItem(item.id)}
-                className="flex-1 !min-w-[90px] sm:!min-w-[120px] !py-2"
+                className="flex-1 !min-w-[95px] sm:!min-w-[130px] !py-2"
               >
                 <span className="flex items-center justify-center gap-1">
                   <span>{item.label}</span>
