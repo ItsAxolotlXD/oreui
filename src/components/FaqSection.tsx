@@ -52,7 +52,6 @@ export const FaqSection: React.FC<FaqSectionProps> = ({ onGoToPlayCraftmine }) =
   const [openIds, setOpenIds] = useState<number[]>([1, 2, 3, 4, 5]);
 
   const toggleFaq = (id: number) => {
-    playPopSound();
     setOpenIds((prev) =>
       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
     );
@@ -99,8 +98,9 @@ export const FaqSection: React.FC<FaqSectionProps> = ({ onGoToPlayCraftmine }) =
               key={faq.id}
               className="bg-[#2b2d30] border-2 border-[#141414] shadow-md overflow-hidden transition-all duration-150"
             >
-              {/* ACCORDION HEADER BUTTON */}
+              {/* ACCORDION HEADER BUTTON (Sound plays on press down) */}
               <button
+                onMouseDown={() => playPopSound()}
                 onClick={() => toggleFaq(faq.id)}
                 className="w-full p-3 sm:p-3.5 flex items-center justify-between gap-3 text-left hover:bg-[#34373b] active:bg-[#252729] cursor-pointer select-none btn-press-effect"
               >
@@ -135,15 +135,13 @@ export const FaqSection: React.FC<FaqSectionProps> = ({ onGoToPlayCraftmine }) =
                     {faq.answer}
                   </p>
 
-                  {/* Quick Action Button for Question 2 */}
+                  {/* Quick Action Button for Question 2 (font-minecraft-ten for green button) */}
                   {faq.id === 2 && onGoToPlayCraftmine && (
                     <div className="pt-1">
                       <button
-                        onClick={() => {
-                          playPopSound();
-                          onGoToPlayCraftmine();
-                        }}
-                        className="inline-flex items-center gap-2 bg-[#418a28] hover:bg-[#52a634] active:bg-[#2e681c] text-white text-xs font-minecraft-seven px-3 py-1.5 border-2 border-[#141414] shadow-[inset_1px_1px_0_#89dc69] cursor-pointer"
+                        onMouseDown={() => playPopSound()}
+                        onClick={onGoToPlayCraftmine}
+                        className="inline-flex items-center gap-2 bg-[#418a28] hover:bg-[#52a634] active:bg-[#2e681c] text-white text-xs font-minecraft-ten px-3 py-1.5 border-2 border-[#141414] shadow-[inset_1px_1px_0_#89dc69] cursor-pointer"
                       >
                         <span>▶ Play Craftmine right now</span>
                       </button>

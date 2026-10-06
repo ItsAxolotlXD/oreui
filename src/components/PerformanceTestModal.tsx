@@ -164,27 +164,27 @@ export const PerformanceTestModal: React.FC<PerformanceTestModalProps> = ({ isOp
     if (avgFps >= 57.5 && avgFrameTimeMs <= 17.5) {
       grade = 'S+';
       gradeColor = 'text-[#89dc69] border-[#89dc69] bg-[#224415]';
-      assessment = 'SIÊU CẤP GOD TIER! Thiết bị đạt hiệu năng tối thượng. Xử lý cực kỳ mượt mà tất cả các hiệu ứng Ore UI, video 4K & đồ họa 3D phức tạp mà không có bất kỳ hiện tượng giật lag nào.';
+      assessment = 'GOD TIER PERFORMANCE! Your hardware provides ultimate smoothness. Seamlessly rendering all Ore UI effects, 4K canvas, and 3D voxels without any frame drops or jitter.';
     } else if (avgFps >= 50) {
       grade = 'S';
       gradeColor = 'text-emerald-400 border-emerald-500 bg-emerald-950';
-      assessment = 'XUẤT SẮC! Cấu hình thiết bị rất mạnh mẽ. Trải nghiệm Vplay & Live TV hoàn hảo với tốc độ phản hồi mượt mà và khung hình luôn duy trì ổn định cao.';
+      assessment = 'EXCELLENT! Very powerful hardware. The Craftmine runs with instant responsiveness and consistently high frame rates.';
     } else if (avgFps >= 38) {
       grade = 'A';
       gradeColor = 'text-yellow-400 border-yellow-500 bg-yellow-950';
-      assessment = 'TỐT / MƯỢT MÀ! Đáp ứng đầy đủ mượt mà trải nghiệm xem truyền hình Vplay và các hiệu ứng động giao diện ở chất lượng tiêu chuẩn.';
+      assessment = 'GOOD / SMOOTH! Fully meets all performance requirements for playing Craftmine sandbox editions with standard Ore UI animation quality.';
     } else if (avgFps >= 25) {
       grade = 'B';
       gradeColor = 'text-orange-400 border-orange-500 bg-orange-950';
-      assessment = 'TRUNG BÌNH! Thiết bị phản hồi khá ổn, tuy nhiên có thể xuất hiện độ trễ nhẹ khi thực hiện các tác vụ chuyển cảnh phức tạp hoặc xử lý luồng nặng.';
+      assessment = 'MODERATE! Decent responsiveness, though slight latency may occur during intense particle effects or fast scene transitions.';
     } else if (avgFps >= 15) {
       grade = 'C';
       gradeColor = 'text-red-400 border-red-500 bg-red-950';
-      assessment = 'YẾU / KHUYẾN CÁO! Tốc độ khung hình thấp và có độ trễ nhận thấy rõ. Nên bật tùy chọn "Giảm chuyển động (Reduce motion)" trong Cài đặt Vplay.';
+      assessment = 'LOW / ADVISORY! Low frame rates and noticeable input lag. Enabling "Reduce motion" in Settings is recommended for smoother navigation.';
     } else {
       grade = 'D';
       gradeColor = 'text-rose-500 border-rose-600 bg-rose-950';
-      assessment = 'CẢNH BÁO POTATO! Phần cứng thiết bị đang gặp quá tải nghiêm trọng. Hãy đóng các ứng dụng chạy ngầm khác để đảm bảo trải nghiệm tốt hơn.';
+      assessment = 'POTATO WARNING! System hardware is under severe load. Closing background applications will improve playback and overall stability.';
     }
 
     // Score calculation
@@ -540,7 +540,7 @@ Date: ${new Date().toLocaleString()}
         <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 animate-fade-in overflow-y-auto">
           <div className="bg-[#484a4c] border-2 border-[#6c6e70] w-full max-w-md sm:max-w-lg shadow-2xl text-white font-montserrat select-none flex flex-col h-[82vh] sm:h-[85vh] max-h-[640px] my-auto overflow-hidden">
             
-            {/* PHẦN 1: HEADER (Title not uppercase, enlarged pixel buttons) */}
+            {/* PART 1: HEADER (Title not uppercase, enlarged pixel buttons) */}
             <div className="bg-[#484a4c] border-b-2 border-[#1c1d1f] px-3.5 py-2 sm:py-2.5 flex items-center justify-between flex-shrink-0">
               <button
                 onMouseDown={() => playPopSound()}
@@ -556,7 +556,7 @@ Date: ${new Date().toLocaleString()}
               </button>
               
               <h2 className="text-sm sm:text-base font-bold text-white font-montserrat text-center flex-1 tracking-tight">
-                Cấu hình Performance Test
+                Performance Test Configuration
               </h2>
 
               <button
@@ -573,11 +573,11 @@ Date: ${new Date().toLocaleString()}
               </button>
             </div>
 
-            {/* PHẦN 2: PHẦN CHÍNH (Nền tối hơn #222426, luôn scrollable) */}
+            {/* PART 2: MAIN CONTENT */}
             <div className="p-4 space-y-4 bg-[#222426] flex-1 overflow-y-scroll custom-scrollbar text-xs">
               
               <p className="text-xs text-gray-200 leading-relaxed font-normal">
-                Tùy chỉnh số lượng hạt (Particles) và thời gian kiểm tra hiệu năng hệ thống với bài stress test GPU/CPU thời gian thực.
+                Customize particle counts and test duration to evaluate system performance with real-time GPU/CPU stress testing.
               </p>
 
               {/* Setting 1: Particles Count */}
@@ -585,15 +585,15 @@ Date: ${new Date().toLocaleString()}
                 <div className="flex items-center justify-between font-jura">
                   <span className="font-bold text-xs text-white tracking-wider flex items-center gap-1.5 uppercase">
                     <Sparkles className="w-4 h-4 text-[#89dc69]" />
-                    SỐ LƯỢNG PARTICLES
+                    PARTICLE COUNT
                   </span>
                   <span className="text-[#89dc69] font-mono text-xs bg-[#17181a] border-2 border-[#101112] px-2.5 py-0.5 font-bold shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]">
-                    {customParticles.toLocaleString()} hạt
+                    {customParticles.toLocaleString()} particles
                   </span>
                 </div>
 
                 <p className="text-[11px] text-gray-300 font-normal leading-normal">
-                  Kích hoạt hiệu ứng vật lý hạt chuyển động đa sắc. Số lượng hạt càng lớn thì GPU càng chịu mức tải cao.
+                  Simulates multi-color physics-based particle dynamics. Higher particle counts increase GPU rasterization workload.
                 </p>
 
                 <VplaySlider
@@ -608,7 +608,7 @@ Date: ${new Date().toLocaleString()}
 
                 {/* Quick Presets */}
                 <div className="flex flex-wrap items-center gap-1.5 pt-1">
-                  <span className="text-[10px] text-gray-400 font-mono uppercase mr-1">Mức nhanh:</span>
+                  <span className="text-[10px] text-gray-400 font-mono uppercase mr-1">Presets:</span>
                   {[500, 1200, 2500, 5000, 8000, 10000].map((preset) => (
                     <button
                       key={preset}
@@ -633,15 +633,15 @@ Date: ${new Date().toLocaleString()}
                 <div className="flex items-center justify-between font-jura">
                   <span className="font-bold text-xs text-white tracking-wider flex items-center gap-1.5 uppercase">
                     <Timer className="w-4 h-4 text-yellow-400" />
-                    THỜI GIAN KIỂM TRA (GIÂY)
+                    TEST DURATION (SECONDS)
                   </span>
                   <span className="text-yellow-400 font-mono text-xs bg-[#17181a] border-2 border-[#101112] px-2.5 py-0.5 font-bold shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]">
-                    {customDurationSec} giây
+                    {customDurationSec} seconds
                   </span>
                 </div>
 
                 <p className="text-[11px] text-gray-300 font-normal leading-normal">
-                  Thời gian chạy benchmark để thu thập mẫu dữ liệu FPS, độ trễ khung hình và dung lượng RAM tiêu thụ.
+                  Benchmark execution duration for sampling FPS, frame latency variance, and RAM consumption.
                 </p>
 
                 <VplaySlider
@@ -656,7 +656,7 @@ Date: ${new Date().toLocaleString()}
 
                 {/* Quick Presets */}
                 <div className="flex flex-wrap items-center gap-1.5 pt-1">
-                  <span className="text-[10px] text-gray-400 font-mono uppercase mr-1">Mức nhanh:</span>
+                  <span className="text-[10px] text-gray-400 font-mono uppercase mr-1">Presets:</span>
                   {[5, 10, 15, 30, 60].map((sec) => (
                     <button
                       key={sec}
@@ -681,7 +681,7 @@ Date: ${new Date().toLocaleString()}
                 <div className="flex items-center justify-between font-jura">
                   <span className="font-bold text-xs text-white tracking-wider flex items-center gap-1.5 uppercase">
                     <Sliders className="w-4 h-4 text-cyan-400" />
-                    MỨC TẢI CẤU TRÚC 3D & MA TRẬN CPU
+                    3D CUBE & CPU MATRIX WORKLOAD
                   </span>
                   <span className="text-cyan-400 font-mono text-xs bg-[#17181a] border-2 border-[#101112] px-2.5 py-0.5 font-bold shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]">
                     {stressLevel}X LOAD
@@ -689,7 +689,7 @@ Date: ${new Date().toLocaleString()}
                 </div>
 
                 <p className="text-[11px] text-gray-300 font-normal leading-normal">
-                  Tăng gấp đôi khối 3D lập phương xoay không gian và ma trận tính toán số học trên CPU.
+                  Scales 3D spinning voxel cubes and simultaneous floating-point arithmetic matrix operations on the CPU.
                 </p>
 
                 <div className="grid grid-cols-5 gap-2 pt-1">
@@ -720,14 +720,14 @@ Date: ${new Date().toLocaleString()}
               <div className="w-full h-[1px] bg-[#5e6266]" />
             </div>
 
-            {/* PHẦN 3: PHẦN NÚT (Nếu có 2 nút thì xếp mỗi nút 1 dòng) */}
+            {/* PART 3: ACTION BUTTONS */}
             <div className="p-3.5 sm:p-4 bg-[#424446] flex flex-col gap-2.5 w-full flex-shrink-0">
               <VplayPrimaryButton
                 size="normal"
                 fullWidth={true}
                 onClick={handleStartFromSetup}
               >
-                Bắt đầu Test Performance
+                Start Performance Test
               </VplayPrimaryButton>
 
               <VplaySecondaryButton
@@ -739,7 +739,7 @@ Date: ${new Date().toLocaleString()}
                   onClose();
                 }}
               >
-                Hủy bỏ
+                Cancel
               </VplaySecondaryButton>
             </div>
 
@@ -805,7 +805,7 @@ Date: ${new Date().toLocaleString()}
               }}
             >
               <Sliders className="w-3.5 h-3.5" />
-              <span>CẤU HÌNH</span>
+              <span>CONFIGURE</span>
             </VplaySecondaryButton>
 
             {isTesting && (
@@ -880,7 +880,7 @@ Date: ${new Date().toLocaleString()}
             <div>• Particles: <span className="text-white font-bold">{customParticles.toLocaleString()}</span></div>
             <div>• Duration: <span className="text-yellow-400 font-bold">{customDurationSec}s</span></div>
             <div>• 3D Cubes: <span className="text-white font-bold">{stressLevel * 4}</span></div>
-            <div className="text-[#89dc69] italic pt-0.5">💡 Di chuột / Vuốt màn hình để tương tác lực hạt</div>
+            <div className="text-[#89dc69] italic pt-0.5">💡 Move mouse / swipe to exert particle force</div>
           </div>
         </div>
       )}
@@ -890,12 +890,12 @@ Date: ${new Date().toLocaleString()}
         <div className="absolute inset-0 z-40 flex items-center justify-center p-3 sm:p-6 bg-black/80 animate-fade-in overflow-y-auto">
           <div className="bg-[#484a4c] border-2 border-[#6c6e70] w-full max-w-xl shadow-2xl text-white font-montserrat select-none flex flex-col h-[85vh] max-h-[680px] my-auto overflow-hidden">
             
-            {/* PHẦN 1: HEADER (Title not uppercase, enlarged pixel buttons) */}
+            {/* PART 1: HEADER */}
             <div className="bg-[#484a4c] border-b-2 border-[#1c1d1f] px-3.5 py-2.5 flex items-center justify-between flex-shrink-0">
               <div className="flex items-center gap-2">
                 <Gauge className="w-5 h-5 text-[#89dc69]" />
                 <h2 className="text-sm sm:text-base font-bold text-white font-montserrat tracking-tight">
-                  Báo cáo Benchmark Performance
+                  Benchmark Performance Report
                 </h2>
               </div>
 
@@ -913,7 +913,7 @@ Date: ${new Date().toLocaleString()}
               </button>
             </div>
 
-            {/* PHẦN 2: PHẦN CHÍNH (Nền tối hơn #222426, luôn scrollable) */}
+            {/* PART 2: MAIN CONTENT */}
             <div className="p-4 sm:p-5 space-y-4 bg-[#222426] flex-1 overflow-y-scroll custom-scrollbar text-xs">
               
               {/* GRADE BADGE & OVERALL SCORE BOX */}
@@ -950,44 +950,44 @@ Date: ${new Date().toLocaleString()}
               {/* DETAILED STATS GRID */}
               <div className="space-y-1.5">
                 <div className="text-xs font-bold text-gray-200 uppercase font-jura tracking-wider border-b border-[#141414] pb-1">
-                  CHI TIẾT THÔNG SỐ ĐO ĐẠC
+                  DETAILED BENCHMARK METRICS
                 </div>
 
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 font-mono text-xs">
                   
                   {/* Average FPS */}
                   <div className="bg-[#1a1c1e] p-2.5 border border-[#141414] space-y-0.5">
-                    <div className="text-[9px] text-gray-400 font-sans">FPS TRUNG BÌNH</div>
+                    <div className="text-[9px] text-gray-400 font-sans">AVERAGE FPS</div>
                     <div className="text-sm font-bold text-[#89dc69]">{benchmarkResult.avgFps} FPS</div>
                   </div>
 
                   {/* Min / Max FPS */}
                   <div className="bg-[#1a1c1e] p-2.5 border border-[#141414] space-y-0.5">
-                    <div className="text-[9px] text-gray-400 font-sans">FPS MIN / MAX</div>
+                    <div className="text-[9px] text-gray-400 font-sans">MIN / MAX FPS</div>
                     <div className="text-sm font-bold text-white">{benchmarkResult.minFps} / {benchmarkResult.maxFps}</div>
                   </div>
 
                   {/* Frame Latency */}
                   <div className="bg-[#1a1c1e] p-2.5 border border-[#141414] space-y-0.5">
-                    <div className="text-[9px] text-gray-400 font-sans">ĐỘ TRỄ KHUNG HÌNH</div>
+                    <div className="text-[9px] text-gray-400 font-sans">FRAME LATENCY</div>
                     <div className="text-sm font-bold text-yellow-400">{benchmarkResult.avgFrameTimeMs} ms</div>
                   </div>
 
                   {/* Frame Jitter */}
                   <div className="bg-[#1a1c1e] p-2.5 border border-[#141414] space-y-0.5">
-                    <div className="text-[9px] text-gray-400 font-sans">ĐỘ BIẾN ĐỘNG (JITTER)</div>
+                    <div className="text-[9px] text-gray-400 font-sans">FRAME JITTER</div>
                     <div className="text-sm font-bold text-white">±{benchmarkResult.jitterMs} ms</div>
                   </div>
 
                   {/* RAM Memory */}
                   <div className="bg-[#1a1c1e] p-2.5 border border-[#141414] space-y-0.5">
-                    <div className="text-[9px] text-gray-400 font-sans">BỘ NHỚ RAM DÙNG</div>
+                    <div className="text-[9px] text-gray-400 font-sans">MEMORY USAGE</div>
                     <div className="text-sm font-bold text-cyan-400">{benchmarkResult.memoryMb} MB</div>
                   </div>
 
                   {/* CPU Matrix Ops */}
                   <div className="bg-[#1a1c1e] p-2.5 border border-[#141414] space-y-0.5">
-                    <div className="text-[9px] text-gray-400 font-sans">P.TÍNH CPU KHỞI CHẠY</div>
+                    <div className="text-[9px] text-gray-400 font-sans">CPU OPS EXECUTED</div>
                     <div className="text-sm font-bold text-[#89dc69]">{benchmarkResult.totalMatrixOps.toLocaleString()}</div>
                   </div>
 
@@ -998,7 +998,7 @@ Date: ${new Date().toLocaleString()}
               <div className="bg-[#1a1c1e] border-2 border-[#141414] p-3 space-y-1">
                 <div className="text-[10px] font-bold text-gray-300 uppercase font-jura flex items-center gap-1.5">
                   <Cpu className="w-3.5 h-3.5 text-[#89dc69]" />
-                  <span>ĐÁNH GIÁ CẤU HÌNH PHẦN CỨNG THIẾT BỊ</span>
+                  <span>HARDWARE PERFORMANCE ASSESSMENT</span>
                 </div>
                 <p className="text-xs text-gray-200 leading-relaxed font-normal">
                   {benchmarkResult.assessment}
@@ -1013,7 +1013,7 @@ Date: ${new Date().toLocaleString()}
               <div className="w-full h-[1px] bg-[#5e6266]" />
             </div>
 
-            {/* PHẦN 3: PHẦN NÚT (Mỗi nút 1 dòng) */}
+            {/* PART 3: ACTION BUTTONS */}
             <div className="p-3.5 sm:p-4 bg-[#424446] flex flex-col gap-2.5 w-full flex-shrink-0">
               <VplayPrimaryButton
                 size="normal"
@@ -1024,7 +1024,7 @@ Date: ${new Date().toLocaleString()}
                   onClose();
                 }}
               >
-                Hoàn tất & Đóng
+                Done & Close
               </VplayPrimaryButton>
 
               <VplaySecondaryButton
@@ -1035,7 +1035,7 @@ Date: ${new Date().toLocaleString()}
                   startStressTest();
                 }}
               >
-                Thử lại (Retest)
+                Retest Benchmark
               </VplaySecondaryButton>
 
               <VplaySecondaryButton
@@ -1047,7 +1047,7 @@ Date: ${new Date().toLocaleString()}
                   setShowSetupModal(true);
                 }}
               >
-                Cấu hình lại
+                Reconfigure Test
               </VplaySecondaryButton>
 
               <VplaySecondaryButton
@@ -1055,7 +1055,7 @@ Date: ${new Date().toLocaleString()}
                 fullWidth={true}
                 onClick={handleCopyReport}
               >
-                {copied ? 'Đã sao chép báo cáo!' : 'Sao chép báo cáo'}
+                {copied ? 'Report Copied to Clipboard!' : 'Copy Benchmark Report'}
               </VplaySecondaryButton>
             </div>
 

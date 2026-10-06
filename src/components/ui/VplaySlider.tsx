@@ -55,9 +55,14 @@ export const VplaySlider: React.FC<VplaySliderProps> = ({
     onChange?.(newVal);
   };
 
+  const handlePointerDown = () => {
+    if (effectiveDisabled) return;
+    setIsPressed(true);
+    playPopSound();
+  };
+
   const handlePointerUp = () => {
     setIsPressed(false);
-    playPopSound();
   };
 
   let activeSegmentBg = 'bg-[#418a28] shadow-[inset_0_1px_0_#6bc34b]';
@@ -109,9 +114,9 @@ export const VplaySlider: React.FC<VplaySliderProps> = ({
       <div
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => { setIsHovered(false); setIsPressed(false); }}
-        onMouseDown={() => setIsPressed(true)}
+        onMouseDown={handlePointerDown}
         onMouseUp={handlePointerUp}
-        onTouchStart={() => setIsPressed(true)}
+        onTouchStart={handlePointerDown}
         onTouchEnd={handlePointerUp}
         className="relative flex items-center h-8 select-none outline-none cursor-pointer px-1"
       >

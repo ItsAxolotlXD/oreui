@@ -24,7 +24,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { id: 'settings', label: 'Settings' },
   ];
 
-  // Navigate left/right with bumper brackets
+  // Navigate left/right with bumper brackets - only play sound on press down
   const handlePrevTab = () => {
     playPopSound();
     const currentIndex = menuItems.findIndex((m) => m.id === activeItem);
@@ -46,7 +46,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
         
         {/* Left Bumper Bracket [ */}
         <button
-          onClick={handlePrevTab}
+          onMouseDown={handlePrevTab}
+          onTouchStart={handlePrevTab}
           title="Previous Tab"
           aria-label="Previous Tab"
           className="flex sm:hidden items-center justify-center bg-[#cdd1d4] hover:bg-[#e2e5e8] active:bg-[#abafb3] text-[#141414] font-minecraft-seven text-xs px-2.5 py-2 border-2 border-[#141414] shadow-[inset_2px_2px_0_#ffffff,inset_-2px_-2px_0_#9ea2a6] flex-shrink-0 cursor-pointer z-10"
@@ -80,7 +81,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
         {/* Right Bumper Bracket ] */}
         <button
-          onClick={handleNextTab}
+          onMouseDown={handleNextTab}
+          onTouchStart={handleNextTab}
           title="Next Tab"
           aria-label="Next Tab"
           className="flex sm:hidden items-center justify-center bg-[#cdd1d4] hover:bg-[#e2e5e8] active:bg-[#abafb3] text-[#141414] font-minecraft-seven text-xs px-2.5 py-2 border-2 border-[#141414] shadow-[inset_2px_2px_0_#ffffff,inset_-2px_-2px_0_#9ea2a6] flex-shrink-0 cursor-pointer z-10"

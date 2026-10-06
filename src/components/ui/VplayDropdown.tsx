@@ -107,7 +107,13 @@ export const VplayDropdown: React.FC<VplayDropdownProps> = ({
           {options.map((opt) => (
             <div
               key={opt.value}
-              onClick={() => {
+              onMouseDown={() => {
+                playPopSound();
+                setSelected(opt.value);
+                onChange?.(opt.value);
+                setIsOpen(false);
+              }}
+              onTouchStart={() => {
                 playPopSound();
                 setSelected(opt.value);
                 onChange?.(opt.value);

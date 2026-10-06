@@ -34,9 +34,14 @@ export const VplayCheckbox: React.FC<VplayCheckboxProps> = ({
     isHovered ? 'hovered' : 'normal'
   );
 
+  const handlePointerDown = () => {
+    if (effectiveDisabled) return;
+    setIsPressed(true);
+    playPopSound();
+  };
+
   const handleClick = () => {
     if (effectiveDisabled) return;
-    playPopSound();
     const next = !isChecked;
     if (forcedChecked === undefined) {
       setInternalChecked(next);
@@ -90,8 +95,10 @@ export const VplayCheckbox: React.FC<VplayCheckboxProps> = ({
       onClick={handleClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => { setIsHovered(false); setIsPressed(false); }}
-      onMouseDown={() => setIsPressed(true)}
+      onMouseDown={handlePointerDown}
       onMouseUp={() => setIsPressed(false)}
+      onTouchStart={handlePointerDown}
+      onTouchEnd={() => setIsPressed(false)}
       className={`inline-flex items-center gap-2 cursor-pointer select-none ${effectiveDisabled ? 'cursor-not-allowed opacity-90' : ''} ${className}`}
     >
       <div

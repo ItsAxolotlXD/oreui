@@ -51,42 +51,20 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   const [showPerfTestModal, setShowPerfTestModal] = useState(false);
   const [devKeyInput, setDevKeyInput] = useState('');
   const [devKeyStatus, setDevKeyStatus] = useState<string | null>(null);
-  const [exported, setExported] = useState(false);
-
-  const handleExportData = () => {
-    playPopSound();
-    const configData = JSON.stringify(temp, null, 2);
-    const blob = new Blob([configData], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.setAttribute('download', 'craftmine_settings.json');
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-
-    setExported(true);
-    setTimeout(() => setExported(false), 2000);
-  };
 
   const handleToggleDisablePanorama = () => {
-    playPopSound();
     setTemp((prev) => ({ ...prev, disablePanorama: !prev.disablePanorama }));
   };
 
   const handleToggleLockPanorama = () => {
-    playPopSound();
     setTemp((prev) => ({ ...prev, lockPanoramaScroll: !prev.lockPanoramaScroll }));
   };
 
   const handleToggleReduceMotion = () => {
-    playPopSound();
     setTemp((prev) => ({ ...prev, reduceMotion: !prev.reduceMotion }));
   };
 
   const handleResetDefault = () => {
-    playPopSound();
     const def: UserSettings = {
       autoPlay: true,
       subtitles: true,
@@ -136,10 +114,8 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           />
           {settingSearch && (
             <button
-              onClick={() => {
-                playPopSound();
-                setSettingSearch('');
-              }}
+              onMouseDown={() => playPopSound()}
+              onClick={() => setSettingSearch('')}
               className="absolute right-3 text-gray-400 hover:text-white text-xs px-1 cursor-pointer font-bold z-10"
             >
               ✕
@@ -266,14 +242,13 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         </div>
       )}
 
-      {/* SUBHEADING: ACCOUNT & PROFILE */}
-      {(matchesSearch('Gamertag') ||
-        matchesSearch('Sign in with Craftmine account') ||
-        matchesSearch('ACCOUNT & PROFILE')) && (
+      {/* SUBHEADING: ACCOUNT & SIGN IN (Player Gamertag removed as requested) */}
+      {(matchesSearch('Sign in with Craftmine account') ||
+        matchesSearch('ACCOUNT')) && (
         <div>
           <div className="px-3 sm:px-4 py-2 bg-[#3d4043]">
             <h3 className="text-xs uppercase text-gray-200 font-minecraft-ten">
-              ACCOUNT & PROFILE
+              ACCOUNT
             </h3>
           </div>
 
@@ -294,10 +269,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                 <div className="w-24 flex-shrink-0">
                   <VplaySecondaryButton
                     size="sm"
-                    onClick={() => {
-                      playPopSound();
-                      setShowComingSoonModal(true);
-                    }}
+                    onClick={() => setShowComingSoonModal(true)}
                     className="w-full text-center"
                   >
                     Sign in
@@ -307,33 +279,10 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
               <SettingsDivider />
             </>
           )}
-
-          {/* Gamertag / User Name */}
-          {matchesSearch('Gamertag', 'User Display Name') && (
-            <>
-              <div className="px-3 sm:px-4 py-2.5 hover:bg-[#525559] transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                <div>
-                  <div className="text-xs text-white font-minecraft-ten">Player Gamertag</div>
-                  <div className="text-[10px] text-gray-300 font-minecraft-seven">
-                    Display name shown inside The Craftmine application.
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="text"
-                    value={temp.searchQuery}
-                    onChange={(e) => setTemp({ ...temp, searchQuery: e.target.value })}
-                    className="w-40 h-8 bg-[#222426] text-white px-2.5 py-1 text-xs font-minecraft-seven border-2 border-[#141414] focus:outline-none focus:border-white shadow-[inset_0_2px_0_rgba(0,0,0,0.4)] cursor-pointer"
-                  />
-                </div>
-              </div>
-              <SettingsDivider />
-            </>
-          )}
         </div>
       )}
 
-      {/* SUBHEADING 5: DEVELOPER OPTIONS */}
+      {/* SUBHEADING: DEVELOPER OPTIONS (Export settings removed as requested) */}
       {(matchesSearch('Performance test') ||
         matchesSearch('Ore UI design components') ||
         matchesSearch('Design components') ||
@@ -367,20 +316,14 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                   {isDeveloperUnlocked ? (
                     <VplaySecondaryButton
                       size="sm"
-                      onClick={() => {
-                        playPopSound();
-                        onToggleDeveloperUnlocked?.(false);
-                      }}
+                      onClick={() => onToggleDeveloperUnlocked?.(false)}
                     >
                       Disable features
                     </VplaySecondaryButton>
                   ) : (
                     <VplaySecondaryButton
                       size="sm"
-                      onClick={() => {
-                        playPopSound();
-                        setShowDevKeyModal(true);
-                      }}
+                      onClick={() => setShowDevKeyModal(true)}
                     >
                       Enter password
                     </VplaySecondaryButton>
@@ -407,10 +350,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                 <div className="w-24 flex-shrink-0">
                   <VplaySecondaryButton
                     size="sm"
-                    onClick={() => {
-                      playPopSound();
-                      setShowPerfTestModal(true);
-                    }}
+                    onClick={() => setShowPerfTestModal(true)}
                   >
                     Test
                   </VplaySecondaryButton>
@@ -420,7 +360,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             </>
           )}
 
-          {/* Item 2: Ore UI design components */}
+          {/* Item 3: Ore UI design components */}
           {(matchesSearch('Ore UI design components') ||
             matchesSearch('Design components')) && (
             <>
@@ -435,36 +375,10 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                   <VplaySecondaryButton
                     size="sm"
                     onClick={() => {
-                      playPopSound();
                       if (onOpenDesignSystem) onOpenDesignSystem();
                     }}
                   >
                     Open
-                  </VplaySecondaryButton>
-                </div>
-              </div>
-              <SettingsDivider />
-            </>
-          )}
-
-          {/* Item 3: Export configuration (.json) */}
-          {(matchesSearch('Export settings (.json)') ||
-            matchesSearch('Export settings') ||
-            matchesSearch('json')) && (
-            <>
-              <div className="px-3 sm:px-4 py-2.5 hover:bg-[#525559] transition-colors flex items-center justify-between gap-3">
-                <div>
-                  <div className="text-xs text-white font-minecraft-ten">Export settings (.json)</div>
-                  <div className="text-[10px] text-gray-300 font-minecraft-seven">
-                    Download backup configuration file for The Craftmine in .json format.
-                  </div>
-                </div>
-                <div className="w-24 flex-shrink-0">
-                  <VplaySecondaryButton
-                    size="sm"
-                    onClick={handleExportData}
-                  >
-                    {exported ? 'Exported!' : 'Export'}
                   </VplaySecondaryButton>
                 </div>
               </div>
@@ -516,10 +430,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             <div className="bg-[#484a4c] border-b-2 border-[#1c1d1f] px-3.5 py-2.5 flex items-center justify-between flex-shrink-0">
               <button
                 onMouseDown={() => playPopSound()}
-                onClick={() => {
-                  playPopSound();
-                  setShowComingSoonModal(false);
-                }}
+                onClick={() => setShowComingSoonModal(false)}
                 className="w-8 h-8 flex items-center justify-center text-gray-200 hover:text-white font-mono text-2xl cursor-pointer hover:bg-[#383b3e] active:bg-[#1f2022] border-2 border-transparent hover:border-[#141414] transition-all"
                 title="Back"
               >
@@ -532,10 +443,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
               <button
                 onMouseDown={() => playPopSound()}
-                onClick={() => {
-                  playPopSound();
-                  setShowComingSoonModal(false);
-                }}
+                onClick={() => setShowComingSoonModal(false)}
                 className="w-8 h-8 flex items-center justify-center text-gray-200 hover:text-white font-mono text-lg sm:text-xl cursor-pointer hover:bg-[#383b3e] active:bg-[#1f2022] border-2 border-transparent hover:border-[#141414] transition-all"
                 title="Close"
               >
@@ -557,10 +465,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
               <VplaySecondaryButton
                 size="normal"
                 fullWidth={true}
-                onClick={() => {
-                  playPopSound();
-                  setShowComingSoonModal(false);
-                }}
+                onClick={() => setShowComingSoonModal(false)}
               >
                 Got it
               </VplaySecondaryButton>
@@ -580,7 +485,6 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
               <button
                 onMouseDown={() => playPopSound()}
                 onClick={() => {
-                  playPopSound();
                   setShowDevKeyModal(false);
                   setDevKeyInput('');
                   setDevKeyStatus(null);
@@ -598,7 +502,6 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
               <button
                 onMouseDown={() => playPopSound()}
                 onClick={() => {
-                  playPopSound();
                   setShowDevKeyModal(false);
                   setDevKeyInput('');
                   setDevKeyStatus(null);
@@ -648,7 +551,6 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                 size="normal"
                 fullWidth={true}
                 onClick={() => {
-                  playPopSound();
                   if (devKeyInput.trim() === '366761') {
                     setDevKeyStatus('Unlocked restricted features successfully!');
                     onToggleDeveloperUnlocked?.(true);
@@ -669,7 +571,6 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                 size="normal"
                 fullWidth={true}
                 onClick={() => {
-                  playPopSound();
                   setShowDevKeyModal(false);
                   setDevKeyInput('');
                   setDevKeyStatus(null);

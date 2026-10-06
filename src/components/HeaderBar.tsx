@@ -2,26 +2,20 @@ import React from 'react';
 import { playPopSound } from '../utils/sound';
 
 interface HeaderBarProps {
-  title?: string;
   onBack?: () => void;
   onSearchClick?: () => void;
-  searchValue?: string;
-  onSearchChange?: (val: string) => void;
 }
 
 export const HeaderBar: React.FC<HeaderBarProps> = ({
-  title = 'HOME',
   onBack,
   onSearchClick,
 }) => {
-  const handleBack = () => {
+  const handleBackPress = () => {
     playPopSound();
-    onBack?.();
   };
 
-  const handleSearchClick = () => {
+  const handleSearchPress = () => {
     playPopSound();
-    onSearchClick?.();
   };
 
   return (
@@ -29,7 +23,9 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
       {/* Left controls: Chevron Left (<) */}
       <div className="flex items-center gap-0.5 sm:gap-1 min-w-[36px]">
         <button
-          onClick={handleBack}
+          onMouseDown={handleBackPress}
+          onTouchStart={handleBackPress}
+          onClick={onBack}
           aria-label="Back"
           className="p-1 hover:bg-[#cecece] active:bg-[#bebebe] btn-press-effect text-[#141414] cursor-pointer rounded-none flex items-center justify-center"
           title="Back"
@@ -44,8 +40,8 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
         </button>
       </div>
 
-      {/* Center: Craftmine Logo in the middle */}
-      <div className="flex items-center justify-center gap-2 flex-1 mx-2">
+      {/* Center: Craftmine Logo in the middle (Tab name removed as requested) */}
+      <div className="flex items-center justify-center flex-1 mx-2">
         <img
           src="https://static.wikia.nocookie.net/ep-deo/images/7/7a/Craftmine.png/revision/latest/scale-to-width-down/1000?cb=20261004160440"
           alt="The Craftmine"
@@ -53,20 +49,17 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
           className="h-6 sm:h-7 md:h-8 w-auto max-w-[200px] sm:max-w-[280px] object-contain [image-rendering:pixelated] select-none filter drop-shadow-sm"
           style={{ imageRendering: 'pixelated' }}
         />
-        {title && title !== 'HOME' && (
-          <span className="hidden md:inline-block bg-[#1c1d1f] text-[#89dc69] text-[10px] font-minecraft-ten px-2 py-0.5 border border-[#141414] uppercase shadow-sm">
-            {title}
-          </span>
-        )}
       </div>
 
-      {/* Right controls: Custom Search Icon or Info */}
+      {/* Right controls: Universal Search Button */}
       <div className="flex items-center gap-1 min-w-[36px] justify-end">
         <button
-          onClick={handleSearchClick}
-          aria-label="Search"
+          onMouseDown={handleSearchPress}
+          onTouchStart={handleSearchPress}
+          onClick={onSearchClick}
+          aria-label="Universal Search"
           className="p-1 hover:bg-[#cecece] active:bg-[#bebebe] btn-press-effect text-[#141414] cursor-pointer rounded-none flex items-center justify-center"
-          title="Feedback & Search"
+          title="Search all aspects of Craftmine"
         >
           <img
             src="https://static.wikia.nocookie.net/ep-deo/images/c/c8/MagnifyingGlass-52f96e5f47f42e682a00.png/revision/latest?cb=20260723030208"

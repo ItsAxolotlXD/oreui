@@ -127,13 +127,11 @@ export const ReleaseNotesView: React.FC<ReleaseNotesViewProps> = ({
   const selectedArticle = ARTICLES_LIST.find((a) => a.id === selectedArticleId);
 
   const handleSelectArticle = (id: string) => {
-    playPopSound();
     setSelectedArticleId(id);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleBackToList = () => {
-    playPopSound();
     setSelectedArticleId(null);
   };
 
@@ -185,10 +183,8 @@ export const ReleaseNotesView: React.FC<ReleaseNotesViewProps> = ({
             />
             {searchQuery && (
               <button
-                onClick={() => {
-                  playPopSound();
-                  setSearchQuery('');
-                }}
+                onMouseDown={() => playPopSound()}
+                onClick={() => setSearchQuery('')}
                 className="absolute right-3 text-gray-400 hover:text-white text-xs px-1 cursor-pointer font-bold z-10"
               >
                 ✕
@@ -205,6 +201,7 @@ export const ReleaseNotesView: React.FC<ReleaseNotesViewProps> = ({
           {/* TOP BACK BAR */}
           <div className="flex items-center justify-between bg-[#35383b] border-2 border-[#141414] p-3 shadow-md">
             <button
+              onMouseDown={() => playPopSound()}
               onClick={handleBackToList}
               className="flex items-center gap-2 bg-[#2a2c2f] hover:bg-[#34373b] active:bg-[#1a1b1d] text-white px-3 py-1.5 border-2 border-[#141414] text-xs font-minecraft-seven cursor-pointer btn-press-effect"
             >
@@ -214,11 +211,9 @@ export const ReleaseNotesView: React.FC<ReleaseNotesViewProps> = ({
 
             {selectedArticle.editionId && onPlayEdition && (
               <button
-                onClick={() => {
-                  playPopSound();
-                  onPlayEdition(selectedArticle.editionId!);
-                }}
-                className="flex items-center gap-1.5 bg-[#418a28] hover:bg-[#52a634] text-white px-3 py-1.5 border-2 border-[#141414] text-xs font-minecraft-seven cursor-pointer shadow-[inset_1px_1px_0_#89dc69]"
+                onMouseDown={() => playPopSound()}
+                onClick={() => onPlayEdition(selectedArticle.editionId!)}
+                className="flex items-center gap-1.5 bg-[#418a28] hover:bg-[#52a634] text-white px-3 py-1.5 border-2 border-[#141414] text-xs font-minecraft-ten cursor-pointer shadow-[inset_1px_1px_0_#89dc69]"
               >
                 <Play className="w-3.5 h-3.5 fill-current" />
                 <span>PLAY BASE44 EDITION NOW</span>
@@ -263,14 +258,14 @@ export const ReleaseNotesView: React.FC<ReleaseNotesViewProps> = ({
               />
             </div>
 
-            {/* ARTICLE BODY SECTIONS */}
+            {/* ARTICLE BODY SECTIONS (REMOVED # AND ## SYMBOLS AS REQUESTED) */}
             <div className="space-y-8 pt-2">
               {/* SECTION: FEATURES */}
               <section className="space-y-4">
                 <div className="flex items-center gap-2 border-b-2 border-[#418a28] pb-1.5">
                   <span className="w-3 h-3 bg-[#89dc69] inline-block border border-[#141414]" />
                   <h2 className="text-lg sm:text-xl font-minecraft-ten tracking-wider text-white">
-                    # FEATURES
+                    FEATURES
                   </h2>
                 </div>
 
@@ -279,7 +274,7 @@ export const ReleaseNotesView: React.FC<ReleaseNotesViewProps> = ({
                     <div key={idx} className="space-y-2 bg-[#25272a] p-3.5 border border-[#141414]">
                       <h3 className="text-xs sm:text-sm text-[#89dc69] font-minecraft-ten uppercase tracking-wider flex items-center gap-1.5">
                         <Sparkles className="w-3.5 h-3.5 text-[#89dc69]" />
-                        <span>## {cat.category}</span>
+                        <span>{cat.category}</span>
                       </h3>
                       <ul className="space-y-1.5 pl-4 sm:pl-6 text-xs sm:text-sm text-gray-200 list-disc marker:text-[#89dc69]">
                         {cat.items.map((item, itemIdx) => (
@@ -298,7 +293,7 @@ export const ReleaseNotesView: React.FC<ReleaseNotesViewProps> = ({
                 <div className="flex items-center gap-2 border-b-2 border-[#38bdf8] pb-1.5">
                   <span className="w-3 h-3 bg-[#38bdf8] inline-block border border-[#141414]" />
                   <h2 className="text-lg sm:text-xl font-minecraft-ten tracking-wider text-white">
-                    # BUG FIXES
+                    BUG FIXES
                   </h2>
                 </div>
 
@@ -318,7 +313,7 @@ export const ReleaseNotesView: React.FC<ReleaseNotesViewProps> = ({
                 <div className="flex items-center gap-2 border-b-2 border-[#f59e0b] pb-1.5">
                   <span className="w-3 h-3 bg-[#f59e0b] inline-block border border-[#141414]" />
                   <h2 className="text-lg sm:text-xl font-minecraft-ten tracking-wider text-white">
-                    # KNOWN ISSUES
+                    KNOWN ISSUES
                   </h2>
                 </div>
 
@@ -341,6 +336,7 @@ export const ReleaseNotesView: React.FC<ReleaseNotesViewProps> = ({
             {/* BOTTOM ARTICLE ACTIONS */}
             <div className="pt-6 border-t-2 border-[#3d4145] flex flex-wrap items-center justify-between gap-3">
               <button
+                onMouseDown={() => playPopSound()}
                 onClick={handleBackToList}
                 className="bg-[#2a2c2f] hover:bg-[#34373b] text-white px-4 py-2 border-2 border-[#141414] text-xs font-minecraft-seven cursor-pointer btn-press-effect"
               >
@@ -351,10 +347,7 @@ export const ReleaseNotesView: React.FC<ReleaseNotesViewProps> = ({
                 <div className="w-full sm:w-64">
                   <VplayHeroButton
                     fullWidth
-                    onClick={() => {
-                      playPopSound();
-                      onPlayEdition(selectedArticle.editionId!);
-                    }}
+                    onClick={() => onPlayEdition(selectedArticle.editionId!)}
                   >
                     <span>PLAY THIS SNAPSHOT</span>
                   </VplayHeroButton>
@@ -390,10 +383,7 @@ export const ReleaseNotesView: React.FC<ReleaseNotesViewProps> = ({
               </p>
               <div className="w-48 mx-auto pt-2">
                 <VplaySecondaryButton
-                  onClick={() => {
-                    playPopSound();
-                    setSearchQuery('');
-                  }}
+                  onClick={() => setSearchQuery('')}
                 >
                   CLEAR SEARCH
                 </VplaySecondaryButton>
@@ -401,11 +391,12 @@ export const ReleaseNotesView: React.FC<ReleaseNotesViewProps> = ({
             </div>
           ) : (
             <div className="space-y-3">
-              {filteredArticles.map((article, index) => {
+              {filteredArticles.map((article) => {
                 const isLatest = article.id === 'snapshot-26w04-base';
                 return (
                   <div
                     key={article.id}
+                    onMouseDown={() => playPopSound()}
                     onClick={() => handleSelectArticle(article.id)}
                     className={`
                       group relative bg-[#313437] hover:bg-[#393d41] border-2 cursor-pointer transition-all duration-150 p-4 sm:p-5 shadow-lg select-none btn-press-effect overflow-hidden

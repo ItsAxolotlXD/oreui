@@ -47,7 +47,6 @@ export const DesignSystemViewer: React.FC<DesignSystemViewerProps> = ({ onOpenFe
           onClick={() => {
             playPopSound();
             if (onOpenFeedback) onOpenFeedback();
-            else alert('Cảm ơn bạn đã đóng góp ý kiến về The Craftmine!');
           }}
           className="flex items-center gap-2 bg-[#dcdfe2] hover:bg-white text-[#141414] font-extrabold text-xs sm:text-sm px-4 py-2 border-2 border-[#141414] cursor-pointer active:translate-y-[1px] btn-press-effect flex-shrink-0 shadow-[inset_0_1px_0_#ffffff]"
         >
@@ -96,7 +95,7 @@ export const DesignSystemViewer: React.FC<DesignSystemViewerProps> = ({ onOpenFe
           {/* SECTION 1: HERO BUTTON */}
           <section className="bg-[#292a2c] p-6 border-2 border-[#141414] rounded-none">
             <h2 className="text-base sm:text-lg font-bold text-[#89dc69] mb-6 flex items-center gap-2 border-b border-[#3e4145] pb-2">
-              <span className="text-xs text-gray-400">01.</span> HERO BUTTON (Nút xanh lá, uppercase)
+              <span className="text-xs text-gray-400">01.</span> HERO BUTTON (Green Button, Uppercase)
             </h2>
             <div className="space-y-4 max-w-3xl">
               {STATES.map((st) => (
@@ -113,7 +112,7 @@ export const DesignSystemViewer: React.FC<DesignSystemViewerProps> = ({ onOpenFe
           {/* SECTION 2: PRIMARY BUTTON */}
           <section className="bg-[#292a2c] p-6 border-2 border-[#141414] rounded-none">
             <h2 className="text-base sm:text-lg font-bold text-[#89dc69] mb-6 flex items-center gap-2 border-b border-[#3e4145] pb-2">
-              <span className="text-xs text-gray-400">02.</span> Primary button (Nút xanh lá, sentence case)
+              <span className="text-xs text-gray-400">02.</span> Primary button (Green Button, Sentence Case)
             </h2>
             <div className="space-y-4 max-w-3xl">
               {STATES.map((st) => (
@@ -130,7 +129,7 @@ export const DesignSystemViewer: React.FC<DesignSystemViewerProps> = ({ onOpenFe
           {/* SECTION 3: SECONDARY BUTTON */}
           <section className="bg-[#292a2c] p-6 border-2 border-[#141414] rounded-none">
             <h2 className="text-base sm:text-lg font-bold text-gray-200 mb-6 flex items-center gap-2 border-b border-[#3e4145] pb-2">
-              <span className="text-xs text-gray-400">03.</span> Secondary button (Nút trắng)
+              <span className="text-xs text-gray-400">03.</span> Secondary button (Light Button)
             </h2>
             <div className="space-y-4 max-w-3xl">
               {STATES.map((st) => (
@@ -147,7 +146,7 @@ export const DesignSystemViewer: React.FC<DesignSystemViewerProps> = ({ onOpenFe
           {/* SECTION 3B: SECONDARY BUTTON DARK */}
           <section className="bg-[#292a2c] p-6 border-2 border-[#141414] rounded-none">
             <h2 className="text-base sm:text-lg font-bold text-gray-200 mb-6 flex items-center gap-2 border-b border-[#3e4145] pb-2">
-              <span className="text-xs text-gray-400">03B.</span> Secondary button dark (Nút xám tối)
+              <span className="text-xs text-gray-400">03B.</span> Secondary button dark (Dark Gray Button)
             </h2>
             <div className="space-y-4 max-w-3xl">
               {STATES.map((st) => (
@@ -339,16 +338,16 @@ export const DesignSystemViewer: React.FC<DesignSystemViewerProps> = ({ onOpenFe
               <div className="bg-[#1f2123] p-4 border border-[#383a3d]">
                 <h3 className="text-xs text-gray-400 mb-3">01, 02 & 03. Buttons</h3>
                 <div className="space-y-3">
-                  <VplayHeroButton onClick={() => alert('HERO BUTTON Clicked!')}>
+                  <VplayHeroButton>
                     HERO BUTTON
                   </VplayHeroButton>
-                  <VplayPrimaryButton onClick={() => alert('Primary Button Clicked!')}>
+                  <VplayPrimaryButton>
                     Primary button
                   </VplayPrimaryButton>
-                  <VplaySecondaryButton onClick={() => alert('Secondary Button Clicked!')}>
+                  <VplaySecondaryButton>
                     Secondary button
                   </VplaySecondaryButton>
-                  <VplaySecondaryButtonDark onClick={() => alert('Secondary Button Dark Clicked!')}>
+                  <VplaySecondaryButtonDark>
                     Secondary button dark
                   </VplaySecondaryButtonDark>
                 </div>
@@ -359,7 +358,7 @@ export const DesignSystemViewer: React.FC<DesignSystemViewerProps> = ({ onOpenFe
                 <VplayCheckbox
                   checked={pgCheck}
                   onChange={setPgCheck}
-                  label={pgCheck ? 'Tự động phát video tiếp theo (BẬT)' : 'Tự động phát video tiếp theo (TẮT)'}
+                  label={pgCheck ? 'Autoplay next video (ON)' : 'Autoplay next video (OFF)'}
                 />
               </div>
 
@@ -368,7 +367,7 @@ export const DesignSystemViewer: React.FC<DesignSystemViewerProps> = ({ onOpenFe
                 <VplayToggleSwitch
                   checked={pgSwitch}
                   onChange={setPgSwitch}
-                  label={pgSwitch ? 'Chế độ xem HD 1080p' : 'Chế độ xem Tiêu Chuẩn 720p'}
+                  label={pgSwitch ? '1080p HD Video Mode' : '720p Standard Video Mode'}
                 />
               </div>
             </div>
@@ -378,14 +377,14 @@ export const DesignSystemViewer: React.FC<DesignSystemViewerProps> = ({ onOpenFe
               <div className="bg-[#1f2123] p-4 border border-[#383a3d]">
                 <h3 className="text-xs text-gray-400 mb-3">05. Dropdown Button</h3>
                 <VplayDropdown
-                  label="Chọn kênh truyền hình yêu thích"
+                  label="Select preferred channel"
                   value={pgDropdown}
                   onChange={setPgDropdown}
                   options={[
-                    { value: 'vtv1', label: 'VTV1 HD - Thời sự' },
-                    { value: 'vtv3', label: 'VTV3 HD - Giải trí' },
-                    { value: 'htv7', label: 'HTV7 HD - Phim truyện' },
-                    { value: 'vplay_sports', label: 'Vplay Sports Live' },
+                    { value: 'channel_1', label: 'Craftmine Live Broadcast' },
+                    { value: 'channel_2', label: 'Voxel Survival Stream' },
+                    { value: 'channel_3', label: 'Creative Builders Weekly' },
+                    { value: 'channel_4', label: 'Redstone Engineering Showcase' },
                   ]}
                 />
               </div>
@@ -393,7 +392,7 @@ export const DesignSystemViewer: React.FC<DesignSystemViewerProps> = ({ onOpenFe
               <div className="bg-[#1f2123] p-4 border border-[#383a3d]">
                 <h3 className="text-xs text-gray-400 mb-3">06. Slider</h3>
                 <VplaySlider
-                  label="Âm lượng TV Vplay"
+                  label="Master Audio Volume"
                   value={pgSlider}
                   min={0}
                   max={10}
@@ -404,18 +403,18 @@ export const DesignSystemViewer: React.FC<DesignSystemViewerProps> = ({ onOpenFe
               <div className="bg-[#1f2123] p-4 border border-[#383a3d]">
                 <h3 className="text-xs text-gray-400 mb-3">07. Input Box</h3>
                 <VplayInputBox
-                  label="Tìm kiếm chương trình TV"
-                  description="Nhập tên phim, kênh hoặc sự kiện thể thao"
+                  label="Search Game Channels"
+                  description="Enter player name, world seed or event tag"
                   value={pgInput}
                   onChange={(e) => setPgInput(e.target.value)}
-                  placeholder="Nhập tên kênh..."
+                  placeholder="Search channels or worlds..."
                 />
               </div>
 
               <div className="bg-[#1f2123] p-4 border border-[#383a3d]">
                 <h3 className="text-xs text-gray-400 mb-3">09. Tabs</h3>
                 <div className="flex gap-2 flex-wrap">
-                  {['Trực tiếp', 'Hôm nay', 'Lịch phát', 'Cài đặt'].map((tabLabel, idx) => (
+                  {['Featured', 'Today', 'Live Streams', 'Settings'].map((tabLabel, idx) => (
                     <VplayTab
                       key={tabLabel}
                       active={pgSelectedTab === idx}

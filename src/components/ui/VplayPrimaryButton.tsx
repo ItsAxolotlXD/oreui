@@ -33,7 +33,6 @@ export const VplayPrimaryButton: React.FC<VplayPrimaryButtonProps> = ({
   let layer2Bg = 'bg-[#1e4511]';
   let layer3Bg = 'bg-[#6bc34b]';
   let textColor = 'text-white';
-  let transformClass = '';
 
   switch (state) {
     case 'hovered':
@@ -63,6 +62,7 @@ export const VplayPrimaryButton: React.FC<VplayPrimaryButtonProps> = ({
       break;
   }
 
+  // ONLY play sound on button press down, NEVER on button release
   const handleMouseDown = () => {
     if (!effectiveDisabled) {
       setIsPressed(true);
@@ -88,8 +88,8 @@ export const VplayPrimaryButton: React.FC<VplayPrimaryButtonProps> = ({
 
   const isSmall = size === 'sm' || size === 'compact';
   const fontClasses = isSmall
-    ? 'text-xs font-bold'
-    : 'text-sm sm:text-base font-bold';
+    ? 'text-xs'
+    : 'text-sm sm:text-base';
   const padClasses = isSmall ? 'px-3 py-1.5' : 'px-5 py-2';
 
   return (
@@ -105,7 +105,7 @@ export const VplayPrimaryButton: React.FC<VplayPrimaryButtonProps> = ({
       onClick={handleClick}
       /* LAYER 4: Outer 2px dark border frame */
       className={`
-        relative select-none font-montserrat overflow-hidden !p-0 inline-flex flex-col
+        relative select-none font-minecraft-ten uppercase overflow-hidden !p-0 inline-flex flex-col
         border-2 border-[#141414] bg-[#141414] rounded-none cursor-pointer
         ${effectiveDisabled ? 'cursor-not-allowed opacity-80' : ''}
         ${fullWidth ? 'w-full' : ''}

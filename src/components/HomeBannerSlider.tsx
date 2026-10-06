@@ -21,12 +21,10 @@ export const HomeBannerSlider: React.FC<HomeBannerSliderProps> = ({
   const totalSlides = 2;
 
   const handlePrev = () => {
-    playPopSound();
     setCurrentSlide((prev) => (prev === 0 ? totalSlides - 1 : prev - 1));
   };
 
   const handleNext = () => {
-    playPopSound();
     setCurrentSlide((prev) => (prev === 1 ? 0 : prev + 1));
   };
 
@@ -99,7 +97,6 @@ export const HomeBannerSlider: React.FC<HomeBannerSliderProps> = ({
                   <VplaySecondaryButton
                     fullWidth
                     onClick={() => {
-                      playPopSound();
                       if (onOpenFeedback) onOpenFeedback();
                     }}
                   >
@@ -174,7 +171,6 @@ export const HomeBannerSlider: React.FC<HomeBannerSliderProps> = ({
                   <VplaySecondaryButton
                     fullWidth
                     onClick={() => {
-                      playPopSound();
                       if (onOpenFeedback) onOpenFeedback();
                     }}
                   >
@@ -204,10 +200,8 @@ export const HomeBannerSlider: React.FC<HomeBannerSliderProps> = ({
         {[0, 1].map((index) => (
           <button
             key={index}
-            onClick={() => {
-              playPopSound();
-              setCurrentSlide(index);
-            }}
+            onMouseDown={() => playPopSound()}
+            onClick={() => setCurrentSlide(index)}
             aria-label={`Go to slide ${index + 1}`}
             className={`w-3 h-3 border border-[#141414] transition-all duration-150 cursor-pointer ${
               currentSlide === index

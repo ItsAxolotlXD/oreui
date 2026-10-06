@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { playPopSound } from '../utils/sound';
 import { VplayHeroButton } from './ui/VplayHeroButton';
 import { ExternalLink, Maximize2, RotateCw } from 'lucide-react';
@@ -55,15 +55,30 @@ export const CRAFTMINE_EDITIONS: CraftmineEdition[] = [
   },
 ];
 
-export const PlayCraftmineView: React.FC = () => {
-  const [selectedEdition, setSelectedEdition] = useState<CraftmineEdition>(CRAFTMINE_EDITIONS[0]);
+interface PlayCraftmineViewProps {
+  initialEditionId?: string | null;
+}
+
+export const PlayCraftmineView: React.FC<PlayCraftmineViewProps> = ({ initialEditionId }) => {
+  const initial = (initialEditionId && CRAFTMINE_EDITIONS.find((e) => e.id === initialEditionId)) || CRAFTMINE_EDITIONS[0];
+  const [selectedEdition, setSelectedEdition] = useState<CraftmineEdition>(initial);
   const [iframeKey, setIframeKey] = useState<number>(0);
   const [, setIsFullscreen] = useState<boolean>(false);
   const [isLoadingFrame, setIsLoadingFrame] = useState<boolean>(true);
   const playerContainerRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    if (initialEditionId) {
+      const match = CRAFTMINE_EDITIONS.find((e) => e.id === initialEditionId);
+      if (match && match.id !== selectedEdition.id) {
+        setIsLoadingFrame(true);
+        setSelectedEdition(match);
+        setIframeKey((prev) => prev + 1);
+      }
+    }
+  }, [initialEditionId]);
+
   const handleSelectEdition = (edition: CraftmineEdition) => {
-    playPopSound();
     if (edition.id !== selectedEdition.id) {
       setIsLoadingFrame(true);
       setSelectedEdition(edition);
@@ -72,13 +87,11 @@ export const PlayCraftmineView: React.FC = () => {
   };
 
   const handleReloadFrame = () => {
-    playPopSound();
     setIsLoadingFrame(true);
     setIframeKey((prev) => prev + 1);
   };
 
   const handleToggleFullscreen = () => {
-    playPopSound();
     if (!document.fullscreenElement) {
       playerContainerRef.current?.requestFullscreen?.();
       setIsFullscreen(true);
@@ -110,8 +123,8 @@ export const PlayCraftmineView: React.FC = () => {
             href={selectedEdition.url}
             target="_blank"
             rel="noopener noreferrer"
-            onClick={() => playPopSound()}
-            className="flex items-center gap-2 bg-[#89dc69] hover:bg-[#9ded7e] text-[#141414] font-minecraft-seven text-xs px-3.5 py-1.5 border-2 border-[#141414] shadow-[inset_1px_1px_0_#ffffff] transition-all cursor-pointer flex-shrink-0 active:translate-y-[1px]"
+            onMouseDown={() => playPopSound()}
+            className="flex items-center gap-2 bg-[#89dc69] hover:bg-[#9ded7e] text-[#141414] font-minecraft-ten text-xs px-3.5 py-1.5 border-2 border-[#141414] shadow-[inset_1px_1px_0_#ffffff] transition-all cursor-pointer flex-shrink-0 active:translate-y-[1px]"
           >
             <span>Open Original Page</span>
             <ExternalLink className="w-3.5 h-3.5" />
@@ -125,6 +138,7 @@ export const PlayCraftmineView: React.FC = () => {
             return (
               <button
                 key={edition.id}
+                onMouseDown={() => playPopSound()}
                 onClick={() => handleSelectEdition(edition)}
                 className={`
                   relative p-2.5 sm:p-3 text-left border-2 cursor-pointer transition-all duration-100 flex flex-col justify-between overflow-hidden select-none btn-press-effect
@@ -191,6 +205,7 @@ export const PlayCraftmineView: React.FC = () => {
           {/* Action buttons */}
           <div className="flex items-center gap-1.5">
             <button
+              onMouseDown={() => playPopSound()}
               onClick={handleReloadFrame}
               title="Reload game"
               className="bg-[#3e4246] hover:bg-[#4d5156] active:bg-[#252729] text-white p-1.5 border border-[#141414] cursor-pointer flex items-center gap-1 text-[11px]"
@@ -200,6 +215,7 @@ export const PlayCraftmineView: React.FC = () => {
             </button>
 
             <button
+              onMouseDown={() => playPopSound()}
               onClick={handleToggleFullscreen}
               title="Fullscreen"
               className="bg-[#3e4246] hover:bg-[#4d5156] active:bg-[#252729] text-white p-1.5 border border-[#141414] cursor-pointer flex items-center gap-1 text-[11px]"
@@ -212,9 +228,9 @@ export const PlayCraftmineView: React.FC = () => {
               href={selectedEdition.url}
               target="_blank"
               rel="noopener noreferrer"
-              onClick={() => playPopSound()}
+              onMouseDown={() => playPopSound()}
               title="Open in new tab"
-              className="bg-[#418a28] hover:bg-[#52a634] active:bg-[#2e681c] text-white px-2.5 py-1.5 border border-[#141414] cursor-pointer flex items-center gap-1 text-[11px]"
+              className="bg-[#418a28] hover:bg-[#52a634] active:bg-[#2e681c] text-white px-2.5 py-1.5 border border-[#141414] cursor-pointer flex items-center gap-1 text-[11px] font-minecraft-ten"
             >
               <ExternalLink className="w-3.5 h-3.5" />
               <span>New Tab</span>

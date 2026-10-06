@@ -10,6 +10,7 @@ import { HeaderBar } from './components/HeaderBar';
 import { MinecraftPanorama } from './components/MinecraftPanorama';
 import { HomeBannerSlider } from './components/HomeBannerSlider';
 import { FeedbackModal } from './components/FeedbackModal';
+import { SearchModal } from './components/SearchModal';
 import { playPopSound } from './utils/sound';
 
 import { Play, Sparkles, Cpu, Layers } from 'lucide-react';
@@ -18,8 +19,11 @@ export default function App() {
   const [sidebarItem, setSidebarItem] = useState<SidebarMenuItem>('home');
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isTabLoading, setIsTabLoading] = useState(false);
   const [isDeveloperUnlocked, setIsDeveloperUnlocked] = useState<boolean>(false);
+  const [targetArticleId, setTargetArticleId] = useState<string | null>(null);
+  const [targetEditionId, setTargetEditionId] = useState<string | null>(null);
 
   const triggerTabLoading = () => {
     setIsTabLoading(true);
@@ -45,7 +49,6 @@ export default function App() {
   });
 
   const handleSidebarSelect = (item: SidebarMenuItem) => {
-    playPopSound();
     if (item !== sidebarItem || isSettingsOpen) {
       triggerTabLoading();
     }
@@ -55,17 +58,6 @@ export default function App() {
     } else {
       setIsSettingsOpen(false);
       setSidebarItem(item);
-    }
-  };
-
-  const getHeaderTitle = () => {
-    if (isSettingsOpen) return 'SETTINGS';
-    switch (sidebarItem) {
-      case 'home': return 'HOME';
-      case 'play_craftmine': return 'PLAY CRAFTMINE';
-      case 'release_notes': return 'RELEASE NOTES';
-      case 'settings': return 'SETTINGS';
-      default: return 'SETTINGS';
     }
   };
 
@@ -81,6 +73,26 @@ export default function App() {
     }
   };
 
+  const handleUniversalSearchNavigate = (
+    tab: SidebarMenuItem,
+    extra?: { articleId?: string; editionId?: string }
+  ) => {
+    triggerTabLoading();
+    if (extra?.articleId) {
+      setTargetArticleId(extra.articleId);
+    }
+    if (extra?.editionId) {
+      setTargetEditionId(extra.editionId);
+    }
+    if (tab === 'settings') {
+      setIsSettingsOpen(true);
+      setSidebarItem('settings');
+    } else {
+      setIsSettingsOpen(false);
+      setSidebarItem(tab);
+    }
+  };
+
   return (
     <div className="relative min-h-screen text-white font-minecraft-seven antialiased selection:bg-[#418a28] selection:text-white flex flex-col">
       {/* Minecraft Panorama Animated Background */}
@@ -92,11 +104,8 @@ export default function App() {
       
       {/* STICKY TOP HEADER BAR WITH CRAFTMINE LOGO */}
       <HeaderBar
-        title={getHeaderTitle()}
         onBack={handleHeaderBack}
-        onSearchClick={() => {
-          setIsFeedbackOpen(true);
-        }}
+        onSearchClick={() => setIsSearchOpen(true)}
       />
 
       {/* HORIZONTAL TAB BAR */}
@@ -171,13 +180,14 @@ export default function App() {
                   />
                 ) : sidebarItem === 'release_notes' ? (
                   <ReleaseNotesView
+                    initialArticleId={targetArticleId}
                     onPlayEdition={() => {
                       triggerTabLoading();
                       setSidebarItem('play_craftmine');
                     }}
                   />
                 ) : sidebarItem === 'play_craftmine' ? (
-                  <PlayCraftmineView />
+                  <PlayCraftmineView initialEditionId={targetEditionId} />
                 ) : (
                   /* HOME DASHBOARD VIEW */
                   <div className="space-y-4">
@@ -212,13 +222,14 @@ export default function App() {
                           </h2>
                         </div>
                         <button
+                          onMouseDown={() => playPopSound()}
                           onClick={() => {
                             triggerTabLoading();
                             setSidebarItem('play_craftmine');
                           }}
-                          className="text-xs text-[#89dc69] font-minecraft-seven hover:underline cursor-pointer"
+                          className="text-xs text-[#89dc69] font-minecraft-ten hover:underline cursor-pointer"
                         >
-                          [Play Now]
+                          [PLAY NOW]
                         </button>
                       </div>
 
@@ -227,9 +238,10 @@ export default function App() {
                         {CRAFTMINE_EDITIONS.map((edition, idx) => (
                           <div
                             key={edition.id}
+                            onMouseDown={() => playPopSound()}
                             onClick={() => {
-                              playPopSound();
                               triggerTabLoading();
+                              setTargetEditionId(edition.id);
                               setSidebarItem('play_craftmine');
                             }}
                             className="group relative bg-[#3f4246] hover:bg-[#484c50] border-2 border-[#141414] hover:border-[#89dc69] cursor-pointer transition-all duration-150 flex flex-col justify-between overflow-hidden shadow-md select-none btn-press-effect p-3.5 space-y-3"
@@ -270,7 +282,7 @@ export default function App() {
                               <span className="text-gray-300 font-minecraft-seven truncate max-w-[140px]">
                                 {edition.engineType}
                               </span>
-                              <span className="text-[#89dc69] font-minecraft-seven group-hover:underline flex items-center gap-1">
+                              <span className="text-[#89dc69] font-minecraft-ten group-hover:underline flex items-center gap-1 text-[11px]">
                                 <span>PLAY NOW</span>
                                 <Play className="w-3 h-3 fill-current" />
                               </span>
@@ -282,9 +294,10 @@ export default function App() {
 
                     {/* LATEST RELEASE NOTE BANNER */}
                     <div
+                      onMouseDown={() => playPopSound()}
                       onClick={() => {
-                        playPopSound();
                         triggerTabLoading();
+                        setTargetArticleId('snapshot-26w04-base');
                         setSidebarItem('release_notes');
                       }}
                       className="group relative bg-[#2a2d30] hover:bg-[#32363a] border-2 border-[#89dc69] p-4 sm:p-5 shadow-xl cursor-pointer select-none btn-press-effect flex flex-col sm:flex-row items-center justify-between gap-4 overflow-hidden"
@@ -321,7 +334,7 @@ export default function App() {
                       </div>
 
                       <div className="self-end sm:self-center relative z-10 flex-shrink-0">
-                        <span className="bg-[#418a28] group-hover:bg-[#52a634] text-white px-3.5 py-2 text-xs font-minecraft-seven border-2 border-[#141414] flex items-center gap-1.5 shadow-[inset_1px_1px_0_#89dc69]">
+                        <span className="bg-[#418a28] group-hover:bg-[#52a634] text-white px-3.5 py-2 text-xs font-minecraft-ten border-2 border-[#141414] flex items-center gap-1.5 shadow-[inset_1px_1px_0_#89dc69]">
                           <span>VIEW DETAILS</span>
                           <span>→</span>
                         </span>
@@ -342,6 +355,13 @@ export default function App() {
           </AnimatePresence>
         </main>
       </div>
+
+      {/* UNIVERSAL SEARCH MODAL */}
+      <SearchModal
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
+        onNavigate={handleUniversalSearchNavigate}
+      />
 
       {/* FEEDBACK MODAL */}
       <FeedbackModal
