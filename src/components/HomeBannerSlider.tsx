@@ -13,7 +13,6 @@ interface HomeBannerSliderProps {
 }
 
 export const HomeBannerSlider: React.FC<HomeBannerSliderProps> = ({
-  onExploreDesignSystem,
   onPlayCraftmine,
   onOpenFeedback,
   reduceMotion = false,
@@ -28,7 +27,7 @@ export const HomeBannerSlider: React.FC<HomeBannerSliderProps> = ({
 
   const handleNext = () => {
     playPopSound();
-    setCurrentSlide((prev) => (prev === totalSlides - 1 ? 0 : prev + 1));
+    setCurrentSlide((prev) => (prev === 1 ? 0 : prev + 1));
   };
 
   const slideMotionProps = reduceMotion
@@ -42,11 +41,14 @@ export const HomeBannerSlider: React.FC<HomeBannerSliderProps> = ({
         initial: { opacity: 0, x: 50 },
         animate: { opacity: 1, x: 0 },
         exit: { opacity: 0, x: -50 },
-        transition: { duration: 0.35, ease: [0.25, 1, 0.5, 1] as [number, number, number, number] },
+        transition: { duration: 0.35, ease: 'easeInOut' },
       };
 
   return (
-    <div className="bg-black/50 border-2 border-[#141414] p-4 sm:p-6 shadow-xl flex flex-col gap-4 relative overflow-hidden min-h-[300px] justify-between">
+    <div className="relative w-full bg-[#35383b] border-2 border-[#141414] p-4 sm:p-6 md:p-8 flex flex-col justify-between overflow-hidden shadow-2xl select-none min-h-[360px] font-minecraft-seven">
+      {/* 3D BEVEL INSET SHADOW */}
+      <div className="absolute inset-0 pointer-events-none z-20 shadow-[inset_2px_2px_0_rgba(255,255,255,0.2),inset_-2px_-4px_0_rgba(0,0,0,0.5)]" />
+
       {/* SLIDE CONTENT AREA WITH ANIMATION */}
       <div className="relative z-10 w-full flex-1 flex flex-col justify-between py-1 overflow-hidden">
         <AnimatePresence mode="popLayout" initial={false}>
@@ -58,10 +60,10 @@ export const HomeBannerSlider: React.FC<HomeBannerSliderProps> = ({
             >
               {/* TITLE & SUBTITLE WITH IMAGE BELOW SUBTITLE */}
               <div className="space-y-2 text-left max-w-3xl mx-auto">
-                <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-white uppercase tracking-wide font-jura text-center sm:text-left drop-shadow-md">
+                <h1 className="text-xl sm:text-2xl md:text-3xl text-white uppercase tracking-wide font-minecraft-ten text-center sm:text-left drop-shadow-md">
                   Unleash possible creativity
                 </h1>
-                <p className="text-xs sm:text-sm text-gray-200 leading-relaxed text-center sm:text-left drop-shadow">
+                <p className="text-xs sm:text-sm text-gray-200 leading-relaxed text-center sm:text-left drop-shadow font-minecraft-seven">
                   The Craftmine is coming soon. Stay tuned!
                 </p>
                 <div className="pt-2 flex justify-center">
@@ -82,15 +84,15 @@ export const HomeBannerSlider: React.FC<HomeBannerSliderProps> = ({
                   size="compact"
                   onClick={handlePrev}
                   aria-label="Previous Banner"
-                  title="Trang trước"
+                  title="Previous banner"
                   className="!w-11 !h-11 !px-0 flex items-center justify-center"
                 >
                   <ChevronLeft className="w-5 h-5 text-[#1c1d1f]" />
                 </VplaySecondaryButton>
 
                 <div className="w-48 sm:w-56">
-                  <VplayHeroButton fullWidth onClick={onExploreDesignSystem}>
-                    KHÁM PHÁ ORE UI
+                  <VplayHeroButton fullWidth onClick={onPlayCraftmine}>
+                    PLAY CRAFTMINE
                   </VplayHeroButton>
                 </div>
                 <div className="w-48 sm:w-56">
@@ -99,18 +101,9 @@ export const HomeBannerSlider: React.FC<HomeBannerSliderProps> = ({
                     onClick={() => {
                       playPopSound();
                       if (onOpenFeedback) onOpenFeedback();
-                      else alert('Thank you for your feedback on The Craftmine!');
                     }}
                   >
-                    <span className="flex items-center justify-center gap-2">
-                      <img
-                        src="https://static.wikia.nocookie.net/ep-deo/images/5/5a/External-link-b22bbbc33f4f1f41e010vcvcv.png/revision/latest?cb=20260728071637"
-                        alt="External link"
-                        referrerPolicy="no-referrer"
-                        className="w-3.5 h-3.5 object-contain"
-                      />
-                      <span>Give Feedback</span>
-                    </span>
+                    <span>Give Feedback</span>
                   </VplaySecondaryButton>
                 </div>
 
@@ -120,7 +113,7 @@ export const HomeBannerSlider: React.FC<HomeBannerSliderProps> = ({
                   size="compact"
                   onClick={handleNext}
                   aria-label="Next Banner"
-                  title="Trang sau"
+                  title="Next banner"
                   className="!w-11 !h-11 !px-0 flex items-center justify-center"
                 >
                   <ChevronRight className="w-5 h-5 text-[#1c1d1f]" />
@@ -135,11 +128,11 @@ export const HomeBannerSlider: React.FC<HomeBannerSliderProps> = ({
             >
               {/* TITLE & SUBTITLE WITH IMAGE */}
               <div className="space-y-2 text-left max-w-3xl mx-auto">
-                <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-white uppercase tracking-wide font-jura text-center sm:text-left drop-shadow-md">
-                  CHƠI 3 PHIÊN BẢN THE CRAFTMINE
+                <h1 className="text-xl sm:text-2xl md:text-3xl text-white uppercase tracking-wide font-minecraft-ten text-center sm:text-left drop-shadow-md">
+                  PLAY 3 CRAFTMINE EDITIONS
                 </h1>
-                <p className="text-xs sm:text-sm text-gray-200 leading-relaxed text-center sm:text-left drop-shadow">
-                  Trải nghiệm 3 phiên bản được dựng bởi 3 engine khác nhau: Lovable Edition (WebGL 3D), Base 64 Edition (High-Speed Sandbox) và Studio Edition (Full Voxel Suite).
+                <p className="text-xs sm:text-sm text-gray-200 leading-relaxed text-center sm:text-left drop-shadow font-minecraft-seven">
+                  Experience 3 editions powered by 3 distinct engines: Lovable Edition (WebGL 3D), Base 64 Edition (High-Speed Sandbox), and Studio Edition (Full Voxel Suite).
                 </p>
                 <div className="pt-2 flex justify-center">
                   <div className="w-full max-w-2xl md:max-w-3xl bg-[#1c1e20] border-2 border-[#141414] p-4 text-center shadow-lg relative overflow-hidden">
@@ -149,7 +142,7 @@ export const HomeBannerSlider: React.FC<HomeBannerSliderProps> = ({
                       referrerPolicy="no-referrer"
                       className="mx-auto h-16 sm:h-24 object-contain [image-rendering:pixelated] drop-shadow-lg"
                     />
-                    <div className="mt-3 flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-xs text-[#89dc69] font-mono">
+                    <div className="mt-3 flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-xs text-[#89dc69] font-minecraft-seven">
                       <span>• LOVABLE EDITION</span>
                       <span>• BASE 64 EDITION</span>
                       <span>• STUDIO EDITION</span>
@@ -166,7 +159,7 @@ export const HomeBannerSlider: React.FC<HomeBannerSliderProps> = ({
                   size="compact"
                   onClick={handlePrev}
                   aria-label="Previous Banner"
-                  title="Trang trước"
+                  title="Previous banner"
                   className="!w-11 !h-11 !px-0 flex items-center justify-center"
                 >
                   <ChevronLeft className="w-5 h-5 text-[#1c1d1f]" />
@@ -174,7 +167,7 @@ export const HomeBannerSlider: React.FC<HomeBannerSliderProps> = ({
 
                 <div className="w-48 sm:w-56">
                   <VplayHeroButton fullWidth onClick={onPlayCraftmine}>
-                    CHƠI CRAFTMINE NGAY
+                    PLAY CRAFTMINE NOW
                   </VplayHeroButton>
                 </div>
                 <div className="w-48 sm:w-56">
@@ -183,7 +176,6 @@ export const HomeBannerSlider: React.FC<HomeBannerSliderProps> = ({
                     onClick={() => {
                       playPopSound();
                       if (onOpenFeedback) onOpenFeedback();
-                      else alert('Thank you for checking out The Craftmine!');
                     }}
                   >
                     <span>Give Feedback</span>
@@ -196,7 +188,7 @@ export const HomeBannerSlider: React.FC<HomeBannerSliderProps> = ({
                   size="compact"
                   onClick={handleNext}
                   aria-label="Next Banner"
-                  title="Trang sau"
+                  title="Next banner"
                   className="!w-11 !h-11 !px-0 flex items-center justify-center"
                 >
                   <ChevronRight className="w-5 h-5 text-[#1c1d1f]" />
@@ -208,20 +200,20 @@ export const HomeBannerSlider: React.FC<HomeBannerSliderProps> = ({
       </div>
 
       {/* BOTTOM DOT INDICATORS */}
-      <div className="flex items-center justify-center gap-2 z-10 pt-1">
-        {Array.from({ length: totalSlides }).map((_, idx) => (
+      <div className="relative z-10 flex items-center justify-center gap-2 pt-4">
+        {[0, 1].map((index) => (
           <button
-            key={idx}
+            key={index}
             onClick={() => {
               playPopSound();
-              setCurrentSlide(idx);
+              setCurrentSlide(index);
             }}
-            className={`h-2 transition-all duration-150 cursor-pointer ${
-              currentSlide === idx
-                ? 'w-6 bg-[#89dc69] border border-[#141414]'
-                : 'w-2 bg-[#52565a] hover:bg-[#888c91]'
+            aria-label={`Go to slide ${index + 1}`}
+            className={`w-3 h-3 border border-[#141414] transition-all duration-150 cursor-pointer ${
+              currentSlide === index
+                ? 'bg-[#89dc69] shadow-[inset_1px_1px_0_#ffffff]'
+                : 'bg-[#202224] hover:bg-[#2b2d30]'
             }`}
-            aria-label={`Slide ${idx + 1}`}
           />
         ))}
       </div>

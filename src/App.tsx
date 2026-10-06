@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { UserSettings } from './types';
-import { DesignSystemViewer } from './components/DesignSystemViewer';
 import { SettingsView } from './components/SettingsView';
 import { PlayCraftmineView, CRAFTMINE_EDITIONS } from './components/PlayCraftmineView';
+import { ReleaseNotesView } from './components/ReleaseNotesView';
 import { FaqSection } from './components/FaqSection';
 import { Sidebar, SidebarMenuItem } from './components/Sidebar';
 import { HeaderBar } from './components/HeaderBar';
@@ -12,9 +12,7 @@ import { HomeBannerSlider } from './components/HomeBannerSlider';
 import { FeedbackModal } from './components/FeedbackModal';
 import { playPopSound } from './utils/sound';
 
-import { VplayHeroButton } from './components/ui/VplayHeroButton';
-import { VplaySecondaryButton } from './components/ui/VplaySecondaryButton';
-import { Play, Sparkles, Monitor, Cpu, Layers, ExternalLink } from 'lucide-react';
+import { Play, Sparkles, Cpu, Layers } from 'lucide-react';
 
 export default function App() {
   const [sidebarItem, setSidebarItem] = useState<SidebarMenuItem>('home');
@@ -61,13 +59,13 @@ export default function App() {
   };
 
   const getHeaderTitle = () => {
-    if (isSettingsOpen) return 'CÀI ĐẶT';
+    if (isSettingsOpen) return 'SETTINGS';
     switch (sidebarItem) {
-      case 'home': return 'TRANG CHỦ';
+      case 'home': return 'HOME';
       case 'play_craftmine': return 'PLAY CRAFTMINE';
-      case 'settings': return 'CÀI ĐẶT';
-      case 'design_system': return 'ORE UI';
-      default: return 'CÀI ĐẶT';
+      case 'release_notes': return 'RELEASE NOTES';
+      case 'settings': return 'SETTINGS';
+      default: return 'SETTINGS';
     }
   };
 
@@ -84,7 +82,7 @@ export default function App() {
   };
 
   return (
-    <div className="relative min-h-screen text-white font-jura antialiased selection:bg-[#418a28] selection:text-white flex flex-col">
+    <div className="relative min-h-screen text-white font-minecraft-seven antialiased selection:bg-[#418a28] selection:text-white flex flex-col">
       {/* Minecraft Panorama Animated Background */}
       <MinecraftPanorama
         disablePanorama={settings.disablePanorama}
@@ -132,8 +130,8 @@ export default function App() {
                   <div className="w-48 bg-[#1b1c1e] h-3 border border-[#141414] p-0.5 mt-2">
                     <div className="bg-[#418a28] h-full w-2/3 animate-pulse" />
                   </div>
-                  <span className="text-xs text-gray-400 font-mono tracking-wider">
-                    Đang nạp engine The Craftmine...
+                  <span className="text-xs text-gray-400 font-minecraft-seven tracking-wider">
+                    Loading The Craftmine engines...
                   </span>
                 </div>
               </motion.div>
@@ -167,17 +165,17 @@ export default function App() {
                       triggerTabLoading();
                       setSidebarItem('home');
                     }}
-                    onOpenDesignSystem={() => {
-                      setIsSettingsOpen(false);
-                      triggerTabLoading();
-                      setSidebarItem('design_system');
-                    }}
                     onOpenFeedback={() => setIsFeedbackOpen(true)}
                     isDeveloperUnlocked={isDeveloperUnlocked}
                     onToggleDeveloperUnlocked={setIsDeveloperUnlocked}
                   />
-                ) : sidebarItem === 'design_system' ? (
-                  <DesignSystemViewer onOpenFeedback={() => setIsFeedbackOpen(true)} />
+                ) : sidebarItem === 'release_notes' ? (
+                  <ReleaseNotesView
+                    onPlayEdition={() => {
+                      triggerTabLoading();
+                      setSidebarItem('play_craftmine');
+                    }}
+                  />
                 ) : sidebarItem === 'play_craftmine' ? (
                   <PlayCraftmineView />
                 ) : (
@@ -185,7 +183,7 @@ export default function App() {
                   <div className="space-y-4">
                     {/* YELLOW TIP PANEL BANNER */}
                     <div className="relative w-full bg-[#ffe866] overflow-hidden select-none border-2 border-[#141414] shadow-md">
-                      <div className="relative z-10 py-1.5 px-3 text-center text-[#141414] font-montserrat font-bold text-[11px] sm:text-xs">
+                      <div className="relative z-10 py-1.5 px-3 text-center text-[#141414] font-minecraft-seven text-xs">
                         ⭐ The Craftmine — An unofficial Minecraft project with Ore UI Design System. The Craftmine is coming soon. Stay tuned!
                       </div>
                     </div>
@@ -195,7 +193,7 @@ export default function App() {
                       reduceMotion={settings.reduceMotion}
                       onExploreDesignSystem={() => {
                         triggerTabLoading();
-                        setSidebarItem('design_system');
+                        setSidebarItem('play_craftmine');
                       }}
                       onPlayCraftmine={() => {
                         triggerTabLoading();
@@ -209,8 +207,8 @@ export default function App() {
                       <div className="flex items-center justify-between border-b border-[#2d3033] pb-3">
                         <div className="flex items-center gap-2">
                           <span className="w-2.5 h-2.5 bg-[#89dc69] rounded-none animate-pulse" />
-                          <h2 className="text-sm sm:text-base font-black text-white uppercase tracking-wider font-jura">
-                            3 PHIÊN BẢN THE CRAFTMINE (3 GAME ENGINES)
+                          <h2 className="text-sm sm:text-base text-white uppercase tracking-wider font-minecraft-ten">
+                            3 CRAFTMINE EDITIONS (3 GAME ENGINES)
                           </h2>
                         </div>
                         <button
@@ -218,9 +216,9 @@ export default function App() {
                             triggerTabLoading();
                             setSidebarItem('play_craftmine');
                           }}
-                          className="text-xs text-[#89dc69] font-bold hover:underline cursor-pointer"
+                          className="text-xs text-[#89dc69] font-minecraft-seven hover:underline cursor-pointer"
                         >
-                          [Vào chơi ngay]
+                          [Play Now]
                         </button>
                       </div>
 
@@ -241,44 +239,92 @@ export default function App() {
                             <div className="space-y-2">
                               <div className="flex items-center justify-between">
                                 <span
-                                  className="text-[10px] font-bold font-mono px-2 py-0.5 border border-[#141414]"
+                                  className="text-[10px] font-minecraft-ten px-2 py-0.5 border border-[#141414]"
                                   style={{ backgroundColor: edition.accentColor, color: '#141414' }}
                                 >
                                   ENGINE #{idx + 1}
                                 </span>
-                                <span className="text-[10px] text-gray-300 font-mono flex items-center gap-1">
+                                <span className="text-[10px] text-gray-300 font-minecraft-seven flex items-center gap-1">
                                   <span className="w-1.5 h-1.5 bg-[#89dc69] rounded-full" />
                                   READY
                                 </span>
                               </div>
 
-                              <h3 className="font-bold text-sm sm:text-base text-white group-hover:text-[#89dc69] font-montserrat flex items-center gap-1.5">
+                              <h3 className="text-sm sm:text-base text-white group-hover:text-[#89dc69] font-minecraft-ten flex items-center gap-1.5">
                                 {idx === 0 && <Sparkles className="w-4 h-4 text-[#89dc69]" />}
                                 {idx === 1 && <Cpu className="w-4 h-4 text-sky-400" />}
                                 {idx === 2 && <Layers className="w-4 h-4 text-amber-400" />}
                                 {edition.name}
                               </h3>
 
-                              <div className="text-[11px] text-gray-400 font-mono">
+                              <div className="text-[11px] text-gray-400 font-minecraft-seven">
                                 {edition.engineName}
                               </div>
 
-                              <p className="text-xs text-gray-300 font-montserrat leading-relaxed line-clamp-3">
+                              <p className="text-xs text-gray-300 font-minecraft-seven leading-relaxed line-clamp-3">
                                 {edition.description}
                               </p>
                             </div>
 
                             <div className="pt-3 border-t border-[#4e5257] flex items-center justify-between text-[11px]">
-                              <span className="text-gray-300 font-mono truncate max-w-[140px]">
+                              <span className="text-gray-300 font-minecraft-seven truncate max-w-[140px]">
                                 {edition.engineType}
                               </span>
-                              <span className="text-[#89dc69] font-bold group-hover:underline flex items-center gap-1">
-                                <span>CHƠI NGAY</span>
+                              <span className="text-[#89dc69] font-minecraft-seven group-hover:underline flex items-center gap-1">
+                                <span>PLAY NOW</span>
                                 <Play className="w-3 h-3 fill-current" />
                               </span>
                             </div>
                           </div>
                         ))}
+                      </div>
+                    </div>
+
+                    {/* LATEST RELEASE NOTE BANNER */}
+                    <div
+                      onClick={() => {
+                        playPopSound();
+                        triggerTabLoading();
+                        setSidebarItem('release_notes');
+                      }}
+                      className="group relative bg-[#2a2d30] hover:bg-[#32363a] border-2 border-[#89dc69] p-4 sm:p-5 shadow-xl cursor-pointer select-none btn-press-effect flex flex-col sm:flex-row items-center justify-between gap-4 overflow-hidden"
+                    >
+                      <div className="absolute inset-0 pointer-events-none z-20 shadow-[inset_2px_2px_0_rgba(255,255,255,0.2),inset_-2px_-3px_0_rgba(0,0,0,0.5)]" />
+
+                      <div className="flex items-center gap-3 sm:gap-4 relative z-10 w-full sm:w-auto">
+                        <div className="w-16 h-16 sm:w-20 sm:h-20 bg-[#161718] border-2 border-[#141414] flex-shrink-0 flex items-center justify-center overflow-hidden">
+                          <img
+                            src="https://static.wikia.nocookie.net/ep-deo/images/2/28/Update_thumb.png/revision/latest/scale-to-width-down/1000?cb=20261006103204"
+                            alt="Snapshot 26w04-base"
+                            referrerPolicy="no-referrer"
+                            className="w-full h-full object-contain [image-rendering:pixelated] group-hover:scale-105 transition-transform"
+                            style={{ imageRendering: 'pixelated' }}
+                          />
+                        </div>
+
+                        <div className="space-y-1 min-w-0">
+                          <div className="flex items-center gap-2">
+                            <span className="bg-[#89dc69] text-[#141414] text-[10px] font-minecraft-ten px-1.5 py-0.5 border border-[#141414]">
+                              NEW UPDATE
+                            </span>
+                            <span className="text-[#38bdf8] text-[11px] font-minecraft-seven">
+                              Base44 Exclusive
+                            </span>
+                          </div>
+                          <h3 className="text-sm sm:text-base text-white group-hover:text-[#89dc69] font-minecraft-ten">
+                            Snapshot 26w04-base: Desert Biome, Caves & Decorative Blocks
+                          </h3>
+                          <p className="text-xs text-gray-300 font-minecraft-seven truncate max-w-xl">
+                            Explore all new features, cactus flowers, natural waterfalls and fixed bugs in the latest snapshot.
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="self-end sm:self-center relative z-10 flex-shrink-0">
+                        <span className="bg-[#418a28] group-hover:bg-[#52a634] text-white px-3.5 py-2 text-xs font-minecraft-seven border-2 border-[#141414] flex items-center gap-1.5 shadow-[inset_1px_1px_0_#89dc69]">
+                          <span>VIEW DETAILS</span>
+                          <span>→</span>
+                        </span>
                       </div>
                     </div>
 

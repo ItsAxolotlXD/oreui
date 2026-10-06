@@ -1,9 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { playPopSound } from '../utils/sound';
 import { VplayHeroButton } from './ui/VplayHeroButton';
-import { VplaySecondaryButton } from './ui/VplaySecondaryButton';
-import { VplaySecondaryButtonDark } from './ui/VplaySecondaryButtonDark';
-import { ExternalLink, Maximize2, RotateCw, Play, Monitor, Sparkles, Cpu, Layers } from 'lucide-react';
+import { ExternalLink, Maximize2, RotateCw } from 'lucide-react';
 
 export interface CraftmineEdition {
   id: string;
@@ -16,7 +14,6 @@ export interface CraftmineEdition {
   badge: string;
   accentColor: string;
   features: string[];
-  bannerUrl?: string;
 }
 
 export const CRAFTMINE_EDITIONS: CraftmineEdition[] = [
@@ -27,10 +24,10 @@ export const CRAFTMINE_EDITIONS: CraftmineEdition[] = [
     engineType: 'Three.js / WebGL 3D Voxel',
     url: 'https://boundless-block-worlds.lovable.app/',
     tagline: 'Boundless 3D Block Worlds with dynamic lighting & terrain',
-    description: 'Phiên bản đồ họa 3D hiện đại trên nền tảng Lovable WebGL, tích hợp tạo thế giới khối vô hạn, chu kỳ ánh sáng mặt trời/mặt trăng và vật lý tương tác khối linh hoạt.',
+    description: 'Modern 3D WebGL graphics powered by Lovable engine, featuring infinite block world generation, dynamic sun & moon lighting cycles, and smooth voxel physics.',
     badge: 'LOVABLE ENGINE',
     accentColor: '#89dc69',
-    features: ['Infinite Voxel Terrain', 'Dynamic Sunlight & Shadows', 'Block Physics', 'Smooth FPS 60+'],
+    features: ['Infinite Voxel Terrain', 'Dynamic Sunlight & Shadows', 'Block Physics', 'Smooth 60+ FPS'],
   },
   {
     id: 'base64',
@@ -39,7 +36,7 @@ export const CRAFTMINE_EDITIONS: CraftmineEdition[] = [
     engineType: 'Base44 High-Speed Voxel Canvas',
     url: 'https://craftmine-preview.base44.app/',
     tagline: 'Ultra-fast loading & lightweight creative block sandbox',
-    description: 'Phiên bản xây dựng trên Base44 tối ưu hóa hiệu năng cực cao, tải siêu nhanh, dung lượng bộ nhớ tối thiểu, lý tưởng cho trải nghiệm sandbox sáng tạo mượt mà.',
+    description: 'High-performance edition built on Base44, optimized for ultra-fast load times, minimal memory usage, and instant creative sandbox gameplay.',
     badge: 'BASE 64 ENGINE',
     accentColor: '#38bdf8',
     features: ['Instant Chunk Streaming', 'Low Latency Input', 'Creative Building', 'Lightweight Footprint'],
@@ -51,7 +48,7 @@ export const CRAFTMINE_EDITIONS: CraftmineEdition[] = [
     engineType: 'Next-Gen Full Voxel Architecture',
     url: 'https://the-craftmine.vercel.app/',
     tagline: 'The flagship full-featured Craftmine experience',
-    description: 'Phiên bản hoàn chỉnh và toàn diện nhất của The Craftmine với hệ thống tính năng phong phú, sảnh thế giới, giao diện Bedrock và khả năng tùy biến đa dạng.',
+    description: 'The complete flagship edition of The Craftmine with a rich feature set, custom world lobby, Bedrock styling, and deep customization.',
     badge: 'STUDIO EDITION',
     accentColor: '#f59e0b',
     features: ['Full Gameplay Suite', 'World Customization', 'Lobby & Skins', 'Ore UI Integration'],
@@ -61,7 +58,7 @@ export const CRAFTMINE_EDITIONS: CraftmineEdition[] = [
 export const PlayCraftmineView: React.FC = () => {
   const [selectedEdition, setSelectedEdition] = useState<CraftmineEdition>(CRAFTMINE_EDITIONS[0]);
   const [iframeKey, setIframeKey] = useState<number>(0);
-  const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
+  const [, setIsFullscreen] = useState<boolean>(false);
   const [isLoadingFrame, setIsLoadingFrame] = useState<boolean>(true);
   const playerContainerRef = useRef<HTMLDivElement>(null);
 
@@ -92,19 +89,19 @@ export const PlayCraftmineView: React.FC = () => {
   };
 
   return (
-    <div className="w-full space-y-4">
+    <div className="w-full space-y-4 font-minecraft-seven">
       {/* HEADER BAR: PLAY CRAFTMINE TITLE & EDITION SELECTOR */}
       <div className="bg-[#35383b] border-2 border-[#141414] p-4 sm:p-5 shadow-xl space-y-3">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-[#2d3033] pb-3">
           <div>
             <div className="flex items-center gap-2">
               <span className="w-3 h-3 bg-[#89dc69] inline-block border border-[#141414]" />
-              <h1 className="text-base sm:text-lg font-black text-white uppercase tracking-wider font-jura flex items-center gap-2">
+              <h1 className="text-base sm:text-lg text-white uppercase tracking-wider font-minecraft-ten flex items-center gap-2">
                 <span>PLAY CRAFTMINE (3 GAME ENGINES)</span>
               </h1>
             </div>
-            <p className="text-xs text-gray-300 font-montserrat mt-0.5">
-              Chọn một trong 3 phiên bản được phát triển trên các engine khác nhau để trải nghiệm The Craftmine.
+            <p className="text-xs text-gray-300 font-minecraft-seven mt-0.5">
+              Choose from 3 editions developed on different engines to experience The Craftmine.
             </p>
           </div>
 
@@ -114,9 +111,9 @@ export const PlayCraftmineView: React.FC = () => {
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => playPopSound()}
-            className="flex items-center gap-2 bg-[#89dc69] hover:bg-[#9ded7e] text-[#141414] font-montserrat font-bold text-xs px-3.5 py-1.5 border-2 border-[#141414] shadow-[inset_1px_1px_0_#ffffff] transition-all cursor-pointer flex-shrink-0 active:translate-y-[1px]"
+            className="flex items-center gap-2 bg-[#89dc69] hover:bg-[#9ded7e] text-[#141414] font-minecraft-seven text-xs px-3.5 py-1.5 border-2 border-[#141414] shadow-[inset_1px_1px_0_#ffffff] transition-all cursor-pointer flex-shrink-0 active:translate-y-[1px]"
           >
-            <span>Mở Trang Gốc</span>
+            <span>Open Original Page</span>
             <ExternalLink className="w-3.5 h-3.5" />
           </a>
         </div>
@@ -148,24 +145,24 @@ export const PlayCraftmineView: React.FC = () => {
 
                 <div className="flex items-center justify-between gap-1 mb-1">
                   <span
-                    className="px-1.5 py-0.5 text-[9px] font-bold font-mono uppercase border border-[#141414]"
+                    className="px-1.5 py-0.5 text-[9px] font-minecraft-ten uppercase border border-[#141414]"
                     style={{ backgroundColor: isSelected ? edition.accentColor : '#222426', color: isSelected ? '#141414' : '#d1d5db' }}
                   >
                     #{idx + 1} {edition.badge}
                   </span>
                   {isSelected && (
-                    <span className="flex items-center gap-1 text-[9px] text-[#89dc69] font-bold font-mono">
+                    <span className="flex items-center gap-1 text-[9px] text-[#89dc69] font-minecraft-seven">
                       <span className="w-1.5 h-1.5 bg-[#89dc69] rounded-full animate-ping" />
                       ACTIVE
                     </span>
                   )}
                 </div>
 
-                <div className="font-bold text-xs sm:text-sm text-white font-montserrat truncate mt-1">
+                <div className="text-xs sm:text-sm text-white font-minecraft-ten truncate mt-1">
                   {edition.name}
                 </div>
 
-                <div className="text-[10px] text-gray-300 font-mono truncate mt-0.5">
+                <div className="text-[10px] text-gray-300 font-minecraft-seven truncate mt-0.5">
                   {edition.engineName}
                 </div>
               </button>
@@ -180,13 +177,13 @@ export const PlayCraftmineView: React.FC = () => {
         className="bg-[#292b2d] border-2 border-[#141414] shadow-2xl overflow-hidden flex flex-col relative"
       >
         {/* PLAYER CONTROL TOOLBAR */}
-        <div className="bg-[#1e2022] border-b-2 border-[#141414] px-3 py-2 flex items-center justify-between flex-wrap gap-2 text-xs font-montserrat select-none">
+        <div className="bg-[#1e2022] border-b-2 border-[#141414] px-3 py-2 flex items-center justify-between flex-wrap gap-2 text-xs font-minecraft-seven select-none">
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 bg-[#89dc69] rounded-full" />
-            <span className="font-bold text-white text-xs sm:text-sm tracking-wide">
+            <span className="text-white text-xs sm:text-sm tracking-wide font-minecraft-ten">
               {selectedEdition.name}
             </span>
-            <span className="hidden md:inline-block bg-[#141414] text-gray-300 text-[10px] px-2 py-0.5 border border-[#383a3d] font-mono">
+            <span className="hidden md:inline-block bg-[#141414] text-gray-300 text-[10px] px-2 py-0.5 border border-[#383a3d]">
               {selectedEdition.engineType}
             </span>
           </div>
@@ -195,20 +192,20 @@ export const PlayCraftmineView: React.FC = () => {
           <div className="flex items-center gap-1.5">
             <button
               onClick={handleReloadFrame}
-              title="Tải lại game"
+              title="Reload game"
               className="bg-[#3e4246] hover:bg-[#4d5156] active:bg-[#252729] text-white p-1.5 border border-[#141414] cursor-pointer flex items-center gap-1 text-[11px]"
             >
               <RotateCw className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Tải lại</span>
+              <span className="hidden sm:inline">Reload</span>
             </button>
 
             <button
               onClick={handleToggleFullscreen}
-              title="Toàn màn hình"
+              title="Fullscreen"
               className="bg-[#3e4246] hover:bg-[#4d5156] active:bg-[#252729] text-white p-1.5 border border-[#141414] cursor-pointer flex items-center gap-1 text-[11px]"
             >
               <Maximize2 className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Phóng to</span>
+              <span className="hidden sm:inline">Fullscreen</span>
             </button>
 
             <a
@@ -216,11 +213,11 @@ export const PlayCraftmineView: React.FC = () => {
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => playPopSound()}
-              title="Mở trong tab mới"
-              className="bg-[#418a28] hover:bg-[#52a634] active:bg-[#2e681c] text-white px-2.5 py-1.5 border border-[#141414] cursor-pointer flex items-center gap-1 text-[11px] font-bold"
+              title="Open in new tab"
+              className="bg-[#418a28] hover:bg-[#52a634] active:bg-[#2e681c] text-white px-2.5 py-1.5 border border-[#141414] cursor-pointer flex items-center gap-1 text-[11px]"
             >
               <ExternalLink className="w-3.5 h-3.5" />
-              <span>Tab Mới</span>
+              <span>New Tab</span>
             </a>
           </div>
         </div>
@@ -236,10 +233,10 @@ export const PlayCraftmineView: React.FC = () => {
                 className="h-12 sm:h-14 object-contain [image-rendering:pixelated] animate-pulse"
               />
               <div className="space-y-1">
-                <div className="text-sm font-bold text-white font-montserrat">
-                  Đang khởi tạo {selectedEdition.name}...
+                <div className="text-sm text-white font-minecraft-ten">
+                  Initializing {selectedEdition.name}...
                 </div>
-                <div className="text-xs text-gray-400 font-mono">
+                <div className="text-xs text-gray-400 font-minecraft-seven">
                   Engine: {selectedEdition.engineName}
                 </div>
               </div>
@@ -260,23 +257,23 @@ export const PlayCraftmineView: React.FC = () => {
         </div>
 
         {/* BOTTOM HELPER BAR: CONTROLS & ENGINE SPECS */}
-        <div className="bg-[#1e2022] border-t-2 border-[#141414] p-3 text-xs font-montserrat flex flex-col md:flex-row items-start md:items-center justify-between gap-3 text-gray-300">
+        <div className="bg-[#1e2022] border-t-2 border-[#141414] p-3 text-xs font-minecraft-seven flex flex-col md:flex-row items-start md:items-center justify-between gap-3 text-gray-300">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="font-bold text-[#89dc69] uppercase font-mono">Phím điều khiển:</span>
-            <span className="bg-[#141414] px-1.5 py-0.5 font-mono text-white text-[11px] border border-[#383a3d]">W A S D</span>
-            <span>Di chuyển</span>
+            <span className="text-[#89dc69] uppercase font-minecraft-ten">Controls:</span>
+            <span className="bg-[#141414] px-1.5 py-0.5 text-white text-[11px] border border-[#383a3d]">W A S D</span>
+            <span>Move</span>
             <span className="text-gray-500">•</span>
-            <span className="bg-[#141414] px-1.5 py-0.5 font-mono text-white text-[11px] border border-[#383a3d]">Space</span>
-            <span>Nhảy</span>
+            <span className="bg-[#141414] px-1.5 py-0.5 text-white text-[11px] border border-[#383a3d]">Space</span>
+            <span>Jump</span>
             <span className="text-gray-500">•</span>
-            <span className="bg-[#141414] px-1.5 py-0.5 font-mono text-white text-[11px] border border-[#383a3d]">Chuột Trái</span>
-            <span>Phá khối</span>
+            <span className="bg-[#141414] px-1.5 py-0.5 text-white text-[11px] border border-[#383a3d]">Left Click</span>
+            <span>Break block</span>
             <span className="text-gray-500">•</span>
-            <span className="bg-[#141414] px-1.5 py-0.5 font-mono text-white text-[11px] border border-[#383a3d]">Chuột Phải</span>
-            <span>Đặt khối</span>
+            <span className="bg-[#141414] px-1.5 py-0.5 text-white text-[11px] border border-[#383a3d]">Right Click</span>
+            <span>Place block</span>
           </div>
 
-          <div className="flex items-center gap-2 font-mono text-[11px] text-gray-400">
+          <div className="flex items-center gap-2 text-[11px] text-gray-400">
             <span>Direct URL:</span>
             <a
               href={selectedEdition.url}
@@ -305,19 +302,19 @@ export const PlayCraftmineView: React.FC = () => {
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <span
-                    className="text-[10px] font-bold font-mono px-2 py-0.5 border border-[#141414]"
+                    className="text-[10px] font-minecraft-ten px-2 py-0.5 border border-[#141414]"
                     style={{ backgroundColor: edition.accentColor, color: '#141414' }}
                   >
                     {edition.badge}
                   </span>
-                  <span className="text-[10px] text-gray-400 font-mono">ONLINE</span>
+                  <span className="text-[10px] text-gray-400 font-minecraft-seven">ONLINE</span>
                 </div>
 
-                <h3 className="font-bold text-sm sm:text-base text-white font-montserrat">
+                <h3 className="text-sm sm:text-base text-white font-minecraft-ten">
                   {edition.name}
                 </h3>
 
-                <p className="text-xs text-gray-300 font-montserrat leading-relaxed">
+                <p className="text-xs text-gray-300 font-minecraft-seven leading-relaxed">
                   {edition.description}
                 </p>
 
@@ -326,7 +323,7 @@ export const PlayCraftmineView: React.FC = () => {
                   {edition.features.map((feat, i) => (
                     <span
                       key={i}
-                      className="bg-[#242628] text-gray-300 px-2 py-0.5 text-[10px] font-mono border border-[#141414]"
+                      className="bg-[#242628] text-gray-300 px-2 py-0.5 text-[10px] font-minecraft-seven border border-[#141414]"
                     >
                       ✓ {feat}
                     </span>
@@ -336,12 +333,12 @@ export const PlayCraftmineView: React.FC = () => {
 
               <div className="pt-3 border-t border-[#2d3033]">
                 {isSelected ? (
-                  <div className="w-full bg-[#242628] text-[#89dc69] text-center py-2 text-xs font-bold font-mono border border-[#418a28]">
-                    ▶ ĐANG CHƠI PHIÊN BẢN NÀY
+                  <div className="w-full bg-[#242628] text-[#89dc69] text-center py-2 text-xs font-minecraft-ten border border-[#418a28]">
+                    ▶ PLAYING THIS EDITION
                   </div>
                 ) : (
                   <VplayHeroButton fullWidth onClick={() => handleSelectEdition(edition)}>
-                    CHUYỂN SANG PHIÊN BẢN NÀY
+                    SWITCH TO THIS EDITION
                   </VplayHeroButton>
                 )}
               </div>

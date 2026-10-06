@@ -25,14 +25,14 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
   };
 
   return (
-    <div className="sticky top-0 z-50 w-full bg-[#dedede] text-[#141414] border-b-4 border-[#5a5a5c] px-3 py-1 sm:py-1.5 flex items-center justify-between font-montserrat select-none">
+    <div className="sticky top-0 z-50 w-full bg-[#dedede] text-[#141414] border-b-4 border-[#5a5a5c] px-3 py-1 sm:py-1.5 flex items-center justify-between font-minecraft-seven select-none">
       {/* Left controls: Chevron Left (<) */}
       <div className="flex items-center gap-0.5 sm:gap-1 min-w-[36px]">
         <button
           onClick={handleBack}
           aria-label="Back"
           className="p-1 hover:bg-[#cecece] active:bg-[#bebebe] btn-press-effect text-[#141414] cursor-pointer rounded-none flex items-center justify-center"
-          title="Quay lại"
+          title="Back"
         >
           <img
             src="https://static.wikia.nocookie.net/ep-deo/images/a/ab/ArrowLeft.png/revision/latest?cb=20260728033445"
@@ -53,8 +53,8 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
           className="h-6 sm:h-7 md:h-8 w-auto max-w-[200px] sm:max-w-[280px] object-contain [image-rendering:pixelated] select-none filter drop-shadow-sm"
           style={{ imageRendering: 'pixelated' }}
         />
-        {title && title !== 'HOME' && title !== 'TRANG CHỦ' && (
-          <span className="hidden md:inline-block bg-[#1c1d1f] text-[#89dc69] text-[10px] font-bold font-montserrat px-2 py-0.5 border border-[#141414] uppercase shadow-sm">
+        {title && title !== 'HOME' && (
+          <span className="hidden md:inline-block bg-[#1c1d1f] text-[#89dc69] text-[10px] font-minecraft-ten px-2 py-0.5 border border-[#141414] uppercase shadow-sm">
             {title}
           </span>
         )}
@@ -66,7 +66,7 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
           onClick={handleSearchClick}
           aria-label="Search"
           className="p-1 hover:bg-[#cecece] active:bg-[#bebebe] btn-press-effect text-[#141414] cursor-pointer rounded-none flex items-center justify-center"
-          title="Tìm kiếm"
+          title="Feedback & Search"
         >
           <img
             src="https://static.wikia.nocookie.net/ep-deo/images/c/c8/MagnifyingGlass-52f96e5f47f42e682a00.png/revision/latest?cb=20260723030208"

@@ -12,6 +12,45 @@ interface VplayTabProps {
   className?: string;
 }
 
+const TabScrollText: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLDivElement>(null);
+  const [isOverflowing, setIsOverflowing] = useState(false);
+
+  useEffect(() => {
+    const checkOverflow = () => {
+      if (containerRef.current && textRef.current) {
+        setIsOverflowing(textRef.current.scrollWidth > containerRef.current.clientWidth + 2);
+      }
+    };
+    checkOverflow();
+    const timeout = setTimeout(checkOverflow, 100);
+    window.addEventListener('resize', checkOverflow);
+    return () => {
+      clearTimeout(timeout);
+      window.removeEventListener('resize', checkOverflow);
+    };
+  }, [children]);
+
+  return (
+    <div
+      ref={containerRef}
+      className="w-full max-w-full overflow-hidden relative flex items-center justify-center select-none"
+    >
+      <div
+        ref={textRef}
+        className={`whitespace-nowrap ${
+          isOverflowing
+            ? 'animate-tab-marquee inline-block will-change-transform'
+            : 'inline-flex items-center justify-center'
+        }`}
+      >
+        {children}
+      </div>
+    </div>
+  );
+};
+
 export const VplayTab: React.FC<VplayTabProps> = ({
   children = 'First tab',
   active = false,
@@ -106,8 +145,8 @@ export const VplayTab: React.FC<VplayTabProps> = ({
       onTouchEnd={handleTouchEnd}
       onTouchCancel={() => setIsPressed(false)}
       className={`
-        relative px-4 py-2 min-w-[90px] sm:min-w-[120px] flex items-center justify-center text-center font-montserrat font-bold text-xs sm:text-sm select-none
-        border-2 border-[#141414] rounded-none outline-none cursor-pointer btn-press-effect transition-colors duration-75
+        relative px-2 sm:px-3 py-2 min-w-[75px] sm:min-w-[110px] max-w-full flex items-center justify-center text-center font-minecraft-seven text-xs sm:text-sm select-none
+        border-2 border-[#141414] rounded-none outline-none cursor-pointer btn-press-effect transition-colors duration-75 overflow-hidden
         ${tabBg} ${transformClass} ${className}
       `}
     >
@@ -132,10 +171,10 @@ export const VplayTab: React.FC<VplayTabProps> = ({
         </svg>
       )}
 
-      <div className="relative inline-flex flex-col items-center max-w-full z-10">
-        <span className={`truncate transition-transform ${!isActive ? '-translate-y-[1px]' : ''}`}>
+      <div className="relative w-full max-w-full overflow-hidden flex flex-col items-center justify-center z-10">
+        <TabScrollText>
           {children}
-        </span>
+        </TabScrollText>
 
         {/* Bottom line indicator */}
         <div
@@ -147,4 +186,3 @@ export const VplayTab: React.FC<VplayTabProps> = ({
     </div>
   );
 };
-

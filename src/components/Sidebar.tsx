@@ -2,14 +2,13 @@ import React from 'react';
 import { playPopSound } from '../utils/sound';
 import { VplayTab } from './ui/VplayTab';
 
-export type SidebarMenuItem = 'home' | 'play_craftmine' | 'design_system' | 'settings';
+export type SidebarMenuItem = 'home' | 'play_craftmine' | 'release_notes' | 'settings';
 
 interface SidebarProps {
   activeItem: SidebarMenuItem;
   onSelectItem: (item: SidebarMenuItem) => void;
   onOpenFeedback?: () => void;
   className?: string;
-  worldCount?: number;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -17,10 +16,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onSelectItem,
   className = '',
 }) => {
+  // Hide Ore UI from the tab bar as requested
   const menuItems: { id: SidebarMenuItem; label: string; badge?: string }[] = [
     { id: 'home', label: 'Home' },
     { id: 'play_craftmine', label: 'Play Craftmine', badge: '(3)' },
-    { id: 'design_system', label: 'Ore UI' },
+    { id: 'release_notes', label: 'Release Notes', badge: '(New)' },
     { id: 'settings', label: 'Settings' },
   ];
 
@@ -49,7 +49,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           onClick={handlePrevTab}
           title="Previous Tab"
           aria-label="Previous Tab"
-          className="flex sm:hidden items-center justify-center bg-[#cdd1d4] hover:bg-[#e2e5e8] active:bg-[#abafb3] text-[#141414] font-extrabold font-mono text-xs px-2.5 py-2 border-2 border-[#141414] shadow-[inset_2px_2px_0_#ffffff,inset_-2px_-2px_0_#9ea2a6] flex-shrink-0 cursor-pointer z-10"
+          className="flex sm:hidden items-center justify-center bg-[#cdd1d4] hover:bg-[#e2e5e8] active:bg-[#abafb3] text-[#141414] font-minecraft-seven text-xs px-2.5 py-2 border-2 border-[#141414] shadow-[inset_2px_2px_0_#ffffff,inset_-2px_-2px_0_#9ea2a6] flex-shrink-0 cursor-pointer z-10"
         >
           [
         </button>
@@ -63,9 +63,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 key={item.id}
                 active={isSelected}
                 onClick={() => onSelectItem(item.id)}
-                className="flex-1 !min-w-[95px] sm:!min-w-[130px] !py-2"
+                className="flex-1 !min-w-[80px] sm:!min-w-[120px] !py-2"
               >
-                <span className="flex items-center justify-center gap-1">
+                <span className="inline-flex items-center gap-1">
                   <span>{item.label}</span>
                   {item.badge && (
                     <span className={`text-[10px] sm:text-xs ${isSelected ? 'text-[#89dc69]' : 'text-gray-300'}`}>
@@ -83,7 +83,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           onClick={handleNextTab}
           title="Next Tab"
           aria-label="Next Tab"
-          className="flex sm:hidden items-center justify-center bg-[#cdd1d4] hover:bg-[#e2e5e8] active:bg-[#abafb3] text-[#141414] font-extrabold font-mono text-xs px-2.5 py-2 border-2 border-[#141414] shadow-[inset_2px_2px_0_#ffffff,inset_-2px_-2px_0_#9ea2a6] flex-shrink-0 cursor-pointer z-10"
+          className="flex sm:hidden items-center justify-center bg-[#cdd1d4] hover:bg-[#e2e5e8] active:bg-[#abafb3] text-[#141414] font-minecraft-seven text-xs px-2.5 py-2 border-2 border-[#141414] shadow-[inset_2px_2px_0_#ffffff,inset_-2px_-2px_0_#9ea2a6] flex-shrink-0 cursor-pointer z-10"
         >
           ]
         </button>

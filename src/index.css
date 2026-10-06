@@ -1,24 +1,66 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'Minecraft Ten';
+  src: url('/fonts/MinecraftTen.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Minecraft Seven';
+  src: url('/fonts/MinecraftSeven.otf') format('opentype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Eliminate synthetic bold doubling on pixel fonts */
+* {
+  font-synthesis: none !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: 'Minecraft Seven', monospace, sans-serif;
+  font-weight: normal !important;
+  letter-spacing: 0.02em;
+}
+
+/* Ensure Minecraft pixel fonts never get artificial thick/bloated strokes */
+.font-minecraft-ten,
+.font-minecraft-seven,
+.font-jura,
+.font-montserrat {
+  font-weight: normal !important;
+}
+
 @layer utilities {
+  .font-minecraft-ten {
+    font-family: 'Minecraft Ten', 'Press Start 2P', monospace;
+  }
+  .font-minecraft-seven {
+    font-family: 'Minecraft Seven', 'VT323', monospace;
+  }
   .font-jura {
-    font-family: 'Jura', sans-serif;
+    font-family: 'Minecraft Ten', 'Jura', sans-serif;
   }
   .font-montserrat {
-    font-family: 'Jura', sans-serif;
+    font-family: 'Minecraft Seven', 'Montserrat', sans-serif;
   }
   .font-pixel {
-    font-family: 'Jura', 'Pixelify Sans', sans-serif;
+    font-family: 'Minecraft Seven', 'Pixelify Sans', sans-serif;
   }
   .font-press-start {
-    font-family: 'Jura', sans-serif;
-    font-weight: 700;
+    font-family: 'Minecraft Ten', sans-serif;
   }
   .font-silkscreen {
-    font-family: 'Jura', sans-serif;
+    font-family: 'Minecraft Seven', sans-serif;
   }
   .font-vt323 {
-    font-family: 'Jura', sans-serif;
+    font-family: 'Minecraft Seven', monospace;
   }
 }
 
@@ -50,6 +92,29 @@
 /* Button Press Down Motion - Instant snappy response without animation */
 .btn-press-effect {
   transition: background-color 0.05s ease, color 0.05s ease !important;
+}
+
+/* Tab Bar Text Marquee Auto-Scroll Animation */
+@keyframes tab-marquee-scroll {
+  0% {
+    transform: translateX(0%);
+  }
+  15% {
+    transform: translateX(0%);
+  }
+  65% {
+    transform: translateX(calc(-100% + 80px));
+  }
+  80% {
+    transform: translateX(calc(-100% + 80px));
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+.animate-tab-marquee {
+  animation: tab-marquee-scroll 6s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
 }
 
 /* Custom Scanline FX for TV screen */
@@ -156,4 +221,3 @@
 .animate-tab-border-run {
   animation: tab-border-run 1.15s cubic-bezier(0.25, 1, 0.5, 1) forwards;
 }
-
