@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { playPopSound } from '../utils/sound';
 import { VplayHeroButton } from './ui/VplayHeroButton';
 import { VplaySecondaryButton } from './ui/VplaySecondaryButton';
-import { ArrowLeft, Calendar, Sparkles, AlertTriangle, Play } from 'lucide-react';
+import { ArrowLeft, Calendar, AlertTriangle, Play } from 'lucide-react';
 
 export interface ReleaseArticle {
   id: string;
@@ -76,33 +76,6 @@ export const ARTICLES_LIST: ReleaseArticle[] = [
       'Wild mushrooms not spawning in caves and Fall Forests',
     ],
   },
-  {
-    id: 'release-26w03-lovable',
-    title: 'Snapshot 26w03: Dynamic World Chunking',
-    versionTag: 'UPDATE 26w03',
-    editionBadge: 'Lovable & Studio Edition',
-    date: '09/28/2026',
-    thumbnail: 'https://static.wikia.nocookie.net/ep-deo/images/7/7a/Craftmine.png/revision/latest/scale-to-width-down/1000?cb=20261004160440',
-    summary: 'Improved 16x16 chunk streaming pipeline, dynamic day/night sunlight cycle, and voxel sound engine overhaul.',
-    editionId: 'lovable',
-    features: [
-      {
-        category: 'CHUNK STREAMING',
-        items: [
-          'Fast chunk streaming pipeline with 60 FPS lock',
-          'Smooth day/night cycle transition',
-          'Dynamic shadow caster for block entities',
-        ],
-      },
-    ],
-    bugFixes: [
-      'Fixed camera clipping through solid bedrock walls',
-      'Reduced memory usage by 24%',
-    ],
-    knownIssues: [
-      'Occasional frame drop during initial world generation',
-    ],
-  },
 ];
 
 const SettingsDivider = () => (
@@ -164,35 +137,32 @@ export const ReleaseNotesView: React.FC<ReleaseNotesViewProps> = ({
 
   return (
     <div className="w-full space-y-4 font-minecraft-seven">
-      {/* SEARCH BAR (EXACT DESIGN AS IN SETTINGS PAGE) */}
-      <div className="bg-[#4c4f52] border-2 border-[#141414] shadow-2xl overflow-hidden select-none">
-        <div className="p-3 sm:p-4 bg-[#35383b]">
-          <div className="relative flex items-center w-full">
-            <img
-              src="https://static.wikia.nocookie.net/ep-deo/images/c/c8/MagnifyingGlass-52f96e5f47f42e682a00.png/revision/latest?cb=20260723030208"
-              alt="Search Icon"
-              referrerPolicy="no-referrer"
-              className="absolute left-3 w-5 h-5 object-contain pointer-events-none z-10"
-            />
-            <input
-              type="text"
-              placeholder="Search for release notes, snapshots or features..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full h-9.5 bg-[#222426] text-white pl-10 pr-8 text-xs font-minecraft-seven border-2 border-[#141414] focus:outline-none focus:border-white placeholder:text-gray-400 shadow-[inset_0_2px_0_rgba(0,0,0,0.4)] cursor-pointer"
-            />
-            {searchQuery && (
-              <button
-                onMouseDown={() => playPopSound()}
-                onClick={() => setSearchQuery('')}
-                className="absolute right-3 text-gray-400 hover:text-white text-xs px-1 cursor-pointer font-bold z-10"
-              >
-                ✕
-              </button>
-            )}
-          </div>
+      {/* SEARCH BAR (NO CONTAINER BACKGROUND) */}
+      <div className="w-full select-none">
+        <div className="relative flex items-center w-full">
+          <img
+            src="https://static.wikia.nocookie.net/ep-deo/images/c/c8/MagnifyingGlass-52f96e5f47f42e682a00.png/revision/latest?cb=20260723030208"
+            alt="Search Icon"
+            referrerPolicy="no-referrer"
+            className="absolute left-3 w-5 h-5 object-contain pointer-events-none z-10"
+          />
+          <input
+            type="text"
+            placeholder="Search for release notes, snapshots or features..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full h-10 bg-[#222426] text-white pl-10 pr-8 text-xs font-minecraft-seven border-2 border-[#141414] focus:outline-none focus:border-[#89dc69] placeholder:text-gray-400 shadow-[inset_0_2px_0_rgba(0,0,0,0.4)] cursor-pointer"
+          />
+          {searchQuery && (
+            <button
+              onMouseDown={() => playPopSound()}
+              onClick={() => setSearchQuery('')}
+              className="absolute right-3 text-gray-400 hover:text-white text-xs px-1 cursor-pointer font-bold z-10"
+            >
+              ✕
+            </button>
+          )}
         </div>
-        <SettingsDivider />
       </div>
 
       {/* FULL ARTICLE DETAIL VIEW */}
@@ -238,7 +208,7 @@ export const ReleaseNotesView: React.FC<ReleaseNotesViewProps> = ({
                 </span>
               </div>
 
-              <h1 className="text-xl sm:text-2xl md:text-3xl font-minecraft-ten text-white uppercase tracking-wide">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-minecraft-ten text-white uppercase tracking-wide leading-tight">
                 {selectedArticle.title}
               </h1>
 
@@ -248,35 +218,34 @@ export const ReleaseNotesView: React.FC<ReleaseNotesViewProps> = ({
             </div>
 
             {/* HERO THUMBNAIL BANNER */}
-            <div className="w-full bg-[#1b1c1e] border-2 border-[#141414] overflow-hidden flex items-center justify-center p-2 sm:p-4 shadow-inner">
+            <div className="w-full aspect-[16/9] sm:aspect-[21/9] max-h-[380px] bg-[#1b1c1e] border-2 border-[#141414] overflow-hidden flex items-center justify-center shadow-inner">
               <img
                 src={selectedArticle.thumbnail}
                 alt={selectedArticle.title}
                 referrerPolicy="no-referrer"
-                className="w-full max-h-[380px] object-contain [image-rendering:pixelated] shadow-md"
+                className="w-full h-full object-cover [image-rendering:pixelated] shadow-md"
                 style={{ imageRendering: 'pixelated' }}
               />
             </div>
 
-            {/* ARTICLE BODY SECTIONS (REMOVED # AND ## SYMBOLS AS REQUESTED) */}
-            <div className="space-y-8 pt-2">
+            {/* ARTICLE BODY SECTIONS (REDUCED SPACE BETWEEN CATEGORIES) */}
+            <div className="space-y-4 pt-1">
               {/* SECTION: FEATURES */}
-              <section className="space-y-4">
-                <div className="flex items-center gap-2 border-b-2 border-[#418a28] pb-1.5">
+              <section className="space-y-2">
+                <div className="flex items-center gap-2 border-b-2 border-[#418a28] pb-1">
                   <span className="w-3 h-3 bg-[#89dc69] inline-block border border-[#141414]" />
                   <h2 className="text-lg sm:text-xl font-minecraft-ten tracking-wider text-white">
                     FEATURES
                   </h2>
                 </div>
 
-                <div className="space-y-5 pl-2 sm:pl-3">
+                <div className="space-y-2.5 pl-2 sm:pl-3">
                   {selectedArticle.features.map((cat, idx) => (
-                    <div key={idx} className="space-y-2 bg-[#25272a] p-3.5 border border-[#141414]">
+                    <div key={idx} className="space-y-1.5 bg-[#25272a] p-3 border border-[#141414]">
                       <h3 className="text-xs sm:text-sm text-[#89dc69] font-minecraft-ten uppercase tracking-wider flex items-center gap-1.5">
-                        <Sparkles className="w-3.5 h-3.5 text-[#89dc69]" />
                         <span>{cat.category}</span>
                       </h3>
-                      <ul className="space-y-1.5 pl-4 sm:pl-6 text-xs sm:text-sm text-gray-200 list-disc marker:text-[#89dc69]">
+                      <ul className="space-y-1 pl-4 sm:pl-6 text-xs sm:text-sm text-gray-200 list-disc marker:text-[#89dc69]">
                         {cat.items.map((item, itemIdx) => (
                           <li key={itemIdx} className="leading-relaxed">
                             {item}
@@ -289,16 +258,16 @@ export const ReleaseNotesView: React.FC<ReleaseNotesViewProps> = ({
               </section>
 
               {/* SECTION: BUG FIXES */}
-              <section className="space-y-3">
-                <div className="flex items-center gap-2 border-b-2 border-[#38bdf8] pb-1.5">
+              <section className="space-y-2">
+                <div className="flex items-center gap-2 border-b-2 border-[#38bdf8] pb-1">
                   <span className="w-3 h-3 bg-[#38bdf8] inline-block border border-[#141414]" />
                   <h2 className="text-lg sm:text-xl font-minecraft-ten tracking-wider text-white">
                     BUG FIXES
                   </h2>
                 </div>
 
-                <div className="bg-[#25272a] p-3.5 border border-[#141414] pl-2 sm:pl-3">
-                  <ul className="space-y-1.5 pl-4 sm:pl-6 text-xs sm:text-sm text-gray-200 list-disc marker:text-[#38bdf8]">
+                <div className="bg-[#25272a] p-3 border border-[#141414] pl-2 sm:pl-3">
+                  <ul className="space-y-1 pl-4 sm:pl-6 text-xs sm:text-sm text-gray-200 list-disc marker:text-[#38bdf8]">
                     {selectedArticle.bugFixes.map((item, idx) => (
                       <li key={idx} className="leading-relaxed">
                         {item}
@@ -309,20 +278,20 @@ export const ReleaseNotesView: React.FC<ReleaseNotesViewProps> = ({
               </section>
 
               {/* SECTION: KNOWN ISSUES */}
-              <section className="space-y-3">
-                <div className="flex items-center gap-2 border-b-2 border-[#f59e0b] pb-1.5">
+              <section className="space-y-2">
+                <div className="flex items-center gap-2 border-b-2 border-[#f59e0b] pb-1">
                   <span className="w-3 h-3 bg-[#f59e0b] inline-block border border-[#141414]" />
                   <h2 className="text-lg sm:text-xl font-minecraft-ten tracking-wider text-white">
                     KNOWN ISSUES
                   </h2>
                 </div>
 
-                <div className="bg-[#25272a] p-3.5 border border-[#141414] pl-2 sm:pl-3">
-                  <p className="text-xs text-amber-300 font-minecraft-seven mb-2 flex items-center gap-1.5">
+                <div className="bg-[#25272a] p-3 border border-[#141414] pl-2 sm:pl-3">
+                  <p className="text-xs text-amber-300 font-minecraft-seven mb-1.5 flex items-center gap-1.5">
                     <AlertTriangle className="w-3.5 h-3.5 text-amber-400" />
                     <span>Reported issues being resolved in upcoming snapshots:</span>
                   </p>
-                  <ul className="space-y-1.5 pl-4 sm:pl-6 text-xs sm:text-sm text-gray-200 list-disc marker:text-[#f59e0b]">
+                  <ul className="space-y-1 pl-4 sm:pl-6 text-xs sm:text-sm text-gray-200 list-disc marker:text-[#f59e0b]">
                     {selectedArticle.knownIssues.map((item, idx) => (
                       <li key={idx} className="leading-relaxed">
                         {item}
@@ -375,17 +344,30 @@ export const ReleaseNotesView: React.FC<ReleaseNotesViewProps> = ({
           {/* ARTICLES LIST */}
           {filteredArticles.length === 0 ? (
             <div className="bg-[#292a2c] p-8 text-center border-2 border-[#141414] space-y-3">
-              <p className="text-sm text-yellow-400 font-minecraft-ten">
-                NO ARTICLES FOUND
+              <p className="text-sm text-white font-minecraft-seven">
+                We found nothing :(
               </p>
               <p className="text-xs text-gray-300 font-minecraft-seven">
-                No articles matched your search query "{searchQuery}". Try searching for keywords like "desert", "caves", "base44", or "snapshot".
+                No results found for {searchQuery ? `"${searchQuery}"` : 'your query'}. Refine your search query.
               </p>
-              <div className="w-48 mx-auto pt-2">
+              <div className="w-56 mx-auto pt-2">
                 <VplaySecondaryButton
-                  onClick={() => setSearchQuery('')}
+                  onClick={() => {
+                    const searchInput = document.querySelector('input[placeholder*="Search for release notes"]') as HTMLInputElement;
+                    if (searchInput) {
+                      searchInput.focus();
+                      searchInput.select();
+                    }
+                  }}
+                  className="flex items-center justify-center gap-2"
                 >
-                  CLEAR SEARCH
+                  <img
+                    src="https://static.wikia.nocookie.net/ep-deo/images/c/c8/MagnifyingGlass-52f96e5f47f42e682a00.png/revision/latest?cb=20260723030208"
+                    alt="Search"
+                    referrerPolicy="no-referrer"
+                    className="w-5 h-5 object-contain filter brightness-0 inline-block mr-1.5"
+                  />
+                  <span>Refine search</span>
                 </VplaySecondaryButton>
               </div>
             </div>
@@ -413,7 +395,7 @@ export const ReleaseNotesView: React.FC<ReleaseNotesViewProps> = ({
                           src={article.thumbnail}
                           alt={article.title}
                           referrerPolicy="no-referrer"
-                          className="w-full h-full object-contain [image-rendering:pixelated] group-hover:scale-105 transition-transform duration-200"
+                          className="w-full h-full object-cover [image-rendering:pixelated] group-hover:scale-105 transition-transform duration-200"
                           style={{ imageRendering: 'pixelated' }}
                         />
                         {isLatest && (

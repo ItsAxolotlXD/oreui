@@ -19,8 +19,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   // Hide Ore UI from the tab bar as requested
   const menuItems: { id: SidebarMenuItem; label: string; badge?: string }[] = [
     { id: 'home', label: 'Home' },
-    { id: 'play_craftmine', label: 'Play Craftmine', badge: '(3)' },
-    { id: 'release_notes', label: 'Release Notes', badge: '(New)' },
+    { id: 'play_craftmine', label: 'Play' },
+    { id: 'release_notes', label: 'Releases' },
     { id: 'settings', label: 'Settings' },
   ];
 

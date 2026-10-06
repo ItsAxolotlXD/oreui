@@ -20,7 +20,18 @@ export const MinecraftPanorama: React.FC<MinecraftPanoramaProps> = ({
 }) => {
   if (disablePanorama) {
     return (
-      <div className="fixed inset-0 -z-10 bg-[#4e4f51] pointer-events-none select-none" />
+      <div
+        className="fixed inset-0 -z-10 pointer-events-none select-none"
+        style={{
+          backgroundImage: "url('https://minecraft.wiki/images/thumb/Spruce_Planks_%28texture%29_JE5.png/48px-Spruce_Planks_%28texture%29_JE5.png?37440')",
+          backgroundRepeat: 'repeat',
+          backgroundSize: '48px 48px',
+          imageRendering: 'pixelated',
+        }}
+      >
+        {/* Subtle dark vignette overlay for readable contrast */}
+        <div className="absolute inset-0 bg-black/35" />
+      </div>
     );
   }
 

@@ -10,7 +10,7 @@ import { HeaderBar } from './components/HeaderBar';
 import { MinecraftPanorama } from './components/MinecraftPanorama';
 import { HomeBannerSlider } from './components/HomeBannerSlider';
 import { FeedbackModal } from './components/FeedbackModal';
-import { SearchModal } from './components/SearchModal';
+import { Base44ExperienceModal } from './components/Base44ExperienceModal';
 import { playPopSound } from './utils/sound';
 
 import { Play, Sparkles, Cpu, Layers } from 'lucide-react';
@@ -21,6 +21,7 @@ export default function App() {
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isTabLoading, setIsTabLoading] = useState(false);
+  const [showBase44Modal, setShowBase44Modal] = useState(false);
   const [isDeveloperUnlocked, setIsDeveloperUnlocked] = useState<boolean>(false);
   const [targetArticleId, setTargetArticleId] = useState<string | null>(null);
   const [targetEditionId, setTargetEditionId] = useState<string | null>(null);
@@ -42,7 +43,7 @@ export default function App() {
     themeMode: 'dark',
     notifications: true,
     searchQuery: 'Craftmine Player',
-    disablePanorama: false,
+    disablePanorama: true,
     lockPanoramaScroll: false,
     panoramaScrollSpeed: 5,
     reduceMotion: false,
@@ -102,10 +103,14 @@ export default function App() {
         panoramaScrollSpeed={settings.panoramaScrollSpeed}
       />
       
-      {/* STICKY TOP HEADER BAR WITH CRAFTMINE LOGO */}
+      {/* STICKY TOP HEADER BAR WITH CRAFTMINE LOGO & FLOATING SEARCH */}
       <HeaderBar
         onBack={handleHeaderBack}
-        onSearchClick={() => setIsSearchOpen(true)}
+        isSearchOpen={isSearchOpen}
+        onToggleSearch={() => setIsSearchOpen((prev) => !prev)}
+        onCloseSearch={() => setIsSearchOpen(false)}
+        onNavigate={handleUniversalSearchNavigate}
+        onSelectBase44={() => setShowBase44Modal(true)}
       />
 
       {/* HORIZONTAL TAB BAR */}
@@ -128,20 +133,14 @@ export default function App() {
                 exit={settings.reduceMotion ? { opacity: 1, x: 0 } : { opacity: 1, transition: { duration: 0 } }}
                 transition={settings.reduceMotion ? { duration: 0 } : { duration: 0.22, ease: 'easeInOut' }}
               >
-                <div className="w-full min-h-[380px] bg-black/60 border-2 border-[#141414] shadow-2xl flex flex-col items-center justify-center p-8 text-center select-none my-2 space-y-3">
+                <div className="w-full min-h-[380px] bg-black/60 border-2 border-[#141414] shadow-2xl flex flex-col items-center justify-center p-8 text-center select-none my-2">
                   <img
-                    src="https://static.wikia.nocookie.net/ep-deo/images/7/7a/Craftmine.png/revision/latest/scale-to-width-down/1000?cb=20261004160440"
+                    src="https://img1.picmix.com/output/stamp/thumb/5/1/5/3/2513515_ae923.gif"
                     alt="Loading The Craftmine..."
                     referrerPolicy="no-referrer"
-                    className="h-10 sm:h-12 object-contain [image-rendering:pixelated] animate-pulse"
+                    className="h-16 sm:h-20 w-auto object-contain [image-rendering:pixelated]"
                     style={{ imageRendering: 'pixelated' }}
                   />
-                  <div className="w-48 bg-[#1b1c1e] h-3 border border-[#141414] p-0.5 mt-2">
-                    <div className="bg-[#418a28] h-full w-2/3 animate-pulse" />
-                  </div>
-                  <span className="text-xs text-gray-400 font-minecraft-seven tracking-wider">
-                    Loading The Craftmine engines...
-                  </span>
                 </div>
               </motion.div>
             ) : (
@@ -181,9 +180,13 @@ export default function App() {
                 ) : sidebarItem === 'release_notes' ? (
                   <ReleaseNotesView
                     initialArticleId={targetArticleId}
-                    onPlayEdition={() => {
-                      triggerTabLoading();
-                      setSidebarItem('play_craftmine');
+                    onPlayEdition={(editionId) => {
+                      if (editionId === 'base64') {
+                        setShowBase44Modal(true);
+                      } else {
+                        triggerTabLoading();
+                        setSidebarItem('play_craftmine');
+                      }
                     }}
                   />
                 ) : sidebarItem === 'play_craftmine' ? (
@@ -240,9 +243,13 @@ export default function App() {
                             key={edition.id}
                             onMouseDown={() => playPopSound()}
                             onClick={() => {
-                              triggerTabLoading();
-                              setTargetEditionId(edition.id);
-                              setSidebarItem('play_craftmine');
+                              if (edition.id === 'base64') {
+                                setShowBase44Modal(true);
+                              } else {
+                                triggerTabLoading();
+                                setTargetEditionId(edition.id);
+                                setSidebarItem('play_craftmine');
+                              }
                             }}
                             className="group relative bg-[#3f4246] hover:bg-[#484c50] border-2 border-[#141414] hover:border-[#89dc69] cursor-pointer transition-all duration-150 flex flex-col justify-between overflow-hidden shadow-md select-none btn-press-effect p-3.5 space-y-3"
                           >
@@ -310,7 +317,7 @@ export default function App() {
                             src="https://static.wikia.nocookie.net/ep-deo/images/2/28/Update_thumb.png/revision/latest/scale-to-width-down/1000?cb=20261006103204"
                             alt="Snapshot 26w04-base"
                             referrerPolicy="no-referrer"
-                            className="w-full h-full object-contain [image-rendering:pixelated] group-hover:scale-105 transition-transform"
+                            className="w-full h-full object-cover [image-rendering:pixelated] group-hover:scale-105 transition-transform"
                             style={{ imageRendering: 'pixelated' }}
                           />
                         </div>
@@ -356,17 +363,16 @@ export default function App() {
         </main>
       </div>
 
-      {/* UNIVERSAL SEARCH MODAL */}
-      <SearchModal
-        isOpen={isSearchOpen}
-        onClose={() => setIsSearchOpen(false)}
-        onNavigate={handleUniversalSearchNavigate}
-      />
-
       {/* FEEDBACK MODAL */}
       <FeedbackModal
         isOpen={isFeedbackOpen}
         onClose={() => setIsFeedbackOpen(false)}
+      />
+
+      {/* BASE44 EXPERIENCE MODAL DIALOG */}
+      <Base44ExperienceModal
+        isOpen={showBase44Modal}
+        onClose={() => setShowBase44Modal(false)}
       />
     </div>
   );

@@ -88,9 +88,10 @@ export const VplayHeroButton: React.FC<VplayHeroButtonProps> = ({
 
   const isSmall = size === 'sm' || size === 'compact';
   const fontClasses = isSmall
-    ? 'text-xs'
+    ? 'text-xs sm:text-sm'
     : 'text-sm sm:text-base';
-  const padClasses = isSmall ? 'px-3 py-1.5' : 'px-5 py-2';
+  const padClasses = isSmall ? 'px-3 py-1.5' : 'px-4 py-2';
+  const heightClass = isSmall ? 'h-8' : 'h-10';
 
   return (
     <button
@@ -107,6 +108,7 @@ export const VplayHeroButton: React.FC<VplayHeroButtonProps> = ({
       className={`
         relative select-none font-minecraft-ten uppercase tracking-wider overflow-hidden !p-0 inline-flex flex-col
         border-2 border-[#141414] bg-[#141414] rounded-none cursor-pointer
+        ${heightClass}
         ${effectiveDisabled ? 'cursor-not-allowed opacity-80' : ''}
         ${fullWidth ? 'w-full' : ''}
         ${className}
@@ -121,7 +123,7 @@ export const VplayHeroButton: React.FC<VplayHeroButtonProps> = ({
         {/* LAYER 1: Center main face containing text */}
         <div
           className={`
-            relative z-10 w-full flex items-center justify-center gap-2
+            relative z-10 w-full h-full flex-1 flex items-center justify-center gap-2
             mt-[2px] mb-[4px]
             ${padClasses} ${fontClasses} ${layer1Bg} ${textColor}
           `}

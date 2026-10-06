@@ -1,7 +1,8 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { playPopSound } from '../utils/sound';
 import { SidebarMenuItem } from './Sidebar';
-import { Search, Gamepad2, FileText, Settings, HelpCircle, Compass, ArrowRight, X } from 'lucide-react';
+import { VplaySecondaryButton } from './ui/VplaySecondaryButton';
+import { Search, X } from 'lucide-react';
 
 export interface SearchResultItem {
   id: string;
@@ -15,7 +16,7 @@ export interface SearchResultItem {
   editionId?: string;
 }
 
-const SEARCH_DATABASE: SearchResultItem[] = [
+export const SEARCH_DATABASE: SearchResultItem[] = [
   // 1. GAME EDITIONS & ENGINES
   {
     id: 'game-lovable',
@@ -217,7 +218,7 @@ const SEARCH_DATABASE: SearchResultItem[] = [
     id: 'nav-play',
     category: 'nav',
     categoryLabel: 'Navigation',
-    title: 'Play Craftmine Tab',
+    title: 'Play Tab',
     description: 'Interactive in-browser launcher supporting Lovable, Base 64, and Studio game engines.',
     badge: 'Tab',
     targetTab: 'play_craftmine',
@@ -226,7 +227,7 @@ const SEARCH_DATABASE: SearchResultItem[] = [
     id: 'nav-notes',
     category: 'nav',
     categoryLabel: 'Navigation',
-    title: 'Release Notes Tab',
+    title: 'Releases Tab',
     description: 'Full changelogs and snapshot documentation for all Craftmine updates.',
     badge: 'Tab',
     targetTab: 'release_notes',
@@ -242,151 +243,191 @@ const SEARCH_DATABASE: SearchResultItem[] = [
   },
 ];
 
-interface SearchModalProps {
+interface FloatingSearchBoxProps {
   isOpen: boolean;
   onClose: () => void;
   onNavigate: (tab: SidebarMenuItem, extra?: { articleId?: string; editionId?: string }) => void;
+  triggerButtonRef?: React.RefObject<HTMLButtonElement | null>;
+  onSelectBase44?: () => void;
 }
 
-export const SearchModal: React.FC<SearchModalProps> = ({
+export const FloatingSearchBox: React.FC<FloatingSearchBoxProps> = ({
   isOpen,
   onClose,
   onNavigate,
+  triggerButtonRef,
+  onSelectBase44,
 }) => {
   const [query, setQuery] = useState('');
-  const [activeFilter, setActiveFilter] = useState<'all' | 'game' | 'update' | 'setting' | 'faq'>('all');
+  const [isFlyoutLoading, setIsFlyoutLoading] = useState(true);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Auto-focus input when opened after loading
+  useEffect(() => {
+    if (isOpen) {
+      setIsFlyoutLoading(true);
+      const timer = setTimeout(() => {
+        setIsFlyoutLoading(false);
+        setTimeout(() => {
+          inputRef.current?.focus();
+        }, 50);
+      }, 450);
+      return () => clearTimeout(timer);
+    } else {
+      setIsFlyoutLoading(true);
+      setQuery('');
+    }
+  }, [isOpen]);
+
+  // Click outside listener
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+      const target = event.target as Node;
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(target) &&
+        (!triggerButtonRef?.current || !triggerButtonRef.current.contains(target))
+      ) {
+        onClose();
+      }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    document.addEventListener('pointerdown', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('pointerdown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen, onClose, triggerButtonRef]);
 
   const filteredResults = useMemo(() => {
-    let results = SEARCH_DATABASE;
-    if (activeFilter !== 'all') {
-      results = results.filter((r) => r.category === activeFilter);
-    }
     if (!query.trim()) {
-      return results;
+      return SEARCH_DATABASE;
     }
     const q = query.toLowerCase().trim();
-    return results.filter(
+    return SEARCH_DATABASE.filter(
       (r) =>
         r.title.toLowerCase().includes(q) ||
         r.description.toLowerCase().includes(q) ||
-        (r.badge && r.badge.toLowerCase().includes(q)) ||
         r.categoryLabel.toLowerCase().includes(q)
     );
-  }, [query, activeFilter]);
+  }, [query]);
 
   if (!isOpen) return null;
 
   const handleSelect = (item: SearchResultItem) => {
+    playPopSound();
+    if (item.editionId === 'base64') {
+      if (onSelectBase44) {
+        onSelectBase44();
+        onClose();
+        return;
+      }
+    }
     onNavigate(item.targetTab, { articleId: item.articleId, editionId: item.editionId });
     onClose();
   };
 
-  const getCategoryIcon = (category: SearchResultItem['category']) => {
-    switch (category) {
-      case 'game':
-        return <Gamepad2 className="w-4 h-4 text-[#89dc69]" />;
-      case 'update':
-        return <FileText className="w-4 h-4 text-sky-400" />;
-      case 'setting':
-        return <Settings className="w-4 h-4 text-amber-400" />;
-      case 'faq':
-        return <HelpCircle className="w-4 h-4 text-purple-400" />;
-      case 'nav':
-      default:
-        return <Compass className="w-4 h-4 text-gray-300" />;
-    }
-  };
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 animate-fade-in overflow-y-auto font-minecraft-seven select-none">
-      <div className="bg-[#35383b] border-2 border-[#141414] w-full max-w-2xl shadow-2xl text-white flex flex-col h-[85vh] max-h-[620px] my-auto overflow-hidden">
-        {/* MODAL HEADER */}
-        <div className="bg-[#2a2c2f] border-b-2 border-[#141414] p-3.5 flex items-center justify-between gap-3 flex-shrink-0">
-          <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 bg-[#89dc69] inline-block border border-[#141414]" />
-            <h2 className="text-sm sm:text-base text-white font-minecraft-ten uppercase tracking-wider">
-              SEARCH CRAFTMINE
-            </h2>
-          </div>
-
-          <button
-            onMouseDown={() => playPopSound()}
-            onClick={onClose}
-            className="w-7 h-7 flex items-center justify-center text-gray-300 hover:text-white hover:bg-[#3e4246] active:bg-[#1a1b1d] border border-[#141414] cursor-pointer"
-            title="Close"
-          >
-            <X className="w-4 h-4" />
-          </button>
+    <div
+      ref={containerRef}
+      className="absolute top-full right-0 mt-2 w-[calc(100vw-1.5rem)] sm:w-[460px] md:w-[500px] max-w-[95vw] bg-[#35383b] border-2 border-[#141414] shadow-[0_12px_36px_rgba(0,0,0,0.85)] z-50 text-white font-minecraft-seven flex flex-col max-h-[82vh] overflow-hidden select-none"
+      style={{
+        boxShadow: '0 12px 36px rgba(0,0,0,0.85), inset 2px 2px 0 rgba(255,255,255,0.18), inset -2px -3px 0 rgba(0,0,0,0.5)',
+      }}
+    >
+      {isFlyoutLoading ? (
+        <div className="p-8 sm:p-10 bg-[#2b2d30] flex flex-col items-center justify-center text-center min-h-[190px]">
+          <img
+            src="https://img1.picmix.com/output/stamp/thumb/5/1/5/3/2513515_ae923.gif"
+            alt="Loading Craftmine Search..."
+            referrerPolicy="no-referrer"
+            className="h-16 sm:h-20 w-auto object-contain [image-rendering:pixelated]"
+            style={{ imageRendering: 'pixelated' }}
+          />
         </div>
-
-        {/* SEARCH INPUT BAR */}
-        <div className="p-3 bg-[#242628] border-b-2 border-[#141414] flex-shrink-0">
-          <div className="relative flex items-center w-full">
+      ) : (
+        <>
+          {/* TOP FLOATING SEARCH BAR HEADER */}
+        <div className="bg-[#292b2d] border-b-2 border-[#141414] p-2.5 sm:p-3 flex items-center gap-2">
+          <div className="relative flex-1 flex items-center">
             <img
               src="https://static.wikia.nocookie.net/ep-deo/images/c/c8/MagnifyingGlass-52f96e5f47f42e682a00.png/revision/latest?cb=20260723030208"
-              alt="Search Icon"
+              alt="Search"
               referrerPolicy="no-referrer"
-              className="absolute left-3 w-4.5 h-4.5 object-contain pointer-events-none z-10"
+              className="absolute left-2.5 w-4.5 h-4.5 object-contain pointer-events-none z-10"
             />
             <input
-              autoFocus
+              ref={inputRef}
               type="text"
-              placeholder="Search across all games, release notes, settings, FAQs..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="w-full h-10 bg-[#191a1c] text-white pl-10 pr-9 text-xs sm:text-sm font-minecraft-seven border-2 border-[#141414] focus:outline-none focus:border-white placeholder:text-gray-400 shadow-[inset_0_2px_0_rgba(0,0,0,0.5)] cursor-pointer"
+              placeholder="Search Craftmine..."
+              className="w-full h-9 bg-[#1b1c1e] text-white pl-9 pr-8 text-xs font-minecraft-seven border-2 border-[#141414] focus:outline-none focus:border-[#89dc69] placeholder:text-gray-400 shadow-[inset_0_2px_0_rgba(0,0,0,0.5)]"
             />
             {query && (
               <button
+                type="button"
                 onMouseDown={() => playPopSound()}
                 onClick={() => setQuery('')}
-                className="absolute right-3 text-gray-400 hover:text-white text-xs px-1 cursor-pointer font-bold z-10"
+                className="absolute right-2 text-gray-400 hover:text-white text-xs px-1 cursor-pointer font-bold z-10"
+                title="Clear query"
               >
                 ✕
               </button>
             )}
           </div>
 
-          {/* FILTER CHIPS */}
-          <div className="flex items-center gap-1.5 mt-2 overflow-x-auto no-scrollbar pt-1 text-[11px]">
-            {[
-              { id: 'all', label: 'All Results' },
-              { id: 'game', label: 'Games (3)' },
-              { id: 'update', label: 'Release Notes' },
-              { id: 'setting', label: 'Settings' },
-              { id: 'faq', label: 'FAQs' },
-            ].map((tab) => {
-              const isSelected = activeFilter === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  onMouseDown={() => playPopSound()}
-                  onClick={() => setActiveFilter(tab.id as any)}
-                  className={`
-                    px-2.5 py-1 border transition-colors cursor-pointer flex-shrink-0 font-minecraft-seven
-                    ${isSelected
-                      ? 'bg-[#418a28] text-white border-[#141414] font-minecraft-ten text-[10px]'
-                      : 'bg-[#2f3235] text-gray-300 border-[#141414] hover:bg-[#3d4144]'
-                    }
-                  `}
-                >
-                  {tab.label}
-                </button>
-              );
-            })}
-          </div>
+          {/* Close button */}
+          <button
+            type="button"
+            onMouseDown={() => playPopSound()}
+            onClick={onClose}
+            className="w-9 h-9 bg-[#222426] hover:bg-[#3f4245] text-gray-300 hover:text-white border-2 border-[#141414] flex items-center justify-center cursor-pointer btn-press-effect flex-shrink-0"
+            title="Close search (Esc)"
+          >
+            <X className="w-4 h-4" />
+          </button>
         </div>
 
-        {/* RESULTS SCROLLABLE LIST */}
-        <div className="flex-1 p-3 space-y-2 overflow-y-auto custom-scrollbar bg-[#1e2022]">
+        {/* SEARCH RESULTS SCROLLABLE LIST */}
+        <div className="overflow-y-auto max-h-[380px] p-2 space-y-1.5 bg-[#2a2c2f]/95">
           {filteredResults.length === 0 ? (
-            <div className="p-8 text-center space-y-2">
-              <p className="text-sm text-yellow-400 font-minecraft-ten">
-                NO MATCHING RESULTS
+            <div className="p-6 sm:p-8 text-center text-gray-400 space-y-2.5">
+              <p className="text-xs font-minecraft-seven text-white">
+                We found nothing :(
               </p>
-              <p className="text-xs text-gray-400 font-minecraft-seven">
-                No items matched "{query}". Try keywords like "desert", "lovable", "base44", "panorama", or "survival".
+              <p className="text-[11px] text-gray-300 font-minecraft-seven">
+                No results found for {query ? `"${query}"` : 'your query'}. Refine your search query.
               </p>
+              <div className="w-52 mx-auto pt-1">
+                <VplaySecondaryButton
+                  size="compact"
+                  onClick={() => {
+                    inputRef.current?.focus();
+                    inputRef.current?.select();
+                  }}
+                  className="flex items-center justify-center gap-2"
+                >
+                  <img
+                    src="https://static.wikia.nocookie.net/ep-deo/images/c/c8/MagnifyingGlass-52f96e5f47f42e682a00.png/revision/latest?cb=20260723030208"
+                    alt="Search"
+                    referrerPolicy="no-referrer"
+                    className="w-5 h-5 object-contain filter brightness-0 inline-block mr-1.5"
+                  />
+                  <span>Refine search</span>
+                </VplaySecondaryButton>
+              </div>
             </div>
           ) : (
             filteredResults.map((item) => (
@@ -394,50 +435,29 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                 key={item.id}
                 onMouseDown={() => playPopSound()}
                 onClick={() => handleSelect(item)}
-                className="group p-3 bg-[#2b2d30] hover:bg-[#34373a] border-2 border-[#141414] hover:border-[#89dc69] transition-all cursor-pointer flex items-center justify-between gap-3 shadow-md btn-press-effect"
+                className="group p-2.5 bg-[#35383b] hover:bg-[#43464a] border border-[#141414] hover:border-[#89dc69] transition-all cursor-pointer flex flex-col gap-1 select-none btn-press-effect"
               >
-                <div className="flex items-start gap-3 min-w-0">
-                  <div className="w-8 h-8 bg-[#18191a] border border-[#141414] flex items-center justify-center flex-shrink-0 mt-0.5 shadow-inner">
-                    {getCategoryIcon(item.category)}
-                  </div>
-
-                  <div className="space-y-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <span className="text-[10px] text-gray-400 font-minecraft-seven">
-                        {item.categoryLabel}
-                      </span>
-                      {item.badge && (
-                        <span className="bg-[#141414] text-[#89dc69] text-[9px] px-1.5 py-0.2 border border-[#383a3d]">
-                          {item.badge}
-                        </span>
-                      )}
-                    </div>
-
-                    <h3 className="text-xs sm:text-sm text-white group-hover:text-[#89dc69] font-minecraft-ten truncate">
-                      {item.title}
-                    </h3>
-
-                    <p className="text-[11px] text-gray-300 font-minecraft-seven line-clamp-2">
-                      {item.description}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-1 text-[#89dc69] flex-shrink-0 font-minecraft-seven text-xs group-hover:translate-x-1 transition-transform">
-                  <span className="hidden sm:inline font-minecraft-ten text-[10px]">OPEN</span>
-                  <ArrowRight className="w-4 h-4" />
-                </div>
+                <span className="text-xs font-minecraft-ten text-white group-hover:text-[#89dc69] transition-colors truncate">
+                  {item.title}
+                </span>
+                <p className="text-[11px] text-gray-300 font-minecraft-seven line-clamp-2 leading-relaxed">
+                  {item.description}
+                </p>
               </div>
             ))
           )}
         </div>
 
-        {/* MODAL FOOTER */}
-        <div className="p-2.5 bg-[#2a2c2f] border-t-2 border-[#141414] flex items-center justify-between text-[11px] text-gray-400 font-minecraft-seven flex-shrink-0">
-          <span>{filteredResults.length} items found</span>
-          <span>Click any item to jump directly to it</span>
+        {/* BOTTOM STATUS FOOTER */}
+        <div className="bg-[#242628] px-3 py-1.5 border-t border-[#141414] flex items-center justify-between text-[10px] text-gray-400">
+          <span>{filteredResults.length} {filteredResults.length === 1 ? 'item' : 'items'} found</span>
+          <span className="flex items-center gap-1">
+            <kbd className="bg-[#18191a] px-1 py-0.5 border border-[#333] text-[9px] text-gray-300">ESC</kbd>
+            <span>to close</span>
+          </span>
         </div>
-      </div>
-    </div>
+      </>
+    )}
+  </div>
   );
 };

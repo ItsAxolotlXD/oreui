@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { playPopSound } from '../utils/sound';
-import { ChevronDown, ChevronUp, HelpCircle, ShieldAlert, Sparkles, Gamepad2, Monitor, Trophy } from 'lucide-react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 
 interface FaqItem {
   id: number;
@@ -57,23 +57,6 @@ export const FaqSection: React.FC<FaqSectionProps> = ({ onGoToPlayCraftmine }) =
     );
   };
 
-  const getFaqIcon = (id: number) => {
-    switch (id) {
-      case 1:
-        return <Gamepad2 className="w-4 h-4 text-[#89dc69]" />;
-      case 2:
-        return <Sparkles className="w-4 h-4 text-yellow-300" />;
-      case 3:
-        return <Monitor className="w-4 h-4 text-sky-400" />;
-      case 4:
-        return <Trophy className="w-4 h-4 text-orange-400" />;
-      case 5:
-        return <ShieldAlert className="w-4 h-4 text-red-400" />;
-      default:
-        return <HelpCircle className="w-4 h-4 text-[#89dc69]" />;
-    }
-  };
-
   return (
     <div className="bg-[#35383b] border-2 border-[#141414] p-4 sm:p-5 shadow-xl space-y-4 font-minecraft-seven">
       {/* SECTION HEADER */}
@@ -105,18 +88,12 @@ export const FaqSection: React.FC<FaqSectionProps> = ({ onGoToPlayCraftmine }) =
                 className="w-full p-3 sm:p-3.5 flex items-center justify-between gap-3 text-left hover:bg-[#34373b] active:bg-[#252729] cursor-pointer select-none btn-press-effect"
               >
                 <div className="flex items-center gap-2.5 sm:gap-3 flex-1 min-w-0">
-                  <div className="w-7 h-7 sm:w-8 sm:h-8 bg-[#1a1b1d] border border-[#141414] flex items-center justify-center flex-shrink-0 shadow-[inset_1px_1px_0_rgba(255,255,255,0.1)]">
-                    {getFaqIcon(faq.id)}
-                  </div>
-
-                  <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 min-w-0">
-                    <span className="bg-[#141414] text-[#89dc69] font-minecraft-ten text-[10px] px-1.5 py-0.5 border border-[#383a3d] self-start sm:self-auto">
-                      Q{faq.id}
-                    </span>
-                    <h3 className="text-xs sm:text-sm text-white font-minecraft-ten tracking-tight truncate sm:whitespace-normal">
-                      {faq.question}
-                    </h3>
-                  </div>
+                  <span className="bg-[#141414] text-[#89dc69] font-minecraft-ten text-[10px] px-2 py-1 border border-[#383a3d] self-start sm:self-auto flex-shrink-0">
+                    Q{faq.id}
+                  </span>
+                  <h3 className="text-xs sm:text-sm text-white font-minecraft-ten tracking-tight truncate sm:whitespace-normal">
+                    {faq.question}
+                  </h3>
                 </div>
 
                 <div className="p-1 text-gray-400 hover:text-white flex-shrink-0">

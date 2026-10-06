@@ -33,7 +33,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   onToggleDeveloperUnlocked,
 }) => {
   const [temp, setTemp] = useState<UserSettings>({
-    disablePanorama: false,
+    disablePanorama: true,
     lockPanoramaScroll: false,
     panoramaScrollSpeed: 5,
     reduceMotion: false,
@@ -75,7 +75,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
       themeMode: 'dark',
       notifications: true,
       searchQuery: 'Craftmine Player',
-      disablePanorama: false,
+      disablePanorama: true,
       lockPanoramaScroll: false,
       panoramaScrollSpeed: 5,
       reduceMotion: false,
@@ -94,7 +94,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   };
 
   return (
-    <div className="w-full max-w-3xl mx-auto my-2 sm:my-4 bg-[#4c4f52] border-2 border-[#141414] text-white font-minecraft-seven shadow-2xl rounded-none overflow-hidden select-none">
+    <div className="w-full my-2 sm:my-4 bg-[#4c4f52] border-2 border-[#141414] text-white font-minecraft-seven shadow-2xl rounded-none overflow-hidden select-none">
       
       {/* SEARCH BAR AT THE TOP OF SETTINGS */}
       <div className="p-3 sm:p-4 bg-[#35383b]">
@@ -110,7 +110,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             placeholder="Search for settings"
             value={settingSearch}
             onChange={(e) => setSettingSearch(e.target.value)}
-            className="w-full h-9.5 bg-[#222426] text-white pl-10 pr-8 text-xs font-minecraft-seven border-2 border-[#141414] focus:outline-none focus:border-white placeholder:text-gray-400 shadow-[inset_0_2px_0_rgba(0,0,0,0.4)] cursor-pointer"
+            className="w-full h-9.5 bg-[#222426] text-white pl-10 pr-8 text-xs font-minecraft-seven border-2 border-[#141414] focus:outline-none focus:border-[#89dc69] placeholder:text-gray-400 shadow-[inset_0_2px_0_rgba(0,0,0,0.4)] cursor-pointer"
           />
           {settingSearch && (
             <button
@@ -134,7 +134,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         matchesSearch('INTERFACE & CUSTOMIZATION')) && (
         <div>
           <div className="px-3 sm:px-4 py-2 bg-[#3d4043]">
-            <h3 className="text-xs uppercase text-gray-200 font-minecraft-ten">
+            <h3 className="text-xs uppercase text-gray-200 font-minecraft-seven">
               INTERFACE & CUSTOMIZATION
             </h3>
           </div>
@@ -146,7 +146,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             <>
               <div className="px-3 sm:px-4 py-3 hover:bg-[#525559] transition-colors flex items-center justify-between gap-3">
                 <div>
-                  <div className="text-xs text-white font-minecraft-ten">Disable panorama</div>
+                  <div className="text-xs text-white font-minecraft-seven">Disable panorama</div>
                   <div className="text-[10px] text-gray-300 font-minecraft-seven">
                     Change app background to dark charcoal instead of space panorama.
                   </div>
@@ -167,7 +167,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                 temp.disablePanorama ? 'opacity-60 bg-[#3f4245]' : 'hover:bg-[#525559]'
               }`}>
                 <div>
-                  <div className={`text-xs font-minecraft-ten ${temp.disablePanorama ? 'text-gray-400' : 'text-white'}`}>
+                  <div className={`text-xs font-minecraft-seven ${temp.disablePanorama ? 'text-gray-400' : 'text-white'}`}>
                     Lock panorama scroll
                   </div>
                   <div className="text-[10px] text-gray-400 font-minecraft-seven">
@@ -193,7 +193,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
               }`}>
                 <div className="flex items-center justify-between">
                   <div>
-                    <div className={`text-xs font-minecraft-ten ${temp.disablePanorama ? 'text-gray-400' : 'text-white'}`}>
+                    <div className={`text-xs font-minecraft-seven ${temp.disablePanorama ? 'text-gray-400' : 'text-white'}`}>
                       Panorama scroll speed
                     </div>
                     <div className="text-[10px] text-gray-400 font-minecraft-seven">
@@ -226,7 +226,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             <>
               <div className="px-3 sm:px-4 py-3 hover:bg-[#525559] transition-colors flex items-center justify-between gap-3">
                 <div>
-                  <div className="text-xs text-white font-minecraft-ten">Reduce motion</div>
+                  <div className="text-xs text-white font-minecraft-seven">Reduce motion</div>
                   <div className="text-[10px] text-gray-300 font-minecraft-seven">
                     Disable transition motion effects between pages.
                   </div>
@@ -247,7 +247,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         matchesSearch('ACCOUNT')) && (
         <div>
           <div className="px-3 sm:px-4 py-2 bg-[#3d4043]">
-            <h3 className="text-xs uppercase text-gray-200 font-minecraft-ten">
+            <h3 className="text-xs uppercase text-gray-200 font-minecraft-seven">
               ACCOUNT
             </h3>
           </div>
@@ -259,7 +259,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             <>
               <div className="px-3 sm:px-4 py-2.5 hover:bg-[#525559] transition-colors flex items-center justify-between gap-3">
                 <div>
-                  <div className="text-xs text-white font-minecraft-ten">
+                  <div className="text-xs text-white font-minecraft-seven">
                     Sign in with Craftmine account
                   </div>
                   <div className="text-[10px] text-gray-300 font-minecraft-seven">
@@ -293,7 +293,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         matchesSearch('DEVELOPER OPTIONS')) && (
         <div>
           <div className="px-3 sm:px-4 py-2 bg-[#3d4043]">
-            <h3 className="text-xs uppercase text-gray-200 font-minecraft-ten">
+            <h3 className="text-xs uppercase text-gray-200 font-minecraft-seven">
               DEVELOPER OPTIONS
             </h3>
           </div>
@@ -307,7 +307,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             <>
               <div className="px-3 sm:px-4 py-2.5 hover:bg-[#525559] transition-colors flex items-center justify-between gap-3">
                 <div>
-                  <div className="text-xs text-white font-minecraft-ten">Unlock restricted features</div>
+                  <div className="text-xs text-white font-minecraft-seven">Unlock restricted features</div>
                   <div className="text-[10px] text-gray-300 font-minecraft-seven">
                     Enables experimental features currently under active development.
                   </div>
@@ -342,7 +342,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             <>
               <div className="px-3 sm:px-4 py-2.5 hover:bg-[#525559] transition-colors flex items-center justify-between gap-3">
                 <div>
-                  <div className="text-xs text-white font-minecraft-ten">Performance test</div>
+                  <div className="text-xs text-white font-minecraft-seven">Performance test</div>
                   <div className="text-[10px] text-gray-300 font-minecraft-seven">
                     Test GPU/CPU performance, FPS, frame latency and memory with full-screen stress test.
                   </div>
@@ -366,7 +366,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             <>
               <div className="px-3 sm:px-4 py-2.5 hover:bg-[#525559] transition-colors flex items-center justify-between gap-3">
                 <div>
-                  <div className="text-xs text-white font-minecraft-ten">Ore UI design components</div>
+                  <div className="text-xs text-white font-minecraft-seven">Ore UI design components</div>
                   <div className="text-[10px] text-gray-300 font-minecraft-seven">
                     Explore component matrix and state guidelines of The Craftmine Ore UI.
                   </div>
@@ -391,7 +391,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             <>
               <div className="px-3 sm:px-4 py-2.5 hover:bg-[#525559] transition-colors flex items-center justify-between gap-3">
                 <div>
-                  <div className="text-xs text-white font-minecraft-ten">Reset settings to default</div>
+                  <div className="text-xs text-white font-minecraft-seven">Reset settings to default</div>
                   <div className="text-[10px] text-gray-300 font-minecraft-seven">
                     Restore all above options to their original default values.
                   </div>
@@ -437,7 +437,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                 ‹
               </button>
 
-              <h2 className="text-sm sm:text-base text-white font-minecraft-ten text-center flex-1 tracking-tight">
+              <h2 className="text-sm sm:text-base text-white font-minecraft-seven text-center flex-1 tracking-tight">
                 Coming soon
               </h2>
 
@@ -495,7 +495,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                 ‹
               </button>
 
-              <h2 className="text-sm sm:text-base text-white font-minecraft-ten text-center flex-1 tracking-tight">
+              <h2 className="text-sm sm:text-base text-white font-minecraft-seven text-center flex-1 tracking-tight">
                 A developer key is required
               </h2>
 
@@ -520,7 +520,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
               </p>
 
               <div className="space-y-2 bg-[#2b2d30] p-3.5 border border-[#141414]">
-                <label className="block text-xs text-white uppercase tracking-wider font-minecraft-ten">
+                <label className="block text-xs text-white uppercase tracking-wider font-minecraft-seven">
                   Developer Key (6 digits)
                 </label>
                 <input

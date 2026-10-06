@@ -97,8 +97,8 @@ export const VplaySecondaryButtonDark: React.FC<VplaySecondaryButtonDarkProps> =
 
   const isSmall = size === 'sm' || size === 'compact';
   const fontClasses = isSmall
-    ? 'text-xs font-bold'
-    : 'text-sm sm:text-base font-semibold';
+    ? 'text-[11px] font-bold'
+    : 'text-xs sm:text-sm font-semibold';
   const padClasses = isSmall ? 'px-3 py-1.5' : 'px-4 py-2';
 
   return (

@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { playPopSound } from '../utils/sound';
 import { VplayHeroButton } from './ui/VplayHeroButton';
 import { ExternalLink, Maximize2, RotateCw } from 'lucide-react';
+import { Base44ExperienceModal } from './Base44ExperienceModal';
 
 export interface CraftmineEdition {
   id: string;
@@ -65,10 +66,13 @@ export const PlayCraftmineView: React.FC<PlayCraftmineViewProps> = ({ initialEdi
   const [iframeKey, setIframeKey] = useState<number>(0);
   const [, setIsFullscreen] = useState<boolean>(false);
   const [isLoadingFrame, setIsLoadingFrame] = useState<boolean>(true);
+  const [showBase44Modal, setShowBase44Modal] = useState<boolean>(false);
   const playerContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (initialEditionId) {
+    if (initialEditionId === 'base64') {
+      setShowBase44Modal(true);
+    } else if (initialEditionId) {
       const match = CRAFTMINE_EDITIONS.find((e) => e.id === initialEditionId);
       if (match && match.id !== selectedEdition.id) {
         setIsLoadingFrame(true);
@@ -79,6 +83,10 @@ export const PlayCraftmineView: React.FC<PlayCraftmineViewProps> = ({ initialEdi
   }, [initialEditionId]);
 
   const handleSelectEdition = (edition: CraftmineEdition) => {
+    if (edition.id === 'base64') {
+      setShowBase44Modal(true);
+      return;
+    }
     if (edition.id !== selectedEdition.id) {
       setIsLoadingFrame(true);
       setSelectedEdition(edition);
@@ -241,24 +249,14 @@ export const PlayCraftmineView: React.FC<PlayCraftmineViewProps> = ({ initialEdi
         {/* IFRAME GAME CANVAS */}
         <div className="relative w-full aspect-[16/10] min-h-[460px] sm:min-h-[560px] md:min-h-[640px] bg-[#121315]">
           {isLoadingFrame && (
-            <div className="absolute inset-0 z-10 bg-[#16181a] flex flex-col items-center justify-center p-6 text-center space-y-3">
+            <div className="absolute inset-0 z-10 bg-[#16181a] flex flex-col items-center justify-center p-6 text-center">
               <img
-                src="https://static.wikia.nocookie.net/ep-deo/images/7/7a/Craftmine.png/revision/latest/scale-to-width-down/1000?cb=20261004160440"
+                src="https://img1.picmix.com/output/stamp/thumb/5/1/5/3/2513515_ae923.gif"
                 alt="Loading Craftmine"
                 referrerPolicy="no-referrer"
-                className="h-12 sm:h-14 object-contain [image-rendering:pixelated] animate-pulse"
+                className="h-16 sm:h-20 w-auto object-contain [image-rendering:pixelated]"
+                style={{ imageRendering: 'pixelated' }}
               />
-              <div className="space-y-1">
-                <div className="text-sm text-white font-minecraft-ten">
-                  Initializing {selectedEdition.name}...
-                </div>
-                <div className="text-xs text-gray-400 font-minecraft-seven">
-                  Engine: {selectedEdition.engineName}
-                </div>
-              </div>
-              <div className="w-48 bg-[#252729] h-2.5 border border-[#141414] p-0.5 overflow-hidden">
-                <div className="bg-[#89dc69] h-full w-3/4 animate-pulse" />
-              </div>
             </div>
           )}
 
@@ -362,6 +360,12 @@ export const PlayCraftmineView: React.FC<PlayCraftmineViewProps> = ({ initialEdi
           );
         })}
       </div>
+
+      {/* BASE44 EXPERIENCED MODAL POPUP */}
+      <Base44ExperienceModal
+        isOpen={showBase44Modal}
+        onClose={() => setShowBase44Modal(false)}
+      />
     </div>
   );
 };

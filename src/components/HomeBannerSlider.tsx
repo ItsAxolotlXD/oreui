@@ -59,7 +59,7 @@ export const HomeBannerSlider: React.FC<HomeBannerSliderProps> = ({
               {/* TITLE & SUBTITLE WITH IMAGE BELOW SUBTITLE */}
               <div className="space-y-2 text-left max-w-3xl mx-auto">
                 <h1 className="text-xl sm:text-2xl md:text-3xl text-white uppercase tracking-wide font-minecraft-ten text-center sm:text-left drop-shadow-md">
-                  Unleash possible creativity
+                  Unlock possibilities without edges
                 </h1>
                 <p className="text-xs sm:text-sm text-gray-200 leading-relaxed text-center sm:text-left drop-shadow font-minecraft-seven">
                   The Craftmine is coming soon. Stay tuned!

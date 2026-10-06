@@ -37,7 +37,7 @@ export const DesignSystemViewer: React.FC<DesignSystemViewerProps> = ({ onOpenFe
         <div>
           <h2 className="font-extrabold text-sm sm:text-base text-white uppercase tracking-wider mb-1 flex items-center gap-2">
             <span className="w-2.5 h-2.5 bg-[#55b331] inline-block border border-[#141414]" />
-            Unleash possible creativity
+            Unlock possibilities without edges
           </h2>
           <p className="text-xs text-gray-300 max-w-2xl font-normal leading-relaxed">
             The Craftmine is coming soon. Stay tuned!
