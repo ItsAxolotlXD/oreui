@@ -42,7 +42,7 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({ isOpen, onClose })
           <button
             onMouseDown={() => playPopSound()}
             onClick={onClose}
-            className="w-8 h-8 flex items-center justify-center text-gray-200 hover:text-white font-mono text-2xl cursor-pointer hover:bg-[#383b3e] active:bg-[#1f2022] border-2 border-transparent hover:border-[#141414] transition-all"
+            className="w-8 h-8 flex items-center justify-center text-gray-200 hover:text-white font-mono text-2xl cursor-pointer hover:bg-[#383b3e] active:bg-[#1f2022] border-2 border-transparent hover:border-[#141414] !transition-none ore-dark-btn hover:outline-2 hover:outline-white"
             title="Back"
           >
             ‹
@@ -55,7 +55,7 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({ isOpen, onClose })
           <button
             onMouseDown={() => playPopSound()}
             onClick={onClose}
-            className="w-8 h-8 flex items-center justify-center text-gray-200 hover:text-white font-mono text-lg sm:text-xl cursor-pointer hover:bg-[#383b3e] active:bg-[#1f2022] border-2 border-transparent hover:border-[#141414] transition-all"
+            className="w-8 h-8 flex items-center justify-center text-gray-200 hover:text-white font-mono text-lg sm:text-xl cursor-pointer hover:bg-[#383b3e] active:bg-[#1f2022] border-2 border-transparent hover:border-[#141414] !transition-none ore-dark-btn hover:outline-2 hover:outline-white"
             title="Close"
           >
             ✕

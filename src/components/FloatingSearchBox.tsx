@@ -164,7 +164,7 @@ export const SEARCH_DATABASE: SearchResultItem[] = [
     categoryLabel: 'FAQ',
     title: 'What type of game is Craftmine?',
     description: 'A sandbox video game inspired by Minecraft combining survival, exploration, building, crafting, and adventure.',
-    badge: 'FAQ #1',
+    badge: 'FAQ',
     targetTab: 'home',
   },
   {
@@ -173,7 +173,7 @@ export const SEARCH_DATABASE: SearchResultItem[] = [
     categoryLabel: 'FAQ',
     title: 'Is Craftmine free?',
     description: 'Yes! All three versions of Craftmine can be played directly on your web browser completely for free.',
-    badge: 'FAQ #2',
+    badge: 'FAQ',
     targetTab: 'home',
   },
   {
@@ -182,7 +182,7 @@ export const SEARCH_DATABASE: SearchResultItem[] = [
     categoryLabel: 'FAQ',
     title: 'On which devices can I play Craftmine?',
     description: 'Playable on Windows, iOS, Android, PlayStation, Xbox, Nintendo Switch, and any device with a modern browser.',
-    badge: 'FAQ #3',
+    badge: 'FAQ',
     targetTab: 'home',
   },
   {
@@ -191,7 +191,7 @@ export const SEARCH_DATABASE: SearchResultItem[] = [
     categoryLabel: 'FAQ',
     title: "What's the goal of Craftmine?",
     description: 'There is no single path—players enjoy complete open-ended freedom to build, survive, explore, or create.',
-    badge: 'FAQ #4',
+    badge: 'FAQ',
     targetTab: 'home',
   },
   {
@@ -200,7 +200,7 @@ export const SEARCH_DATABASE: SearchResultItem[] = [
     categoryLabel: 'FAQ',
     title: 'Copyright & Mojang Disclaimer',
     description: 'The Craftmine is an unofficial community fan project inspired by Minecraft (Mojang Studios).',
-    badge: 'FAQ #5',
+    badge: 'FAQ',
     targetTab: 'home',
   },
 
@@ -393,7 +393,7 @@ export const FloatingSearchBox: React.FC<FloatingSearchBoxProps> = ({
             type="button"
             onMouseDown={() => playPopSound()}
             onClick={onClose}
-            className="w-9 h-9 bg-[#222426] hover:bg-[#3f4245] text-gray-300 hover:text-white border-2 border-[#141414] flex items-center justify-center cursor-pointer btn-press-effect flex-shrink-0"
+            className="w-9 h-9 bg-[#222426] hover:bg-[#3f4245] text-gray-300 hover:text-white border-2 border-[#141414] flex items-center justify-center cursor-pointer btn-press-effect flex-shrink-0 ore-dark-btn !transition-none hover:outline-2 hover:outline-white"
             title="Close search (Esc)"
           >
             <X className="w-4 h-4" />

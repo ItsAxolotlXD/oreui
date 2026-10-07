@@ -134,7 +134,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         matchesSearch('INTERFACE & CUSTOMIZATION')) && (
         <div>
           <div className="px-3 sm:px-4 py-2 bg-[#3d4043]">
-            <h3 className="text-xs uppercase text-gray-200 font-minecraft-seven">
+            <h3 className="text-xs sm:text-sm uppercase text-gray-200 font-minecraft-ten tracking-wide">
               INTERFACE & CUSTOMIZATION
             </h3>
           </div>
@@ -247,7 +247,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         matchesSearch('ACCOUNT')) && (
         <div>
           <div className="px-3 sm:px-4 py-2 bg-[#3d4043]">
-            <h3 className="text-xs uppercase text-gray-200 font-minecraft-seven">
+            <h3 className="text-xs sm:text-sm uppercase text-gray-200 font-minecraft-ten tracking-wide">
               ACCOUNT
             </h3>
           </div>
@@ -293,7 +293,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         matchesSearch('DEVELOPER OPTIONS')) && (
         <div>
           <div className="px-3 sm:px-4 py-2 bg-[#3d4043]">
-            <h3 className="text-xs uppercase text-gray-200 font-minecraft-seven">
+            <h3 className="text-xs sm:text-sm uppercase text-gray-200 font-minecraft-ten tracking-wide">
               DEVELOPER OPTIONS
             </h3>
           </div>
@@ -431,7 +431,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
               <button
                 onMouseDown={() => playPopSound()}
                 onClick={() => setShowComingSoonModal(false)}
-                className="w-8 h-8 flex items-center justify-center text-gray-200 hover:text-white font-mono text-2xl cursor-pointer hover:bg-[#383b3e] active:bg-[#1f2022] border-2 border-transparent hover:border-[#141414] transition-all"
+                className="w-8 h-8 flex items-center justify-center text-gray-200 hover:text-white font-mono text-2xl cursor-pointer hover:bg-[#383b3e] active:bg-[#1f2022] border-2 border-transparent hover:border-[#141414] !transition-none ore-dark-btn hover:outline-2 hover:outline-white"
                 title="Back"
               >
                 ‹
@@ -444,7 +444,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
               <button
                 onMouseDown={() => playPopSound()}
                 onClick={() => setShowComingSoonModal(false)}
-                className="w-8 h-8 flex items-center justify-center text-gray-200 hover:text-white font-mono text-lg sm:text-xl cursor-pointer hover:bg-[#383b3e] active:bg-[#1f2022] border-2 border-transparent hover:border-[#141414] transition-all"
+                className="w-8 h-8 flex items-center justify-center text-gray-200 hover:text-white font-mono text-lg sm:text-xl cursor-pointer hover:bg-[#383b3e] active:bg-[#1f2022] border-2 border-transparent hover:border-[#141414] !transition-none ore-dark-btn hover:outline-2 hover:outline-white"
                 title="Close"
               >
                 ✕
@@ -489,7 +489,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                   setDevKeyInput('');
                   setDevKeyStatus(null);
                 }}
-                className="w-8 h-8 flex items-center justify-center text-gray-200 hover:text-white font-mono text-2xl cursor-pointer hover:bg-[#383b3e] active:bg-[#1f2022] border-2 border-transparent hover:border-[#141414] transition-all"
+                className="w-8 h-8 flex items-center justify-center text-gray-200 hover:text-white font-mono text-2xl cursor-pointer hover:bg-[#383b3e] active:bg-[#1f2022] border-2 border-transparent hover:border-[#141414] !transition-none ore-dark-btn hover:outline-2 hover:outline-white"
                 title="Back"
               >
                 ‹
@@ -506,7 +506,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                   setDevKeyInput('');
                   setDevKeyStatus(null);
                 }}
-                className="w-8 h-8 flex items-center justify-center text-gray-200 hover:text-white font-mono text-lg sm:text-xl cursor-pointer hover:bg-[#383b3e] active:bg-[#1f2022] border-2 border-transparent hover:border-[#141414] transition-all"
+                className="w-8 h-8 flex items-center justify-center text-gray-200 hover:text-white font-mono text-lg sm:text-xl cursor-pointer hover:bg-[#383b3e] active:bg-[#1f2022] border-2 border-transparent hover:border-[#141414] !transition-none ore-dark-btn hover:outline-2 hover:outline-white"
                 title="Close"
               >
                 ✕

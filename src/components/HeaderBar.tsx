@@ -46,7 +46,7 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
           onTouchStart={handleBackPress}
           onClick={onBack}
           aria-label="Back"
-          className="p-1 hover:bg-[#323538] active:bg-[#1a1b1d] btn-press-effect text-white cursor-pointer rounded-none flex items-center justify-center transition-colors"
+          className="p-1 hover:bg-[#323538] active:bg-[#1a1b1d] btn-press-effect text-white cursor-pointer rounded-none flex items-center justify-center !transition-none ore-dark-btn hover:outline-2 hover:outline-white"
           title="Back"
         >
           <img
@@ -78,7 +78,7 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
           onTouchStart={handleSearchPress}
           aria-label="Universal Search"
           aria-expanded={isSearchOpen}
-          className={`p-1 hover:bg-[#323538] active:bg-[#1a1b1d] btn-press-effect text-white cursor-pointer rounded-none flex items-center justify-center transition-colors ${
+          className={`p-1 hover:bg-[#323538] active:bg-[#1a1b1d] btn-press-effect text-white cursor-pointer rounded-none flex items-center justify-center !transition-none ore-dark-btn hover:outline-2 hover:outline-white ${
             isSearchOpen ? 'bg-[#323538] ring-2 ring-[#418a28]' : ''
           }`}
           title={isSearchOpen ? 'Close search' : 'Search all aspects of Craftmine'}

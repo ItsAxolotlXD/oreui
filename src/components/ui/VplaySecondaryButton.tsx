@@ -90,8 +90,8 @@ export const VplaySecondaryButton: React.FC<VplaySecondaryButtonProps> = ({
   const fontClasses = isSmall
     ? 'text-[11px] font-bold'
     : 'text-xs sm:text-sm font-semibold';
-  const padClasses = isSmall ? 'px-3 py-1.5' : 'px-4 py-2';
-  const heightClass = isSmall ? 'h-8' : 'h-10';
+  const padClasses = isSmall ? 'px-3 py-1' : 'px-4 py-1.5';
+  const heightClass = isSmall ? 'h-8' : 'h-11';
 
   return (
     <button
@@ -115,16 +115,15 @@ export const VplaySecondaryButton: React.FC<VplaySecondaryButtonProps> = ({
       `}
       {...props}
     >
-      {/* LAYER 3: Top & Side highlight frame */}
-      <div className={`relative w-full h-full flex flex-col px-[2px] ${state === 'pressed' ? 'translate-y-[4px]' : ''} ${layer3Bg}`}>
-        {/* LAYER 2: Bottom dark bevel bar */}
-        <div className={`absolute inset-x-0 bottom-0 h-[4px] ${layer2Bg}`} />
+      {/* LAYER 3: Top & Side highlight frame with 4px bottom bevel allowance */}
+      <div className={`relative w-full h-full flex flex-col px-[2px] pt-[2px] pb-[4px] ${state === 'pressed' ? 'translate-y-[4px]' : ''} ${layer3Bg}`}>
+        {/* LAYER 2: Bottom dark bevel bar (2 layers thick = 4px) */}
+        <div className={`absolute inset-x-0 bottom-0 h-[4px] ${layer2Bg} pointer-events-none`} />
 
         {/* LAYER 1: Center main face containing text */}
         <div
           className={`
             relative z-10 w-full h-full flex-1 flex items-center justify-center gap-2
-            mt-[2px] mb-[4px]
             ${padClasses} ${fontClasses} ${layer1Bg} ${textColor}
           `}
         >

@@ -163,7 +163,7 @@ const SEARCH_DATABASE: SearchResultItem[] = [
     categoryLabel: 'FAQ',
     title: 'What type of game is Craftmine?',
     description: 'A sandbox video game inspired by Minecraft combining survival, exploration, building, crafting, and adventure.',
-    badge: 'FAQ #1',
+    badge: 'FAQ',
     targetTab: 'home',
   },
   {
@@ -172,7 +172,7 @@ const SEARCH_DATABASE: SearchResultItem[] = [
     categoryLabel: 'FAQ',
     title: 'Is Craftmine free?',
     description: 'Yes! All three versions of Craftmine can be played directly on your web browser completely for free.',
-    badge: 'FAQ #2',
+    badge: 'FAQ',
     targetTab: 'home',
   },
   {
@@ -181,7 +181,7 @@ const SEARCH_DATABASE: SearchResultItem[] = [
     categoryLabel: 'FAQ',
     title: 'On which devices can I play Craftmine?',
     description: 'Playable on Windows, iOS, Android, PlayStation, Xbox, Nintendo Switch, and any device with a modern browser.',
-    badge: 'FAQ #3',
+    badge: 'FAQ',
     targetTab: 'home',
   },
   {
@@ -190,7 +190,7 @@ const SEARCH_DATABASE: SearchResultItem[] = [
     categoryLabel: 'FAQ',
     title: "What's the goal of Craftmine?",
     description: 'There is no single path—players enjoy complete open-ended freedom to build, survive, explore, or create.',
-    badge: 'FAQ #4',
+    badge: 'FAQ',
     targetTab: 'home',
   },
   {
@@ -199,7 +199,7 @@ const SEARCH_DATABASE: SearchResultItem[] = [
     categoryLabel: 'FAQ',
     title: 'Copyright & Mojang Disclaimer',
     description: 'The Craftmine is an unofficial community fan project inspired by Minecraft (Mojang Studios).',
-    badge: 'FAQ #5',
+    badge: 'FAQ',
     targetTab: 'home',
   },
 
@@ -312,7 +312,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
           <button
             onMouseDown={() => playPopSound()}
             onClick={onClose}
-            className="w-7 h-7 flex items-center justify-center text-gray-300 hover:text-white hover:bg-[#3e4246] active:bg-[#1a1b1d] border border-[#141414] cursor-pointer"
+            className="w-7 h-7 flex items-center justify-center text-gray-300 hover:text-white hover:bg-[#3e4246] active:bg-[#1a1b1d] border border-[#141414] cursor-pointer ore-dark-btn !transition-none hover:outline-2 hover:outline-white"
             title="Close"
           >
             <X className="w-4 h-4" />
@@ -363,10 +363,10 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                   onMouseDown={() => playPopSound()}
                   onClick={() => setActiveFilter(tab.id as any)}
                   className={`
-                    px-2.5 py-1 border transition-colors cursor-pointer flex-shrink-0 font-minecraft-seven
+                    px-2.5 py-1 border cursor-pointer flex-shrink-0 font-minecraft-seven !transition-none
                     ${isSelected
-                      ? 'bg-[#418a28] text-white border-[#141414] font-minecraft-ten text-[10px]'
-                      : 'bg-[#2f3235] text-gray-300 border-[#141414] hover:bg-[#3d4144]'
+                      ? 'bg-[#418a28] text-white border-[#141414] font-minecraft-ten text-[10px] shadow-[inset_0_1px_0_#6bc34b,inset_0_-2px_0_#1e4511]'
+                      : 'bg-[#2f3235] text-gray-300 border-[#141414] hover:bg-[#3d4144] ore-dark-btn hover:outline-2 hover:outline-white'
                     }
                   `}
                 >

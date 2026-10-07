@@ -48,7 +48,7 @@ export const DesignSystemViewer: React.FC<DesignSystemViewerProps> = ({ onOpenFe
             playPopSound();
             if (onOpenFeedback) onOpenFeedback();
           }}
-          className="flex items-center gap-2 bg-[#dcdfe2] hover:bg-white text-[#141414] font-extrabold text-xs sm:text-sm px-4 py-2 border-2 border-[#141414] cursor-pointer active:translate-y-[1px] btn-press-effect flex-shrink-0 shadow-[inset_0_1px_0_#ffffff]"
+          className="flex items-center gap-2 bg-[#dcdfe2] hover:bg-white text-[#141414] font-extrabold text-xs sm:text-sm px-4 py-2 border-2 border-[#141414] cursor-pointer active:translate-y-[1px] btn-press-effect flex-shrink-0 shadow-[inset_0_2px_0_#ffffff,inset_0_-4px_0_#9ea2a6]"
         >
           <ExternalLink className="w-4 h-4" />
           Give feedback
@@ -73,16 +73,18 @@ export const DesignSystemViewer: React.FC<DesignSystemViewerProps> = ({ onOpenFe
         <div className="flex gap-2 bg-[#2a2c2f] p-1.5 border border-[#141414]">
           <button
             onClick={() => setActiveTab('matrix')}
-            className={`px-4 py-2 text-xs font-montserrat font-bold transition-colors cursor-pointer ${
-              activeTab === 'matrix' ? 'bg-[#418a28] text-white' : 'text-gray-300 hover:text-white'
+            data-dark-btn={activeTab !== 'matrix' ? 'true' : undefined}
+            className={`px-4 py-2 text-xs font-montserrat font-bold cursor-pointer !transition-none ${
+              activeTab === 'matrix' ? 'bg-[#418a28] text-white shadow-[inset_0_2px_0_#6bc34b,inset_0_-4px_0_#1e4511]' : 'text-gray-300 hover:text-white ore-dark-btn'
             }`}
           >
             Design Matrix (Reference)
           </button>
           <button
             onClick={() => setActiveTab('playground')}
-            className={`px-4 py-2 text-xs font-montserrat font-bold transition-colors cursor-pointer ${
-              activeTab === 'playground' ? 'bg-[#418a28] text-white' : 'text-gray-300 hover:text-white'
+            data-dark-btn={activeTab !== 'playground' ? 'true' : undefined}
+            className={`px-4 py-2 text-xs font-montserrat font-bold cursor-pointer !transition-none ${
+              activeTab === 'playground' ? 'bg-[#418a28] text-white shadow-[inset_0_2px_0_#6bc34b,inset_0_-4px_0_#1e4511]' : 'text-gray-300 hover:text-white ore-dark-btn'
             }`}
           >
             Interactive Playground

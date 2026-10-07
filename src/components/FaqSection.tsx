@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { playPopSound } from '../utils/sound';
 import { ChevronDown, ChevronUp } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 
 interface FaqItem {
   id: number;
   question: string;
   answer: string;
   category?: string;
-  actionText?: string;
 }
 
 const FAQ_LIST: FaqItem[] = [
@@ -22,7 +22,6 @@ const FAQ_LIST: FaqItem[] = [
     question: 'Is Craftmine free?',
     answer: 'Absolutely! Both all three versions of Craftmine can be played on your browser for free. Go to the "Play Craftmine" tab to start playing.',
     category: 'PRICING',
-    actionText: 'Go to Play Craftmine tab',
   },
   {
     id: 3,
@@ -68,7 +67,7 @@ export const FaqSection: React.FC<FaqSectionProps> = ({ onGoToPlayCraftmine }) =
           </h2>
         </div>
         <span className="text-xs text-[#89dc69] font-minecraft-seven">
-          [5 common questions]
+          [Common questions]
         </span>
       </div>
 
@@ -79,19 +78,16 @@ export const FaqSection: React.FC<FaqSectionProps> = ({ onGoToPlayCraftmine }) =
           return (
             <div
               key={faq.id}
-              className="bg-[#2b2d30] border-2 border-[#141414] shadow-md overflow-hidden transition-all duration-150"
+              className="bg-[#2b2d30] border-2 border-[#141414] shadow-md relative"
             >
               {/* ACCORDION HEADER BUTTON (Sound plays on press down) */}
               <button
                 onMouseDown={() => playPopSound()}
                 onClick={() => toggleFaq(faq.id)}
-                className="w-full p-3 sm:p-3.5 flex items-center justify-between gap-3 text-left hover:bg-[#34373b] active:bg-[#252729] cursor-pointer select-none btn-press-effect"
+                className="w-full p-3 sm:p-3.5 flex items-center justify-between gap-3 text-left hover:bg-[#34373b] active:bg-[#252729] cursor-pointer select-none btn-press-effect ore-dark-btn !transition-none hover:outline-2 hover:outline-white relative z-10 hover:z-20"
               >
                 <div className="flex items-center gap-2.5 sm:gap-3 flex-1 min-w-0">
-                  <span className="bg-[#141414] text-[#89dc69] font-minecraft-ten text-[10px] px-2 py-1 border border-[#383a3d] self-start sm:self-auto flex-shrink-0">
-                    Q{faq.id}
-                  </span>
-                  <h3 className="text-xs sm:text-sm text-white font-minecraft-ten tracking-tight truncate sm:whitespace-normal">
+                  <h3 className="text-sm sm:text-base text-white font-minecraft-seven tracking-wide truncate sm:whitespace-normal font-normal">
                     {faq.question}
                   </h3>
                 </div>
@@ -105,34 +101,32 @@ export const FaqSection: React.FC<FaqSectionProps> = ({ onGoToPlayCraftmine }) =
                 </div>
               </button>
 
-              {/* ACCORDION CONTENT */}
-              {isOpen && (
-                <div className="px-3 sm:px-4 pb-3.5 pt-1 border-t border-[#383b3e] bg-[#222426]/90 space-y-3 font-minecraft-seven">
-                  <p className="text-xs sm:text-sm text-gray-200 leading-relaxed font-normal">
-                    {faq.answer}
-                  </p>
+              {/* ACCORDION CONTENT WITH SLIDE UP / SLIDE DOWN ANIMATION */}
+              <AnimatePresence initial={false}>
+                {isOpen && (
+                  <motion.div
+                    key={`faq-content-${faq.id}`}
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.22, ease: 'easeInOut' }}
+                    className="overflow-hidden"
+                  >
+                    <div className="px-3 sm:px-4 pb-3.5 pt-1 border-t border-[#383b3e] bg-[#222426]/90 space-y-3 font-minecraft-seven">
+                      <p className="text-xs sm:text-sm text-gray-200 leading-relaxed font-normal">
+                        {faq.answer}
+                      </p>
 
-                  {/* Quick Action Button for Question 2 (font-minecraft-ten for green button) */}
-                  {faq.id === 2 && onGoToPlayCraftmine && (
-                    <div className="pt-1">
-                      <button
-                        onMouseDown={() => playPopSound()}
-                        onClick={onGoToPlayCraftmine}
-                        className="inline-flex items-center gap-2 bg-[#418a28] hover:bg-[#52a634] active:bg-[#2e681c] text-white text-xs font-minecraft-ten px-3 py-1.5 border-2 border-[#141414] shadow-[inset_1px_1px_0_#89dc69] cursor-pointer"
-                      >
-                        <span>▶ Play Craftmine right now</span>
-                      </button>
+                      {/* Copyright Notice tag for Question 5 */}
+                      {faq.id === 5 && (
+                        <div className="text-[11px] text-gray-400 font-minecraft-seven bg-[#18191b] p-2 border border-[#383a3d]">
+                          Minecraft is a trademark of Mojang Synergies AB. The Craftmine is an unofficial community fan project and is not affiliated with or endorsed by Mojang or Microsoft.
+                        </div>
+                      )}
                     </div>
-                  )}
-
-                  {/* Copyright Notice tag for Question 5 */}
-                  {faq.id === 5 && (
-                    <div className="text-[11px] text-gray-400 font-minecraft-seven bg-[#18191b] p-2 border border-[#383a3d]">
-                      Minecraft is a trademark of Mojang Synergies AB. The Craftmine is an unofficial community fan project and is not affiliated with or endorsed by Mojang or Microsoft.
-                    </div>
-                  )}
-                </div>
-              )}
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           );
         })}

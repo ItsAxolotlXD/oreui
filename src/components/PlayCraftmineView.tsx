@@ -149,10 +149,10 @@ export const PlayCraftmineView: React.FC<PlayCraftmineViewProps> = ({ initialEdi
                 onMouseDown={() => playPopSound()}
                 onClick={() => handleSelectEdition(edition)}
                 className={`
-                  relative p-2.5 sm:p-3 text-left border-2 cursor-pointer transition-all duration-100 flex flex-col justify-between overflow-hidden select-none btn-press-effect
+                  relative p-2.5 sm:p-3 text-left border-2 cursor-pointer flex flex-col justify-between overflow-visible select-none btn-press-effect !transition-none
                   ${isSelected
                     ? 'bg-[#292b2d] border-[#89dc69] shadow-[inset_2px_2px_0_rgba(255,255,255,0.2)]'
-                    : 'bg-[#3e4246] hover:bg-[#484c50] border-[#141414]'
+                    : 'bg-[#3e4246] hover:bg-[#484c50] border-[#141414] ore-dark-btn hover:outline-2 hover:outline-white hover:z-20'
                   }
                 `}
               >
@@ -216,7 +216,7 @@ export const PlayCraftmineView: React.FC<PlayCraftmineViewProps> = ({ initialEdi
               onMouseDown={() => playPopSound()}
               onClick={handleReloadFrame}
               title="Reload game"
-              className="bg-[#3e4246] hover:bg-[#4d5156] active:bg-[#252729] text-white p-1.5 border border-[#141414] cursor-pointer flex items-center gap-1 text-[11px]"
+              className="bg-[#3e4246] hover:bg-[#4d5156] active:bg-[#252729] text-white p-1.5 border border-[#141414] cursor-pointer flex items-center gap-1 text-[11px] ore-dark-btn !transition-none hover:outline-2 hover:outline-white"
             >
               <RotateCw className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">Reload</span>
@@ -226,7 +226,7 @@ export const PlayCraftmineView: React.FC<PlayCraftmineViewProps> = ({ initialEdi
               onMouseDown={() => playPopSound()}
               onClick={handleToggleFullscreen}
               title="Fullscreen"
-              className="bg-[#3e4246] hover:bg-[#4d5156] active:bg-[#252729] text-white p-1.5 border border-[#141414] cursor-pointer flex items-center gap-1 text-[11px]"
+              className="bg-[#3e4246] hover:bg-[#4d5156] active:bg-[#252729] text-white p-1.5 border border-[#141414] cursor-pointer flex items-center gap-1 text-[11px] ore-dark-btn !transition-none hover:outline-2 hover:outline-white"
             >
               <Maximize2 className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">Fullscreen</span>

@@ -45,13 +45,13 @@ export const VplayDropdown: React.FC<VplayDropdownProps> = ({
   const selectedOption = options.find((o) => o.value === selected) || options[0];
 
   let btnBg = 'bg-[#cdd1d4] text-[#1c1d1f]';
-  let shadowClass = 'shadow-[inset_0_2px_0_#f4f6f8,inset_0_-3px_0_#9ea2a6]';
+  let shadowClass = 'shadow-[inset_0_2px_0_#f4f6f8,inset_0_-4px_0_#9ea2a6]';
   let transformClass = '';
 
   switch (state) {
     case 'hovered':
       btnBg = 'bg-[#ffffff] text-[#1c1d1f]';
-      shadowClass = 'shadow-[inset_0_2px_0_#ffffff,inset_0_-2px_0_#b5b9bd]';
+      shadowClass = 'shadow-[inset_0_2px_0_#ffffff,inset_0_-4px_0_#b5b9bd]';
       break;
     case 'pressed':
       btnBg = 'bg-[#73797f] text-white';
@@ -60,12 +60,12 @@ export const VplayDropdown: React.FC<VplayDropdownProps> = ({
       break;
     case 'disabled':
       btnBg = 'bg-[#bdc1c5] text-[#7c8084] cursor-not-allowed';
-      shadowClass = 'shadow-[inset_0_2px_0_#d8dcde,inset_0_-3px_0_#9ea2a6]';
+      shadowClass = 'shadow-[inset_0_2px_0_#d8dcde,inset_0_-4px_0_#9ea2a6]';
       break;
     case 'normal':
     default:
       btnBg = 'bg-[#cdd1d4] text-[#1c1d1f]';
-      shadowClass = 'shadow-[inset_0_2px_0_#f4f6f8,inset_0_-3px_0_#9ea2a6]';
+      shadowClass = 'shadow-[inset_0_2px_0_#f4f6f8,inset_0_-4px_0_#9ea2a6]';
       break;
   }
 

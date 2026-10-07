@@ -173,7 +173,7 @@ export const ReleaseNotesView: React.FC<ReleaseNotesViewProps> = ({
             <button
               onMouseDown={() => playPopSound()}
               onClick={handleBackToList}
-              className="flex items-center gap-2 bg-[#2a2c2f] hover:bg-[#34373b] active:bg-[#1a1b1d] text-white px-3 py-1.5 border-2 border-[#141414] text-xs font-minecraft-seven cursor-pointer btn-press-effect"
+              className="flex items-center gap-2 bg-[#2a2c2f] hover:bg-[#34373b] active:bg-[#1a1b1d] text-white px-3 py-1.5 border-2 border-[#141414] text-xs font-minecraft-seven cursor-pointer btn-press-effect ore-dark-btn !transition-none hover:outline-2 hover:outline-white"
             >
               <ArrowLeft className="w-4 h-4 text-[#89dc69]" />
               <span>BACK TO ALL RELEASE NOTES</span>
@@ -183,7 +183,7 @@ export const ReleaseNotesView: React.FC<ReleaseNotesViewProps> = ({
               <button
                 onMouseDown={() => playPopSound()}
                 onClick={() => onPlayEdition(selectedArticle.editionId!)}
-                className="flex items-center gap-1.5 bg-[#418a28] hover:bg-[#52a634] text-white px-3 py-1.5 border-2 border-[#141414] text-xs font-minecraft-ten cursor-pointer shadow-[inset_1px_1px_0_#89dc69]"
+                className="flex items-center gap-1.5 bg-[#418a28] hover:bg-[#52a634] text-white px-3 py-1.5 border-2 border-[#141414] text-xs font-minecraft-ten cursor-pointer shadow-[inset_0_2px_0_#89dc69,inset_0_-4px_0_#1e4511]"
               >
                 <Play className="w-3.5 h-3.5 fill-current" />
                 <span>PLAY BASE44 EDITION NOW</span>
