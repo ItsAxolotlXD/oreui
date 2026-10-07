@@ -91,7 +91,7 @@ export const VplayPrimaryButton: React.FC<VplayPrimaryButtonProps> = ({
     ? 'text-xs sm:text-sm'
     : 'text-sm sm:text-base';
   const padClasses = isSmall ? 'px-3 py-1' : 'px-4 py-1.5';
-  const heightClass = isSmall ? 'h-8' : 'h-11';
+  const heightClass = 'h-10';
 
   return (
     <button

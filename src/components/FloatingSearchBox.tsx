@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
+import { motion } from 'motion/react';
 import { playPopSound } from '../utils/sound';
 import { SidebarMenuItem } from './Sidebar';
 import { VplaySecondaryButton } from './ui/VplaySecondaryButton';
@@ -388,9 +389,13 @@ export const FloatingSearchBox: React.FC<FloatingSearchBoxProps> = ({
   };
 
   return (
-    <div
+    <motion.div
       ref={containerRef}
-      className="absolute top-full right-0 mt-2 w-[calc(100vw-1.5rem)] sm:w-[460px] md:w-[500px] max-w-[95vw] bg-[#35383b] border-2 border-[#141414] shadow-[0_12px_36px_rgba(0,0,0,0.85)] z-50 text-white font-minecraft-seven flex flex-col max-h-[82vh] overflow-hidden select-none"
+      initial={{ opacity: 0, y: -16, scale: 0.98 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, y: -12, scale: 0.98 }}
+      transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+      className="absolute top-full right-0 mt-2 w-[calc(100vw-1.5rem)] sm:w-[460px] md:w-[500px] max-w-[95vw] bg-[#35383b] border-2 border-[#141414] shadow-[0_12px_36px_rgba(0,0,0,0.85)] z-50 text-white font-minecraft-seven flex flex-col max-h-[82vh] overflow-hidden select-none origin-top-right"
       style={{
         boxShadow: '0 12px 36px rgba(0,0,0,0.85), inset 2px 2px 0 rgba(255,255,255,0.18), inset -2px -3px 0 rgba(0,0,0,0.5)',
       }}
@@ -459,9 +464,8 @@ export const FloatingSearchBox: React.FC<FloatingSearchBoxProps> = ({
               <p className="text-[11px] text-gray-300 font-minecraft-seven">
                 No results found for {query ? `"${query}"` : 'your query'}. Refine your search query.
               </p>
-              <div className="w-52 mx-auto pt-1">
+              <div className="w-56 mx-auto pt-1">
                 <VplaySecondaryButton
-                  size="compact"
                   onClick={() => {
                     inputRef.current?.focus();
                     inputRef.current?.select();
@@ -507,6 +511,6 @@ export const FloatingSearchBox: React.FC<FloatingSearchBoxProps> = ({
         </div>
       </>
     )}
-  </div>
+  </motion.div>
   );
 };

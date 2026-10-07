@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { playPopSound } from '../utils/sound';
 import { VplayHeroButton } from './ui/VplayHeroButton';
 import { VplaySecondaryButton } from './ui/VplaySecondaryButton';
@@ -134,73 +134,127 @@ const SettingsDivider = () => (
 interface ReleaseNotesViewProps {
   onPlayEdition?: (editionId: string) => void;
   initialArticleId?: string | null;
+  activeArticleId?: string | null;
+  onActiveArticleChange?: (id: string | null) => void;
 }
 
 export const ReleaseNotesView: React.FC<ReleaseNotesViewProps> = ({
   onPlayEdition,
   initialArticleId = null,
+  activeArticleId,
+  onActiveArticleChange,
 }) => {
-  const [selectedArticleId, setSelectedArticleId] = useState<string | null>(initialArticleId);
+  const [internalArticleId, setInternalArticleId] = useState<string | null>(initialArticleId);
+  const selectedArticleId = activeArticleId !== undefined ? activeArticleId : internalArticleId;
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [sortMode, setSortMode] = useState<'default' | 'xyz' | 'zyx'>('default');
+  const [isFilterMenuOpen, setIsFilterMenuOpen] = useState(false);
+  const filterMenuRef = useRef<HTMLDivElement>(null);
+
+  // Sync internal state if initialArticleId changes
+  useEffect(() => {
+    if (initialArticleId !== undefined) {
+      setInternalArticleId(initialArticleId);
+    }
+  }, [initialArticleId]);
+
+  // Click outside to close filter menu
+  useEffect(() => {
+    if (!isFilterMenuOpen) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      if (filterMenuRef.current && !filterMenuRef.current.contains(e.target as Node)) {
+        setIsFilterMenuOpen(false);
+      }
+    };
+    document.addEventListener('pointerdown', handleClickOutside);
+    return () => document.removeEventListener('pointerdown', handleClickOutside);
+  }, [isFilterMenuOpen]);
 
   const selectedArticle = ARTICLES_LIST.find((a) => a.id === selectedArticleId);
 
   const handleSelectArticle = (id: string) => {
-    setSelectedArticleId(id);
+    if (onActiveArticleChange) {
+      onActiveArticleChange(id);
+    } else {
+      setInternalArticleId(id);
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleBackToList = () => {
-    setSelectedArticleId(null);
+  const getSnapshotVersionKey = (article: ReleaseArticle): string => {
+    const match = article.title.match(/[0-9]+w[0-9]+([xyz])/i) || article.id.match(/([xyz])$/i);
+    if (match) return match[1].toLowerCase();
+    if (article.editionId === 'lovable') return 'x';
+    if (article.editionId === 'studio') return 'y';
+    if (article.editionId === 'base64') return 'z';
+    return 'z';
   };
 
   // Filter articles by search query
-  const filteredArticles = ARTICLES_LIST.filter((article) => {
-    if (!searchQuery.trim()) return true;
-    const q = searchQuery.toLowerCase().trim();
-    const titleMatch = article.title.toLowerCase().includes(q);
-    const versionMatch = article.versionTag.toLowerCase().includes(q);
-    const badgeMatch = article.editionBadge.toLowerCase().includes(q);
-    const summaryMatch = article.summary.toLowerCase().includes(q);
-    const featuresMatch = article.features.some(
-      (f) =>
-        f.category.toLowerCase().includes(q) ||
-        f.items.some((item) => item.toLowerCase().includes(q))
-    );
-    const fixesMatch = article.bugFixes.some((fix) => fix.toLowerCase().includes(q));
-    const issuesMatch = article.knownIssues.some((issue) => issue.toLowerCase().includes(q));
+  const filteredArticles = useMemo(() => {
+    return ARTICLES_LIST.filter((article) => {
+      if (!searchQuery.trim()) return true;
+      const q = searchQuery.toLowerCase().trim();
+      const titleMatch = article.title.toLowerCase().includes(q);
+      const versionMatch = article.versionTag.toLowerCase().includes(q);
+      const badgeMatch = article.editionBadge.toLowerCase().includes(q);
+      const summaryMatch = article.summary.toLowerCase().includes(q);
+      const featuresMatch = article.features.some(
+        (f) =>
+          f.category.toLowerCase().includes(q) ||
+          f.items.some((item) => item.toLowerCase().includes(q))
+      );
+      const fixesMatch = article.bugFixes.some((fix) => fix.toLowerCase().includes(q));
+      const issuesMatch = article.knownIssues.some((issue) => issue.toLowerCase().includes(q));
 
-    return (
-      titleMatch ||
-      versionMatch ||
-      badgeMatch ||
-      summaryMatch ||
-      featuresMatch ||
-      fixesMatch ||
-      issuesMatch
-    );
-  });
+      return (
+        titleMatch ||
+        versionMatch ||
+        badgeMatch ||
+        summaryMatch ||
+        featuresMatch ||
+        fixesMatch ||
+        issuesMatch
+      );
+    });
+  }, [searchQuery]);
+
+  // Sort articles by snapshot version XYZ / ZYX / Default
+  const sortedArticles = useMemo(() => {
+    return [...filteredArticles].sort((a, b) => {
+      if (sortMode === 'xyz') {
+        const vA = getSnapshotVersionKey(a);
+        const vB = getSnapshotVersionKey(b);
+        return vA.localeCompare(vB);
+      }
+      if (sortMode === 'zyx') {
+        const vA = getSnapshotVersionKey(a);
+        const vB = getSnapshotVersionKey(b);
+        return vB.localeCompare(vA);
+      }
+      return 0;
+    });
+  }, [filteredArticles, sortMode]);
 
   return (
     <div className="w-full space-y-4 font-minecraft-seven">
-      {/* YELLOW NOTE: SNAPSHOT NAMING EXPLANATION */}
+      {/* YELLOW NOTE: SNAPSHOT NAMING EXPLANATION (EMOJI REMOVED, VERSION EXCLUSIVE TO REMOVED) */}
       <div className="relative w-full bg-[#ffe866] overflow-hidden select-none border-2 border-[#141414] shadow-md">
         <div className="relative z-10 py-2 px-3 sm:px-4 text-[#141414] font-minecraft-seven text-xs leading-relaxed space-y-1">
-          <div className="font-bold uppercase tracking-wider flex items-center gap-1.5">
-            <span>ℹ️</span>
-            <span>Snapshot naming explaination:</span>
+          <div className="font-bold uppercase tracking-wider">
+            Snapshot naming explaination:
           </div>
           <div className="flex flex-col sm:flex-row sm:items-center sm:gap-4 text-[11px] sm:text-xs">
-            <span>• <strong>X</strong> = Version exclusive to Lovable Edition</span>
-            <span>• <strong>Y</strong> = Version exclusive to Studios Edition</span>
-            <span>• <strong>Z</strong> = Version exclusive to Base 44 Edition</span>
+            <span>• <strong>X</strong> = Lovable Edition</span>
+            <span>• <strong>Y</strong> = Studios Edition</span>
+            <span>• <strong>Z</strong> = Base 44 Edition</span>
           </div>
         </div>
       </div>
 
-      {/* SEARCH BAR (NO CONTAINER BACKGROUND) */}
-      <div className="w-full select-none">
-        <div className="relative flex items-center w-full">
+      {/* SEARCH BAR WITH PIXELATED FILTER ICON TO SORT SNAPSHOT VERSIONS XYZ */}
+      <div className="w-full select-none flex items-center gap-2">
+        <div className="relative flex-1 flex items-center">
           <img
             src="https://static.wikia.nocookie.net/ep-deo/images/c/c8/MagnifyingGlass-52f96e5f47f42e682a00.png/revision/latest?cb=20260723030208"
             alt="Search Icon"
@@ -209,7 +263,7 @@ export const ReleaseNotesView: React.FC<ReleaseNotesViewProps> = ({
           />
           <input
             type="text"
-            placeholder="Search for release notes, snapshots or features..."
+            placeholder="Search for snapshots or releases..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full h-10 bg-[#222426] text-white pl-10 pr-8 text-xs font-minecraft-seven border-2 border-[#141414] focus:outline-none focus:border-[#89dc69] placeholder:text-gray-400 shadow-[inset_0_2px_0_rgba(0,0,0,0.4)] cursor-pointer"
@@ -219,9 +273,96 @@ export const ReleaseNotesView: React.FC<ReleaseNotesViewProps> = ({
               onMouseDown={() => playPopSound()}
               onClick={() => setSearchQuery('')}
               className="absolute right-3 text-gray-400 hover:text-white text-xs px-1 cursor-pointer font-bold z-10"
+              title="Clear query"
             >
               ✕
             </button>
+          )}
+        </div>
+
+        {/* PIXELATED FILTER ICON BUTTON ON THE RIGHT SIDE TO SORT SNAPSHOT VERSIONS XYZ */}
+        <div ref={filterMenuRef} className="relative flex items-center flex-shrink-0">
+          <button
+            type="button"
+            onMouseDown={() => playPopSound()}
+            onClick={() => setIsFilterMenuOpen((prev) => !prev)}
+            className={`h-10 px-3 bg-[#2a2c2f] hover:bg-[#34373b] active:bg-[#1a1b1d] border-2 border-[#141414] text-xs font-minecraft-seven flex items-center gap-1.5 cursor-pointer ore-dark-btn !transition-none hover:outline-2 hover:outline-white select-none ${
+              sortMode !== 'default' ? 'text-[#89dc69] ring-1 ring-[#89dc69]' : 'text-gray-300'
+            }`}
+            title="Sort snapshot versions XYZ"
+            aria-label="Sort snapshot versions XYZ"
+          >
+            {/* Pixelated Filter / Funnel Icon */}
+            <svg
+              viewBox="0 0 16 16"
+              className="w-4 h-4 fill-current [image-rendering:pixelated]"
+              style={{ shapeRendering: 'crispEdges' }}
+            >
+              <rect x="1" y="2" width="14" height="2" />
+              <rect x="3" y="4" width="10" height="2" />
+              <rect x="5" y="6" width="6" height="2" />
+              <rect x="7" y="8" width="2" height="5" />
+              <rect x="6" y="11" width="4" height="2" />
+            </svg>
+            <span className="font-minecraft-ten text-[11px] hidden sm:inline">
+              {sortMode === 'xyz' ? 'XYZ' : sortMode === 'zyx' ? 'ZYX' : 'SORT XYZ'}
+            </span>
+          </button>
+
+          {/* FILTER / SORT DROPDOWN POPOVER */}
+          {isFilterMenuOpen && (
+            <div
+              className="absolute top-full right-0 mt-1.5 w-56 bg-[#2b2d30] border-2 border-[#141414] shadow-2xl z-40 text-xs font-minecraft-seven divide-y divide-[#1c1d1f]"
+              style={{
+                boxShadow: '0 8px 24px rgba(0,0,0,0.85), inset 1px 1px 0 rgba(255,255,255,0.15)',
+              }}
+            >
+              <div className="px-3 py-1.5 text-[10px] text-gray-400 font-minecraft-ten uppercase bg-[#222426]">
+                Sort Snapshot Versions XYZ
+              </div>
+              <button
+                type="button"
+                onMouseDown={() => playPopSound()}
+                onClick={() => {
+                  setSortMode('xyz');
+                  setIsFilterMenuOpen(false);
+                }}
+                className={`w-full text-left px-3 py-2 flex items-center justify-between hover:bg-[#393d41] cursor-pointer !transition-none ${
+                  sortMode === 'xyz' ? 'bg-[#35383b] text-[#89dc69] font-bold' : 'text-white'
+                }`}
+              >
+                <span>Sort XYZ (X → Y → Z)</span>
+                {sortMode === 'xyz' && <span className="text-[#89dc69]">✓</span>}
+              </button>
+              <button
+                type="button"
+                onMouseDown={() => playPopSound()}
+                onClick={() => {
+                  setSortMode('zyx');
+                  setIsFilterMenuOpen(false);
+                }}
+                className={`w-full text-left px-3 py-2 flex items-center justify-between hover:bg-[#393d41] cursor-pointer !transition-none ${
+                  sortMode === 'zyx' ? 'bg-[#35383b] text-[#89dc69] font-bold' : 'text-white'
+                }`}
+              >
+                <span>Sort ZYX (Z → Y → X)</span>
+                {sortMode === 'zyx' && <span className="text-[#89dc69]">✓</span>}
+              </button>
+              <button
+                type="button"
+                onMouseDown={() => playPopSound()}
+                onClick={() => {
+                  setSortMode('default');
+                  setIsFilterMenuOpen(false);
+                }}
+                className={`w-full text-left px-3 py-2 flex items-center justify-between hover:bg-[#393d41] cursor-pointer !transition-none ${
+                  sortMode === 'default' ? 'bg-[#35383b] text-[#89dc69] font-bold' : 'text-gray-300'
+                }`}
+              >
+                <span>Default (Latest first)</span>
+                {sortMode === 'default' && <span className="text-[#89dc69]">✓</span>}
+              </button>
+            </div>
           )}
         </div>
       </div>
@@ -229,35 +370,6 @@ export const ReleaseNotesView: React.FC<ReleaseNotesViewProps> = ({
       {/* FULL ARTICLE DETAIL VIEW */}
       {selectedArticle ? (
         <div className="space-y-4 animate-fade-in">
-          {/* TOP BACK BAR */}
-          <div className="flex items-center justify-between bg-[#35383b] border-2 border-[#141414] p-3 shadow-md">
-            <button
-              onMouseDown={() => playPopSound()}
-              onClick={handleBackToList}
-              className="flex items-center gap-2 bg-[#2a2c2f] hover:bg-[#34373b] active:bg-[#1a1b1d] text-white px-3 py-1.5 border-2 border-[#141414] text-xs font-minecraft-seven cursor-pointer btn-press-effect ore-dark-btn !transition-none hover:outline-2 hover:outline-white"
-            >
-              <ArrowLeft className="w-4 h-4 text-[#89dc69]" />
-              <span>BACK TO ALL RELEASE NOTES</span>
-            </button>
-
-            {selectedArticle.editionId && onPlayEdition && (
-              <button
-                onMouseDown={() => playPopSound()}
-                onClick={() => onPlayEdition(selectedArticle.editionId!)}
-                className="flex items-center gap-1.5 bg-[#418a28] hover:bg-[#52a634] text-white px-3 py-1.5 border-2 border-[#141414] text-xs font-minecraft-ten cursor-pointer shadow-[inset_0_2px_0_#89dc69,inset_0_-4px_0_#1e4511]"
-              >
-                <Play className="w-3.5 h-3.5 fill-current" />
-                <span>
-                  {selectedArticle.editionId === 'lovable'
-                    ? 'PLAY LOVABLE EDITION NOW'
-                    : selectedArticle.editionId === 'studio'
-                    ? 'PLAY STUDIO EDITION NOW'
-                    : 'PLAY BASE44 EDITION NOW'}
-                </span>
-              </button>
-            )}
-          </div>
-
           {/* ARTICLE MAIN CONTAINER */}
           <article className="bg-[#2e3134] border-2 border-[#141414] shadow-2xl p-4 sm:p-6 md:p-8 space-y-6 text-white font-minecraft-seven">
             {/* ARTICLE HEADER */}
@@ -266,7 +378,7 @@ export const ReleaseNotesView: React.FC<ReleaseNotesViewProps> = ({
                 <span className="bg-[#89dc69] text-[#141414] px-2.5 py-0.5 text-[11px] font-minecraft-ten border border-[#141414] uppercase">
                   {selectedArticle.versionTag}
                 </span>
-                <span className="bg-[#38bdf8] text-[#141414] px-2.5 py-0.5 text-[11px] font-minecraft-seven border border-[#141414]">
+                <span className="bg-[#0074d9] text-white px-2.5 py-0.5 text-[11px] font-minecraft-seven border border-[#141414] shadow-sm">
                   {selectedArticle.editionBadge}
                 </span>
                 <span className="text-gray-400 font-minecraft-seven text-xs flex items-center gap-1 ml-auto">
@@ -370,34 +482,6 @@ export const ReleaseNotesView: React.FC<ReleaseNotesViewProps> = ({
                 </div>
               </section>
             </div>
-
-            {/* BOTTOM ARTICLE ACTIONS */}
-            <div className="pt-6 border-t-2 border-[#3d4145] flex flex-wrap items-center justify-between gap-3">
-              <button
-                onMouseDown={() => playPopSound()}
-                onClick={handleBackToList}
-                className="bg-[#2a2c2f] hover:bg-[#34373b] text-white px-4 py-2 border-2 border-[#141414] text-xs font-minecraft-seven cursor-pointer btn-press-effect"
-              >
-                ← Back to list
-              </button>
-
-              {selectedArticle.editionId && onPlayEdition && (
-                <div className="w-full sm:w-64">
-                  <VplayHeroButton
-                    fullWidth
-                    onClick={() => onPlayEdition(selectedArticle.editionId!)}
-                  >
-                    <span>
-                      {selectedArticle.editionId === 'lovable'
-                        ? 'PLAY LOVABLE EDITION'
-                        : selectedArticle.editionId === 'studio'
-                        ? 'PLAY STUDIO EDITION'
-                        : 'PLAY BASE44 EDITION'}
-                    </span>
-                  </VplayHeroButton>
-                </div>
-              )}
-            </div>
           </article>
         </div>
       ) : (
@@ -417,7 +501,7 @@ export const ReleaseNotesView: React.FC<ReleaseNotesViewProps> = ({
           </div>
 
           {/* ARTICLES LIST */}
-          {filteredArticles.length === 0 ? (
+          {sortedArticles.length === 0 ? (
             <div className="bg-[#292a2c] p-8 text-center border-2 border-[#141414] space-y-3">
               <p className="text-sm text-white font-minecraft-seven">
                 We found nothing :(
@@ -428,7 +512,7 @@ export const ReleaseNotesView: React.FC<ReleaseNotesViewProps> = ({
               <div className="w-56 mx-auto pt-2">
                 <VplaySecondaryButton
                   onClick={() => {
-                    const searchInput = document.querySelector('input[placeholder*="Search for release notes"]') as HTMLInputElement;
+                    const searchInput = document.querySelector('input[placeholder*="Search for snapshots"]') as HTMLInputElement;
                     if (searchInput) {
                       searchInput.focus();
                       searchInput.select();
@@ -448,7 +532,7 @@ export const ReleaseNotesView: React.FC<ReleaseNotesViewProps> = ({
             </div>
           ) : (
             <div className="space-y-3">
-              {filteredArticles.map((article) => {
+              {sortedArticles.map((article) => {
                 const isLatest = article.id === 'snapshot-26w05x';
                 return (
                   <div
@@ -483,10 +567,7 @@ export const ReleaseNotesView: React.FC<ReleaseNotesViewProps> = ({
                       {/* Content Details */}
                       <div className="space-y-2 flex-1 min-w-0">
                         <div className="flex flex-wrap items-center gap-2">
-                          <span className="bg-[#141414] text-[#89dc69] px-2 py-0.5 text-[10px] font-minecraft-ten border border-[#383a3d] uppercase">
-                            {article.versionTag}
-                          </span>
-                          <span className="bg-[#141414] text-sky-300 px-2 py-0.5 text-[10px] font-minecraft-seven border border-[#383a3d]">
+                          <span className="bg-[#0074d9] text-white px-2 py-0.5 text-[10px] font-minecraft-seven border border-[#141414] shadow-sm">
                             {article.editionBadge}
                           </span>
                           <span className="text-gray-400 font-minecraft-seven text-[11px] ml-auto">
@@ -512,7 +593,7 @@ export const ReleaseNotesView: React.FC<ReleaseNotesViewProps> = ({
                           </div>
 
                           <span className="text-xs text-[#89dc69] font-minecraft-seven group-hover:underline flex items-center gap-1">
-                            <span>READ FULL ARTICLE</span>
+                            <span>READ</span>
                             <span>→</span>
                           </span>
                         </div>

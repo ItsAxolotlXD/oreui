@@ -88,10 +88,10 @@ export const VplaySecondaryButton: React.FC<VplaySecondaryButtonProps> = ({
 
   const isSmall = size === 'sm' || size === 'compact';
   const fontClasses = isSmall
-    ? 'text-[11px] font-bold'
+    ? 'text-xs font-semibold'
     : 'text-xs sm:text-sm font-semibold';
   const padClasses = isSmall ? 'px-3 py-1' : 'px-4 py-1.5';
-  const heightClass = isSmall ? 'h-8' : 'h-11';
+  const heightClass = 'h-10';
 
   return (
     <button

@@ -1,6 +1,7 @@
 {
-  "name": "Vplay TV",
-  "description": "Vplay Television App featuring pixel-art TV Design System and interactive TV streaming channels.",
+  "name": "The Craftmine - Ore UI",
+  "description": "The Craftmine is coming soon. Stay tuned! Unlock possibilities without edges with the authentic Minecraft Ore UI design system.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
+

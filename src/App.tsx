@@ -56,6 +56,9 @@ export default function App() {
     if (item !== sidebarItem || isSettingsOpen) {
       triggerTabLoading();
     }
+    if (item !== 'release_notes') {
+      setTargetArticleId(null);
+    }
     if (item === 'settings') {
       setIsSettingsOpen(true);
       setSidebarItem('settings');
@@ -74,6 +77,8 @@ export default function App() {
     } else if (isSettingsOpen) {
       setIsSettingsOpen(false);
       setSidebarItem('home');
+    } else if (sidebarItem === 'release_notes' && targetArticleId) {
+      setTargetArticleId(null);
     } else if (sidebarItem !== 'home') {
       setSidebarItem('home');
     }
@@ -213,6 +218,8 @@ export default function App() {
                 ) : sidebarItem === 'release_notes' ? (
                   <ReleaseNotesView
                     initialArticleId={targetArticleId}
+                    activeArticleId={targetArticleId}
+                    onActiveArticleChange={setTargetArticleId}
                     onPlayEdition={(editionId) => {
                       if (editionId === 'base64') {
                         setShowBase44Modal(true);

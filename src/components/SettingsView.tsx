@@ -86,12 +86,31 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   // Helper filter function for search term
   const matchesSearch = (title: string, subtitle?: string) => {
     if (!settingSearch.trim()) return true;
-    const term = settingSearch.toLowerCase();
+    const term = settingSearch.toLowerCase().trim();
     return (
       title.toLowerCase().includes(term) ||
       (subtitle && subtitle.toLowerCase().includes(term))
     );
   };
+
+  const ALL_SETTING_ITEMS = [
+    { title: 'Disable panorama', subtitle: 'Change app background to dark charcoal instead of space panorama.' },
+    { title: 'Lock panorama scroll', subtitle: 'Lock the space panorama background in place instead of rotating.' },
+    { title: 'Panorama scroll speed', subtitle: 'Adjust how fast or slow the space panorama rotates.' },
+    { title: 'Reduce motion', subtitle: 'Disable transition motion effects between pages.' },
+    { title: 'Sign in with Craftmine account', subtitle: 'Experience all the best things of The Craftmine with an official account.' },
+    { title: 'Unlock restricted features', subtitle: 'Enables experimental features currently under active development. Enter password Disable features' },
+    { title: 'Performance test', subtitle: 'Test GPU/CPU performance, FPS, frame latency and memory with full-screen stress test.' },
+    { title: 'Ore UI design components', subtitle: 'Explore component matrix and state guidelines of The Craftmine Ore UI.' },
+    { title: 'Reset settings to default', subtitle: 'Restore all above options to their original default values.' },
+    { title: 'INTERFACE & CUSTOMIZATION' },
+    { title: 'ACCOUNT' },
+    { title: 'DEVELOPER OPTIONS' },
+  ];
+
+  const hasAnyMatch = !settingSearch.trim() || ALL_SETTING_ITEMS.some((item) =>
+    matchesSearch(item.title, item.subtitle)
+  );
 
   return (
     <div className="w-full my-2 sm:my-4 bg-[#4c4f52] border-2 border-[#141414] text-white font-minecraft-seven shadow-2xl rounded-none overflow-hidden select-none">
@@ -125,6 +144,38 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
       </div>
 
       <SettingsDivider />
+
+      {/* WE FOUND NOTHING SCREEN WHEN SEARCH HAS NO RESULT */}
+      {!hasAnyMatch && (
+        <div className="bg-[#292a2c] p-8 text-center border-b-2 border-[#141414] space-y-3">
+          <p className="text-sm text-white font-minecraft-seven">
+            We found nothing :(
+          </p>
+          <p className="text-xs text-gray-300 font-minecraft-seven">
+            No results found for "{settingSearch}". Refine your search query.
+          </p>
+          <div className="w-56 mx-auto pt-2">
+            <VplaySecondaryButton
+              onClick={() => {
+                const searchInput = document.querySelector('input[placeholder="Search for settings"]') as HTMLInputElement;
+                if (searchInput) {
+                  searchInput.focus();
+                  searchInput.select();
+                }
+              }}
+              className="flex items-center justify-center gap-2"
+            >
+              <img
+                src="https://static.wikia.nocookie.net/ep-deo/images/c/c8/MagnifyingGlass-52f96e5f47f42e682a00.png/revision/latest?cb=20260723030208"
+                alt="Search"
+                referrerPolicy="no-referrer"
+                className="w-5 h-5 object-contain filter brightness-0 inline-block mr-1.5"
+              />
+              <span>Refine search</span>
+            </VplaySecondaryButton>
+          </div>
+        </div>
+      )}
 
       {/* SUBHEADING 1: INTERFACE & CUSTOMIZATION */}
       {(matchesSearch('Disable panorama') ||
