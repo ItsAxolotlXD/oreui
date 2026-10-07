@@ -23,6 +23,52 @@ export interface ReleaseArticle {
 
 export const ARTICLES_LIST: ReleaseArticle[] = [
   {
+    id: 'snapshot-26w05x',
+    title: 'Snapshot 26w05x',
+    versionTag: 'SNAPSHOT 26w05x',
+    editionBadge: 'Exclusive to Lovable Edition',
+    date: '10/07/2026',
+    thumbnail: 'https://static.wikia.nocookie.net/ep-deo/images/9/9a/Craftmine_26w05x.png/revision/latest/scale-to-width-down/1000?cb=20261007153456',
+    summary: 'The latest experimental snapshot for Lovable Edition introduces massive underground cave systems down to layer -64 with huge lava lakes, all Minecraft decorative blocks & items with X-cross model rendering, new Spectator mode, and Creative Fly/Walk mode.',
+    editionId: 'lovable',
+    features: [
+      {
+        category: 'CAVES SYSTEM',
+        items: [
+          'Added cave systems underground and cave entrances randomly appear on the surface',
+          'Added massively large cave systems with huge lava lakes',
+          'Caves can generate down to layer level -64',
+        ],
+      },
+      {
+        category: 'BLOCKS & ITEMS',
+        items: [
+          "Every single blocks and items from Minecraft were added, only for decorative, didn't have any specific functions ywt",
+          'Plants, flowers, torches, cobwebs, stalagmites and stalactites now render using an X-shaped cross model, which consists of two intersecting diagonal planes with a texture applied to both side',
+        ],
+      },
+      {
+        category: 'QUALITY OF LIFE',
+        items: [
+          'Added new Spectator mode helps player clip through blocks for moving more convenient',
+          'Added Fly mode and Walk mode for Creative mode (by pressing the F key)',
+        ],
+      },
+    ],
+    bugFixes: [],
+    knownIssues: [
+      'Caves generation and lava lakes are way too massive, causing performance issues',
+      'There are no water lakes, ores, deepslates, decorative stone blocks or mobs spawning in the caves, only regular stone blocks',
+      'Bottom texture lightning of stone blocks inside caves do not render correctly',
+      'To fly down / crounch, instead of Shift key, you have to press Left Ctrl key',
+      'Game watermark should not display on screen',
+      "The hotbar HUD does not reflect the block you're holding",
+      'The world is missing grass, bushes, flowers, plants and especially biome varirants',
+      'Some blocks still do not render correctly',
+      'Mountain tops generate kind of weird-looking',
+    ],
+  },
+  {
     id: 'snapshot-24w04z',
     title: 'Snapshot 24w04z',
     versionTag: 'SNAPSHOT 24w04z',
@@ -201,7 +247,13 @@ export const ReleaseNotesView: React.FC<ReleaseNotesViewProps> = ({
                 className="flex items-center gap-1.5 bg-[#418a28] hover:bg-[#52a634] text-white px-3 py-1.5 border-2 border-[#141414] text-xs font-minecraft-ten cursor-pointer shadow-[inset_0_2px_0_#89dc69,inset_0_-4px_0_#1e4511]"
               >
                 <Play className="w-3.5 h-3.5 fill-current" />
-                <span>PLAY BASE44 EDITION NOW</span>
+                <span>
+                  {selectedArticle.editionId === 'lovable'
+                    ? 'PLAY LOVABLE EDITION NOW'
+                    : selectedArticle.editionId === 'studio'
+                    ? 'PLAY STUDIO EDITION NOW'
+                    : 'PLAY BASE44 EDITION NOW'}
+                </span>
               </button>
             )}
           </div>
@@ -273,24 +325,26 @@ export const ReleaseNotesView: React.FC<ReleaseNotesViewProps> = ({
               </section>
 
               {/* SECTION: BUG FIXES */}
-              <section className="space-y-2">
-                <div className="flex items-center gap-2 border-b-2 border-[#38bdf8] pb-1">
-                  <span className="w-3 h-3 bg-[#38bdf8] inline-block border border-[#141414]" />
-                  <h2 className="text-lg sm:text-xl font-minecraft-ten tracking-wider text-white">
-                    BUG FIXES
-                  </h2>
-                </div>
+              {selectedArticle.bugFixes.length > 0 && (
+                <section className="space-y-2">
+                  <div className="flex items-center gap-2 border-b-2 border-[#38bdf8] pb-1">
+                    <span className="w-3 h-3 bg-[#38bdf8] inline-block border border-[#141414]" />
+                    <h2 className="text-lg sm:text-xl font-minecraft-ten tracking-wider text-white">
+                      BUG FIXES
+                    </h2>
+                  </div>
 
-                <div className="bg-[#25272a] p-3 border border-[#141414] pl-2 sm:pl-3">
-                  <ul className="space-y-1 pl-4 sm:pl-6 text-xs sm:text-sm text-gray-200 list-disc marker:text-[#38bdf8]">
-                    {selectedArticle.bugFixes.map((item, idx) => (
-                      <li key={idx} className="leading-relaxed">
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </section>
+                  <div className="bg-[#25272a] p-3 border border-[#141414] pl-2 sm:pl-3">
+                    <ul className="space-y-1 pl-4 sm:pl-6 text-xs sm:text-sm text-gray-200 list-disc marker:text-[#38bdf8]">
+                      {selectedArticle.bugFixes.map((item, idx) => (
+                        <li key={idx} className="leading-relaxed">
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </section>
+              )}
 
               {/* SECTION: KNOWN ISSUES */}
               <section className="space-y-2">
@@ -333,7 +387,13 @@ export const ReleaseNotesView: React.FC<ReleaseNotesViewProps> = ({
                     fullWidth
                     onClick={() => onPlayEdition(selectedArticle.editionId!)}
                   >
-                    <span>PLAY THIS SNAPSHOT</span>
+                    <span>
+                      {selectedArticle.editionId === 'lovable'
+                        ? 'PLAY LOVABLE EDITION'
+                        : selectedArticle.editionId === 'studio'
+                        ? 'PLAY STUDIO EDITION'
+                        : 'PLAY BASE44 EDITION'}
+                    </span>
                   </VplayHeroButton>
                 </div>
               )}
@@ -389,7 +449,7 @@ export const ReleaseNotesView: React.FC<ReleaseNotesViewProps> = ({
           ) : (
             <div className="space-y-3">
               {filteredArticles.map((article) => {
-                const isLatest = article.id === 'snapshot-24w04z';
+                const isLatest = article.id === 'snapshot-26w05x';
                 return (
                   <div
                     key={article.id}

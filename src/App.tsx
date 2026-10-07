@@ -338,7 +338,7 @@ export default function App() {
                       onMouseDown={() => playPopSound()}
                       onClick={() => {
                         triggerTabLoading();
-                        setTargetArticleId('snapshot-24w04z');
+                        setTargetArticleId('snapshot-26w05x');
                         setSidebarItem('release_notes');
                       }}
                       className="group relative bg-[#2a2d30] hover:bg-[#32363a] border-2 border-[#89dc69] p-4 sm:p-5 shadow-xl cursor-pointer select-none btn-press-effect flex flex-col sm:flex-row items-center justify-between gap-4 overflow-hidden"
@@ -348,8 +348,8 @@ export default function App() {
                       <div className="flex items-center gap-3 sm:gap-4 relative z-10 w-full sm:w-auto">
                         <div className="w-16 h-16 sm:w-20 sm:h-20 bg-[#161718] border-2 border-[#141414] flex-shrink-0 flex items-center justify-center overflow-hidden">
                           <img
-                            src="https://static.wikia.nocookie.net/ep-deo/images/2/28/Update_thumb.png/revision/latest/scale-to-width-down/1000?cb=20261006103204"
-                            alt="Snapshot 24w04z"
+                            src="https://static.wikia.nocookie.net/ep-deo/images/9/9a/Craftmine_26w05x.png/revision/latest/scale-to-width-down/1000?cb=20261007153456"
+                            alt="Snapshot 26w05x"
                             referrerPolicy="no-referrer"
                             className="w-full h-full object-cover [image-rendering:pixelated] group-hover:scale-105 transition-transform"
                             style={{ imageRendering: 'pixelated' }}
@@ -362,14 +362,14 @@ export default function App() {
                               NEW UPDATE
                             </span>
                             <span className="text-[#38bdf8] text-[11px] font-minecraft-seven">
-                              Base44 Exclusive
+                              Lovable Exclusive
                             </span>
                           </div>
                           <h3 className="text-sm sm:text-base text-white group-hover:text-[#89dc69] font-minecraft-ten">
-                            Snapshot 24w04z: Desert Biome, Caves & Decorative Blocks
+                            Snapshot 26w05x: Caves System, Blocks & Items
                           </h3>
                           <p className="text-xs text-gray-300 font-minecraft-seven truncate max-w-xl">
-                            Explore all new features, cactus flowers, natural waterfalls and fixed bugs in the latest snapshot.
+                            Massive underground caves, all Minecraft blocks & items, Spectator mode, and Fly mode.
                           </p>
                         </div>
                       </div>
