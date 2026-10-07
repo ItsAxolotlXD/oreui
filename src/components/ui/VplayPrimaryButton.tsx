@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ComponentState } from '../../types';
-import { playPopSound } from '../../utils/sound';
+import { playGreenButtonSound } from '../../utils/sound';
 
 interface VplayPrimaryButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children?: React.ReactNode;
@@ -66,7 +66,7 @@ export const VplayPrimaryButton: React.FC<VplayPrimaryButtonProps> = ({
   const handleMouseDown = () => {
     if (!effectiveDisabled) {
       setIsPressed(true);
-      playPopSound();
+      playGreenButtonSound();
     }
   };
 
@@ -78,7 +78,7 @@ export const VplayPrimaryButton: React.FC<VplayPrimaryButtonProps> = ({
   const handleTouchStart = () => {
     if (!effectiveDisabled) {
       setIsPressed(true);
-      playPopSound();
+      playGreenButtonSound();
     }
   };
 
@@ -127,7 +127,7 @@ export const VplayPrimaryButton: React.FC<VplayPrimaryButtonProps> = ({
             ${padClasses} ${fontClasses} ${layer1Bg} ${textColor}
           `}
         >
-          <span className="drop-shadow-[1px_1px_0_rgba(0,0,0,0.6)] flex items-center justify-center gap-2 w-full truncate -translate-y-[5px]">
+          <span className="drop-shadow-[1px_1px_0_rgba(0,0,0,0.6)] flex items-center justify-center gap-2 w-full truncate -translate-y-[4px]">
             {children}
           </span>
         </div>

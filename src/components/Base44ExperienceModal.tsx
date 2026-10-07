@@ -33,10 +33,10 @@ export const Base44ExperienceModal: React.FC<Base44ExperienceModalProps> = ({
         <div className="absolute inset-0 pointer-events-none z-20 shadow-[inset_2px_2px_0_rgba(255,255,255,0.2),inset_-2px_-3px_0_rgba(0,0,0,0.5)]" />
 
         {/* MODAL HEADER */}
-        <div className="bg-[#383a3d] border-b-2 border-[#1c1d1f] px-4 py-3 flex items-center justify-between gap-3 relative z-10 flex-shrink-0">
+        <div className="bg-[#383a3d] border-b-2 border-[#1c1d1f] px-4 py-1.5 flex items-center justify-between gap-3 relative z-10 flex-shrink-0">
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 bg-[#89dc69] inline-block border border-[#141414]" />
-            <h2 className="text-sm sm:text-base text-white font-minecraft-ten uppercase tracking-wider">
+            <h2 className="text-sm sm:text-base text-white font-minecraft-seven uppercase tracking-wider font-normal">
               Unlock full experience
             </h2>
           </div>

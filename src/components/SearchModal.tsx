@@ -50,24 +50,24 @@ const SEARCH_DATABASE: SearchResultItem[] = [
 
   // 2. RELEASE NOTES & UPDATES
   {
-    id: 'update-26w04',
+    id: 'update-24w04z',
     category: 'update',
     categoryLabel: 'Release Note',
-    title: 'Snapshot 26w04-base',
+    title: 'Snapshot 24w04z',
     description: 'New decorative blocks, Desert & Oak Forest biomes, expanded cave systems, and liquid sliding physics.',
     badge: 'Latest Snapshot',
     targetTab: 'release_notes',
-    articleId: 'snapshot-26w04-base',
+    articleId: 'snapshot-24w04z',
   },
   {
     id: 'update-desert',
     category: 'update',
     categoryLabel: 'Game Feature',
-    title: 'Desert Biome (Snapshot 26w04-base)',
+    title: 'Desert Biome (Snapshot 24w04z)',
     description: 'Hot temperature desert biome with cactus flower spawns and arid terrain generation.',
     badge: 'New Biome',
     targetTab: 'release_notes',
-    articleId: 'snapshot-26w04-base',
+    articleId: 'snapshot-24w04z',
   },
   {
     id: 'update-caves',
@@ -77,7 +77,7 @@ const SEARCH_DATABASE: SearchResultItem[] = [
     description: 'Expanded subterranean caves with natural lava, waterfalls, and increased ore generation frequency.',
     badge: 'Caves',
     targetTab: 'release_notes',
-    articleId: 'snapshot-26w04-base',
+    articleId: 'snapshot-24w04z',
   },
   {
     id: 'update-sift',
@@ -87,7 +87,7 @@ const SEARCH_DATABASE: SearchResultItem[] = [
     description: 'Balanced creature spawning, corrected willow leaf transparency rendering, and cactus flower generation.',
     badge: 'The Sift',
     targetTab: 'release_notes',
-    articleId: 'snapshot-26w04-base',
+    articleId: 'snapshot-24w04z',
   },
   {
     id: 'update-fixes',
@@ -97,7 +97,7 @@ const SEARCH_DATABASE: SearchResultItem[] = [
     description: 'Leaves transparency rendering, mangrove block textures, connected cave entrances, and creature damage fixes.',
     badge: 'Bug Fixes',
     targetTab: 'release_notes',
-    articleId: 'snapshot-26w04-base',
+    articleId: 'snapshot-24w04z',
   },
 
   // 3. SETTINGS & OPTIONS
@@ -153,6 +153,15 @@ const SEARCH_DATABASE: SearchResultItem[] = [
     title: 'Performance Stress Test',
     description: 'Full-screen GPU/CPU benchmark measuring real-time FPS, frame latency, memory and particle stress.',
     badge: 'Benchmark',
+    targetTab: 'settings',
+  },
+  {
+    id: 'setting-oreui',
+    category: 'setting',
+    categoryLabel: 'Design',
+    title: 'Ore UI Design Components',
+    description: 'Explore component matrix, states (Normal, Hover, Pressed, Disabled) and interactive playground.',
+    badge: 'Design System',
     targetTab: 'settings',
   },
 
@@ -301,10 +310,10 @@ export const SearchModal: React.FC<SearchModalProps> = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 animate-fade-in overflow-y-auto font-minecraft-seven select-none">
       <div className="bg-[#35383b] border-2 border-[#141414] w-full max-w-2xl shadow-2xl text-white flex flex-col h-[85vh] max-h-[620px] my-auto overflow-hidden">
         {/* MODAL HEADER */}
-        <div className="bg-[#2a2c2f] border-b-2 border-[#141414] p-3.5 flex items-center justify-between gap-3 flex-shrink-0">
+        <div className="bg-[#2a2c2f] border-b-2 border-[#141414] px-3.5 py-2 flex items-center justify-between gap-3 flex-shrink-0">
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 bg-[#89dc69] inline-block border border-[#141414]" />
-            <h2 className="text-sm sm:text-base text-white font-minecraft-ten uppercase tracking-wider">
+            <h2 className="text-sm sm:text-base text-white font-minecraft-seven uppercase tracking-wider font-normal">
               SEARCH CRAFTMINE
             </h2>
           </div>

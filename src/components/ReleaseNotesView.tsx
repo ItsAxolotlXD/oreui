@@ -23,13 +23,13 @@ export interface ReleaseArticle {
 
 export const ARTICLES_LIST: ReleaseArticle[] = [
   {
-    id: 'snapshot-26w04-base',
-    title: 'Snapshot 26w04-base',
-    versionTag: 'SNAPSHOT 26w04-base',
+    id: 'snapshot-24w04z',
+    title: 'Snapshot 24w04z',
+    versionTag: 'SNAPSHOT 24w04z',
     editionBadge: 'Exclusive to Base44 Edition',
     date: '10/06/2026',
     thumbnail: 'https://static.wikia.nocookie.net/ep-deo/images/2/28/Update_thumb.png/revision/latest/scale-to-width-down/1000?cb=20261006103204',
-    summary: 'The latest experimental snapshot exclusively for Base44 Edition introduces a brand-new set of decorative blocks, an expanded cave system, Desert & Oak Forest biomes, and multiple render transparency fixes.',
+    summary: 'The latest experimental snapshot exclusively for Base 44 Edition introduces a brand-new set of decorative blocks, an expanded cave system, Desert & Oak Forest biomes, and multiple render transparency fixes.',
     editionId: 'base64',
     features: [
       {
@@ -137,6 +137,21 @@ export const ReleaseNotesView: React.FC<ReleaseNotesViewProps> = ({
 
   return (
     <div className="w-full space-y-4 font-minecraft-seven">
+      {/* YELLOW NOTE: SNAPSHOT NAMING EXPLANATION */}
+      <div className="relative w-full bg-[#ffe866] overflow-hidden select-none border-2 border-[#141414] shadow-md">
+        <div className="relative z-10 py-2 px-3 sm:px-4 text-[#141414] font-minecraft-seven text-xs leading-relaxed space-y-1">
+          <div className="font-bold uppercase tracking-wider flex items-center gap-1.5">
+            <span>ℹ️</span>
+            <span>Snapshot naming explaination:</span>
+          </div>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:gap-4 text-[11px] sm:text-xs">
+            <span>• <strong>X</strong> = Version exclusive to Lovable Edition</span>
+            <span>• <strong>Y</strong> = Version exclusive to Studios Edition</span>
+            <span>• <strong>Z</strong> = Version exclusive to Base 44 Edition</span>
+          </div>
+        </div>
+      </div>
+
       {/* SEARCH BAR (NO CONTAINER BACKGROUND) */}
       <div className="w-full select-none">
         <div className="relative flex items-center w-full">
@@ -374,7 +389,7 @@ export const ReleaseNotesView: React.FC<ReleaseNotesViewProps> = ({
           ) : (
             <div className="space-y-3">
               {filteredArticles.map((article) => {
-                const isLatest = article.id === 'snapshot-26w04-base';
+                const isLatest = article.id === 'snapshot-24w04z';
                 return (
                   <div
                     key={article.id}

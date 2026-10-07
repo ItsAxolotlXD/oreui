@@ -11,6 +11,7 @@ import { MinecraftPanorama } from './components/MinecraftPanorama';
 import { HomeBannerSlider } from './components/HomeBannerSlider';
 import { FeedbackModal } from './components/FeedbackModal';
 import { Base44ExperienceModal } from './components/Base44ExperienceModal';
+import { DesignSystemViewer } from './components/DesignSystemViewer';
 import { playPopSound } from './utils/sound';
 
 import { Play, Sparkles, Cpu, Layers } from 'lucide-react';
@@ -23,6 +24,7 @@ export default function App() {
   const [isTabLoading, setIsTabLoading] = useState(false);
   const [showBase44Modal, setShowBase44Modal] = useState(false);
   const [isDeveloperUnlocked, setIsDeveloperUnlocked] = useState<boolean>(false);
+  const [isDesignSystemOpen, setIsDesignSystemOpen] = useState(false);
   const [targetArticleId, setTargetArticleId] = useState<string | null>(null);
   const [targetEditionId, setTargetEditionId] = useState<string | null>(null);
 
@@ -50,6 +52,7 @@ export default function App() {
   });
 
   const handleSidebarSelect = (item: SidebarMenuItem) => {
+    setIsDesignSystemOpen(false);
     if (item !== sidebarItem || isSettingsOpen) {
       triggerTabLoading();
     }
@@ -63,10 +66,12 @@ export default function App() {
   };
 
   const handleHeaderBack = () => {
-    if (isSettingsOpen || sidebarItem !== 'home') {
-      triggerTabLoading();
-    }
-    if (isSettingsOpen) {
+    triggerTabLoading();
+    if (isDesignSystemOpen) {
+      setIsDesignSystemOpen(false);
+      setIsSettingsOpen(true);
+      setSidebarItem('settings');
+    } else if (isSettingsOpen) {
       setIsSettingsOpen(false);
       setSidebarItem('home');
     } else if (sidebarItem !== 'home') {
@@ -79,6 +84,7 @@ export default function App() {
     extra?: { articleId?: string; editionId?: string }
   ) => {
     triggerTabLoading();
+    setIsDesignSystemOpen(false);
     if (extra?.articleId) {
       setTargetArticleId(extra.articleId);
     }
@@ -145,7 +151,7 @@ export default function App() {
               </motion.div>
             ) : (
               <motion.div
-                key={isSettingsOpen ? 'settings' : sidebarItem}
+                key={isDesignSystemOpen ? 'design_system' : isSettingsOpen ? 'settings' : sidebarItem}
                 initial={settings.reduceMotion ? { opacity: 1, x: 0 } : { opacity: 0, x: 0 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={settings.reduceMotion ? { opacity: 1, x: 0 } : { x: '-100%', opacity: 1 }}
@@ -158,7 +164,29 @@ export default function App() {
                       }
                 }
               >
-                {sidebarItem === 'settings' || isSettingsOpen ? (
+                {isDesignSystemOpen ? (
+                  <div className="space-y-4">
+                    {/* TOP ACTION BAR TO RETURN TO SETTINGS */}
+                    <div className="flex items-center justify-between pb-1">
+                      <button
+                        onMouseDown={() => playPopSound()}
+                        onClick={() => {
+                          triggerTabLoading();
+                          setIsDesignSystemOpen(false);
+                          setIsSettingsOpen(true);
+                          setSidebarItem('settings');
+                        }}
+                        className="flex items-center gap-2 bg-[#313437] hover:bg-[#3d4145] text-white px-3.5 py-1.5 border-2 border-[#141414] text-xs font-minecraft-seven cursor-pointer ore-dark-btn !transition-none hover:outline-2 hover:outline-white"
+                      >
+                        <span>‹ Back to Settings</span>
+                      </button>
+                      <span className="text-xs text-[#89dc69] font-minecraft-seven">
+                        [Ore UI Design System Viewer]
+                      </span>
+                    </div>
+                    <DesignSystemViewer onOpenFeedback={() => setIsFeedbackOpen(true)} />
+                  </div>
+                ) : sidebarItem === 'settings' || isSettingsOpen ? (
                   <SettingsView
                     settings={settings}
                     onChangeLiveSettings={(newSet) => setSettings(newSet)}
@@ -176,6 +204,11 @@ export default function App() {
                     onOpenFeedback={() => setIsFeedbackOpen(true)}
                     isDeveloperUnlocked={isDeveloperUnlocked}
                     onToggleDeveloperUnlocked={setIsDeveloperUnlocked}
+                    onOpenDesignSystem={() => {
+                      triggerTabLoading();
+                      setIsDesignSystemOpen(true);
+                      setIsSettingsOpen(false);
+                    }}
                   />
                 ) : sidebarItem === 'release_notes' ? (
                   <ReleaseNotesView
@@ -206,7 +239,8 @@ export default function App() {
                       reduceMotion={settings.reduceMotion}
                       onExploreDesignSystem={() => {
                         triggerTabLoading();
-                        setSidebarItem('play_craftmine');
+                        setIsDesignSystemOpen(true);
+                        setIsSettingsOpen(false);
                       }}
                       onPlayCraftmine={() => {
                         triggerTabLoading();
@@ -304,7 +338,7 @@ export default function App() {
                       onMouseDown={() => playPopSound()}
                       onClick={() => {
                         triggerTabLoading();
-                        setTargetArticleId('snapshot-26w04-base');
+                        setTargetArticleId('snapshot-24w04z');
                         setSidebarItem('release_notes');
                       }}
                       className="group relative bg-[#2a2d30] hover:bg-[#32363a] border-2 border-[#89dc69] p-4 sm:p-5 shadow-xl cursor-pointer select-none btn-press-effect flex flex-col sm:flex-row items-center justify-between gap-4 overflow-hidden"
@@ -315,7 +349,7 @@ export default function App() {
                         <div className="w-16 h-16 sm:w-20 sm:h-20 bg-[#161718] border-2 border-[#141414] flex-shrink-0 flex items-center justify-center overflow-hidden">
                           <img
                             src="https://static.wikia.nocookie.net/ep-deo/images/2/28/Update_thumb.png/revision/latest/scale-to-width-down/1000?cb=20261006103204"
-                            alt="Snapshot 26w04-base"
+                            alt="Snapshot 24w04z"
                             referrerPolicy="no-referrer"
                             className="w-full h-full object-cover [image-rendering:pixelated] group-hover:scale-105 transition-transform"
                             style={{ imageRendering: 'pixelated' }}
@@ -332,7 +366,7 @@ export default function App() {
                             </span>
                           </div>
                           <h3 className="text-sm sm:text-base text-white group-hover:text-[#89dc69] font-minecraft-ten">
-                            Snapshot 26w04-base: Desert Biome, Caves & Decorative Blocks
+                            Snapshot 24w04z: Desert Biome, Caves & Decorative Blocks
                           </h3>
                           <p className="text-xs text-gray-300 font-minecraft-seven truncate max-w-xl">
                             Explore all new features, cactus flowers, natural waterfalls and fixed bugs in the latest snapshot.

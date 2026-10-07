@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ComponentState } from '../../types';
-import { playPopSound } from '../../utils/sound';
+import { playSnesPopSound } from '../../utils/sound';
 
 interface VplaySecondaryButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children?: React.ReactNode;
@@ -66,7 +66,7 @@ export const VplaySecondaryButton: React.FC<VplaySecondaryButtonProps> = ({
   const handleMouseDown = () => {
     if (!effectiveDisabled) {
       setIsPressed(true);
-      playPopSound();
+      playSnesPopSound();
     }
   };
 
@@ -78,7 +78,7 @@ export const VplaySecondaryButton: React.FC<VplaySecondaryButtonProps> = ({
   const handleTouchStart = () => {
     if (!effectiveDisabled) {
       setIsPressed(true);
-      playPopSound();
+      playSnesPopSound();
     }
   };
 

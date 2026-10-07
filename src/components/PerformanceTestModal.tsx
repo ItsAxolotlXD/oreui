@@ -541,7 +541,7 @@ Date: ${new Date().toLocaleString()}
           <div className="bg-[#484a4c] border-2 border-[#6c6e70] w-full max-w-md sm:max-w-lg shadow-2xl text-white font-montserrat select-none flex flex-col h-[82vh] sm:h-[85vh] max-h-[640px] my-auto overflow-hidden">
             
             {/* PART 1: HEADER (Title not uppercase, enlarged pixel buttons) */}
-            <div className="bg-[#484a4c] border-b-2 border-[#1c1d1f] px-3.5 py-2 sm:py-2.5 flex items-center justify-between flex-shrink-0">
+            <div className="bg-[#484a4c] border-b-2 border-[#1c1d1f] px-3.5 py-1.5 flex items-center justify-between flex-shrink-0">
               <button
                 onMouseDown={() => playPopSound()}
                 onClick={() => {
@@ -549,13 +549,13 @@ Date: ${new Date().toLocaleString()}
                   setShowSetupModal(false);
                   onClose();
                 }}
-                className="w-8 h-8 flex items-center justify-center text-gray-200 hover:text-white font-mono font-bold text-2xl cursor-pointer hover:bg-[#383b3e] active:bg-[#1f2022] border-2 border-transparent hover:border-[#141414] transition-all"
+                className="w-7 h-7 flex items-center justify-center text-gray-200 hover:text-white font-mono font-bold text-2xl cursor-pointer hover:bg-[#383b3e] active:bg-[#1f2022] border-2 border-transparent hover:border-[#141414] transition-all"
                 title="Back"
               >
                 ‹
               </button>
               
-              <h2 className="text-sm sm:text-base font-bold text-white font-montserrat text-center flex-1 tracking-tight">
+              <h2 className="text-sm sm:text-base font-normal text-white font-minecraft-seven text-center flex-1 tracking-tight">
                 Performance Test Configuration
               </h2>
 
@@ -566,7 +566,7 @@ Date: ${new Date().toLocaleString()}
                   setShowSetupModal(false);
                   onClose();
                 }}
-                className="w-8 h-8 flex items-center justify-center text-gray-200 hover:text-white font-mono font-bold text-lg sm:text-xl cursor-pointer hover:bg-[#383b3e] active:bg-[#1f2022] border-2 border-transparent hover:border-[#141414] transition-all"
+                className="w-7 h-7 flex items-center justify-center text-gray-200 hover:text-white font-mono font-bold text-lg sm:text-xl cursor-pointer hover:bg-[#383b3e] active:bg-[#1f2022] border-2 border-transparent hover:border-[#141414] transition-all"
                 title="Close"
               >
                 ✕
@@ -891,10 +891,10 @@ Date: ${new Date().toLocaleString()}
           <div className="bg-[#484a4c] border-2 border-[#6c6e70] w-full max-w-xl shadow-2xl text-white font-montserrat select-none flex flex-col h-[85vh] max-h-[680px] my-auto overflow-hidden">
             
             {/* PART 1: HEADER */}
-            <div className="bg-[#484a4c] border-b-2 border-[#1c1d1f] px-3.5 py-2.5 flex items-center justify-between flex-shrink-0">
+            <div className="bg-[#484a4c] border-b-2 border-[#1c1d1f] px-3.5 py-1.5 flex items-center justify-between flex-shrink-0">
               <div className="flex items-center gap-2">
                 <Gauge className="w-5 h-5 text-[#89dc69]" />
-                <h2 className="text-sm sm:text-base font-bold text-white font-montserrat tracking-tight">
+                <h2 className="text-sm sm:text-base font-normal text-white font-minecraft-seven tracking-tight">
                   Benchmark Performance Report
                 </h2>
               </div>
@@ -906,7 +906,7 @@ Date: ${new Date().toLocaleString()}
                   setShowReport(false);
                   onClose();
                 }}
-                className="w-8 h-8 flex items-center justify-center text-gray-200 hover:text-white font-mono font-bold text-lg sm:text-xl cursor-pointer hover:bg-[#383b3e] active:bg-[#1f2022] border-2 border-transparent hover:border-[#141414] transition-all"
+                className="w-7 h-7 flex items-center justify-center text-gray-200 hover:text-white font-mono font-bold text-lg sm:text-xl cursor-pointer hover:bg-[#383b3e] active:bg-[#1f2022] border-2 border-transparent hover:border-[#141414] transition-all"
                 title="Close"
               >
                 ✕

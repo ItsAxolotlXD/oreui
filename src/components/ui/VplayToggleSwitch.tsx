@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ComponentState } from '../../types';
-import { playPopSound } from '../../utils/sound';
+import { playSnesPopSound } from '../../utils/sound';
 
 interface VplayToggleSwitchProps {
   checked?: boolean;
@@ -44,7 +44,7 @@ export const VplayToggleSwitch: React.FC<VplayToggleSwitchProps> = ({
   const handlePointerDown = () => {
     if (effectiveDisabled) return;
     setIsPressed(true);
-    playPopSound();
+    playSnesPopSound();
   };
 
   const handleClick = () => {

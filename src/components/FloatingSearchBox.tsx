@@ -51,24 +51,24 @@ export const SEARCH_DATABASE: SearchResultItem[] = [
 
   // 2. RELEASE NOTES & UPDATES
   {
-    id: 'update-26w04',
+    id: 'update-24w04z',
     category: 'update',
     categoryLabel: 'Release Note',
-    title: 'Snapshot 26w04-base',
+    title: 'Snapshot 24w04z',
     description: 'New decorative blocks, Desert & Oak Forest biomes, expanded cave systems, and liquid sliding physics.',
     badge: 'Latest Snapshot',
     targetTab: 'release_notes',
-    articleId: 'snapshot-26w04-base',
+    articleId: 'snapshot-24w04z',
   },
   {
     id: 'update-desert',
     category: 'update',
     categoryLabel: 'Game Feature',
-    title: 'Desert Biome (Snapshot 26w04-base)',
+    title: 'Desert Biome (Snapshot 24w04z)',
     description: 'Hot temperature desert biome with cactus flower spawns and arid terrain generation.',
     badge: 'New Biome',
     targetTab: 'release_notes',
-    articleId: 'snapshot-26w04-base',
+    articleId: 'snapshot-24w04z',
   },
   {
     id: 'update-caves',
@@ -78,7 +78,7 @@ export const SEARCH_DATABASE: SearchResultItem[] = [
     description: 'Expanded subterranean caves with natural lava, waterfalls, and increased ore generation frequency.',
     badge: 'Caves',
     targetTab: 'release_notes',
-    articleId: 'snapshot-26w04-base',
+    articleId: 'snapshot-24w04z',
   },
   {
     id: 'update-sift',
@@ -88,7 +88,7 @@ export const SEARCH_DATABASE: SearchResultItem[] = [
     description: 'Balanced creature spawning, corrected willow leaf transparency rendering, and cactus flower generation.',
     badge: 'The Sift',
     targetTab: 'release_notes',
-    articleId: 'snapshot-26w04-base',
+    articleId: 'snapshot-24w04z',
   },
   {
     id: 'update-fixes',
@@ -98,7 +98,7 @@ export const SEARCH_DATABASE: SearchResultItem[] = [
     description: 'Leaves transparency rendering, mangrove block textures, connected cave entrances, and creature damage fixes.',
     badge: 'Bug Fixes',
     targetTab: 'release_notes',
-    articleId: 'snapshot-26w04-base',
+    articleId: 'snapshot-24w04z',
   },
 
   // 3. SETTINGS & OPTIONS
@@ -154,6 +154,15 @@ export const SEARCH_DATABASE: SearchResultItem[] = [
     title: 'Performance Stress Test',
     description: 'Full-screen GPU/CPU benchmark measuring real-time FPS, frame latency, memory and particle stress.',
     badge: 'Benchmark',
+    targetTab: 'settings',
+  },
+  {
+    id: 'setting-oreui',
+    category: 'setting',
+    categoryLabel: 'Design',
+    title: 'Ore UI Design Components',
+    description: 'Explore component matrix, states (Normal, Hover, Pressed, Disabled) and interactive playground.',
+    badge: 'Design System',
     targetTab: 'settings',
   },
 

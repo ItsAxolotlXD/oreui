@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ComponentState } from '../../types';
-import { playPopSound } from '../../utils/sound';
+import { playSnesPopSound } from '../../utils/sound';
 
 interface VplaySliderProps {
   label?: string;
@@ -58,7 +58,7 @@ export const VplaySlider: React.FC<VplaySliderProps> = ({
   const handlePointerDown = () => {
     if (effectiveDisabled) return;
     setIsPressed(true);
-    playPopSound();
+    playSnesPopSound();
   };
 
   const handlePointerUp = () => {

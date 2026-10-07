@@ -427,24 +427,24 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           <div className="bg-[#484a4c] border-2 border-[#6c6e70] w-full max-w-sm sm:max-w-md shadow-2xl text-white font-minecraft-seven select-none flex flex-col h-[65vh] max-h-[380px] my-auto overflow-hidden">
             
             {/* HEADER */}
-            <div className="bg-[#484a4c] border-b-2 border-[#1c1d1f] px-3.5 py-2.5 flex items-center justify-between flex-shrink-0">
+            <div className="bg-[#484a4c] border-b-2 border-[#1c1d1f] px-3.5 py-1.5 flex items-center justify-between flex-shrink-0">
               <button
                 onMouseDown={() => playPopSound()}
                 onClick={() => setShowComingSoonModal(false)}
-                className="w-8 h-8 flex items-center justify-center text-gray-200 hover:text-white font-mono text-2xl cursor-pointer hover:bg-[#383b3e] active:bg-[#1f2022] border-2 border-transparent hover:border-[#141414] !transition-none ore-dark-btn hover:outline-2 hover:outline-white"
+                className="w-7 h-7 flex items-center justify-center text-gray-200 hover:text-white font-mono text-2xl cursor-pointer hover:bg-[#383b3e] active:bg-[#1f2022] border-2 border-transparent hover:border-[#141414] !transition-none ore-dark-btn hover:outline-2 hover:outline-white"
                 title="Back"
               >
                 ‹
               </button>
 
-              <h2 className="text-sm sm:text-base text-white font-minecraft-seven text-center flex-1 tracking-tight">
+              <h2 className="text-sm sm:text-base text-white font-minecraft-seven text-center flex-1 tracking-tight font-normal">
                 Coming soon
               </h2>
 
               <button
                 onMouseDown={() => playPopSound()}
                 onClick={() => setShowComingSoonModal(false)}
-                className="w-8 h-8 flex items-center justify-center text-gray-200 hover:text-white font-mono text-lg sm:text-xl cursor-pointer hover:bg-[#383b3e] active:bg-[#1f2022] border-2 border-transparent hover:border-[#141414] !transition-none ore-dark-btn hover:outline-2 hover:outline-white"
+                className="w-7 h-7 flex items-center justify-center text-gray-200 hover:text-white font-mono text-lg sm:text-xl cursor-pointer hover:bg-[#383b3e] active:bg-[#1f2022] border-2 border-transparent hover:border-[#141414] !transition-none ore-dark-btn hover:outline-2 hover:outline-white"
                 title="Close"
               >
                 ✕
@@ -481,7 +481,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           <div className="bg-[#484a4c] border-2 border-[#6c6e70] w-full max-w-md shadow-2xl text-white font-minecraft-seven select-none flex flex-col h-[75vh] max-h-[480px] my-auto overflow-hidden">
             
             {/* HEADER */}
-            <div className="bg-[#484a4c] border-b-2 border-[#1c1d1f] px-3.5 py-2.5 flex items-center justify-between flex-shrink-0">
+            <div className="bg-[#484a4c] border-b-2 border-[#1c1d1f] px-3.5 py-1.5 flex items-center justify-between flex-shrink-0">
               <button
                 onMouseDown={() => playPopSound()}
                 onClick={() => {
@@ -489,13 +489,13 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                   setDevKeyInput('');
                   setDevKeyStatus(null);
                 }}
-                className="w-8 h-8 flex items-center justify-center text-gray-200 hover:text-white font-mono text-2xl cursor-pointer hover:bg-[#383b3e] active:bg-[#1f2022] border-2 border-transparent hover:border-[#141414] !transition-none ore-dark-btn hover:outline-2 hover:outline-white"
+                className="w-7 h-7 flex items-center justify-center text-gray-200 hover:text-white font-mono text-2xl cursor-pointer hover:bg-[#383b3e] active:bg-[#1f2022] border-2 border-transparent hover:border-[#141414] !transition-none ore-dark-btn hover:outline-2 hover:outline-white"
                 title="Back"
               >
                 ‹
               </button>
 
-              <h2 className="text-sm sm:text-base text-white font-minecraft-seven text-center flex-1 tracking-tight">
+              <h2 className="text-sm sm:text-base text-white font-minecraft-seven text-center flex-1 tracking-tight font-normal">
                 A developer key is required
               </h2>
 
@@ -506,7 +506,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                   setDevKeyInput('');
                   setDevKeyStatus(null);
                 }}
-                className="w-8 h-8 flex items-center justify-center text-gray-200 hover:text-white font-mono text-lg sm:text-xl cursor-pointer hover:bg-[#383b3e] active:bg-[#1f2022] border-2 border-transparent hover:border-[#141414] !transition-none ore-dark-btn hover:outline-2 hover:outline-white"
+                className="w-7 h-7 flex items-center justify-center text-gray-200 hover:text-white font-mono text-lg sm:text-xl cursor-pointer hover:bg-[#383b3e] active:bg-[#1f2022] border-2 border-transparent hover:border-[#141414] !transition-none ore-dark-btn hover:outline-2 hover:outline-white"
                 title="Close"
               >
                 ✕
